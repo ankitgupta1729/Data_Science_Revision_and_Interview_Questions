@@ -1,0 +1,1592 @@
+(1) NumPy, short for Numerical Python.
+
+(2) NumPy provides an easy-to-use C API, it is straightforward to pass data to external libraries written in a low-level language and also for external libraries 
+to return data to Python as NumPy arrays. 
+This feature has made Python a language of choice for wrapping legacy C/C++/Fortran codebases and giving them a dynamic and easy-to-use interface.
+
+(3) Data munging, sometimes called data wrangling or data cleaning, is converting and mapping unprocessed data into a different format to 
+improve its suitability and value for various downstream uses, including analytics. 
+
+(4) pandas also provides some more domain specific functionality like time series manipulation, which is not present in NumPy.
+
+NumPy internally stores data in a contiguous block of memory, independent of other built-in Python objects. NumPy’s library of algorithms written in the 
+C language can operate on this memory without any type checking or other overhead. 
+NumPy arrays also use much less memory than built-in Python sequences.
+
+(5) 
+
+import numpy as np
+numpy_arr= np.arange(1000000)
+python_list=list(range(1000000))
+%time for _ in range(10): numpy_arr=numpy_arr*2 
+
+-- CPU times: total: 15.6 ms
+Wall time: 24 ms
+
+%time for _ in range(10): python_list=[x*2 for x in python_list] 
+
+-- CPU times: total: 1.5 s
+Wall time: 1.53 s
+
+(6) NumPy-based algorithms are generally 10 to 100 times faster (or more) than their pure Python counterparts and use significantly less memory.
+
+(7) One of the key features of NumPy is its N-dimensional array object, or ndarray, which is a fast, flexible container for large datasets in Python
+
+d=np.random.randn(2,3)
+print(d,'\n',d+d,'\n',d*10)
+
+--
+
+[[-1.04688157 -1.71687934  0.67342889]
+ [-1.42858776 -1.54959277  1.2746503 ]] 
+ [[-2.09376314 -3.43375869  1.34685777]
+ [-2.85717552 -3.09918555  2.5493006 ]] 
+ [[-10.46881572 -17.16879344   6.73428886]
+ [-14.2858776  -15.49592774  12.746503  ]]
+
+(8) You are, of course, welcome to put from numpy import * in your code to avoid having to write np., but I advise against making a habit of this. 
+The numpy namespace is large and contains a number of functions whose names conflict with built-in Python functions (like min and max).
+
+(9) An ndarray is a generic multidimensional container for homogeneous data; that is, all of the elements must be the same type. 
+Every array has a shape, a tuple indicating the size of each dimension, and a dtype, an object describing the data type of the array:
+
+print(d.shape,d.dtype)
+
+-- (2, 3) float64
+
+(10) The easiest way to create an array is to use the array function. This accepts any sequence-like object (including other arrays) and 
+produces a new NumPy array containing the passed data. For example, a list is a good candidate for conversion:
+
+a=np.array([[[1,2],[3,4],[5,6]],[['ankit',8],[9,10],[11,12]]])
+print(a,'\n',a.shape,'\n',a.dtype)
+
+-- [[['1' '2']
+  ['3' '4']
+  ['5' '6']]
+
+ [['ankit' '8']
+  ['9' '10']
+  ['11' '12']]] 
+ (2, 3, 2) 
+ <U11
+
+a=np.array([[[1,2],[3,4],[5,6],[1.2,'q']],[['ankit',8],[9,'b'],[11,'a'],[1.,2]]])
+print(a,'\n',a.ndim,'\n',a.shape,'\n',a.dtype)
+
+--
+
+[[['1' '2']
+  ['3' '4']
+  ['5' '6']
+  ['1.2' 'q']]
+
+ [['ankit' '8']
+  ['9' 'b']
+  ['11' 'a']
+  ['1.0' '2']]] 
+ 3 
+ (2, 4, 2) 
+ <U32
+
+(dimension 3 means array is divided into 3 parts: no of grids, no of rows in each grid and no of columns in each grid)
+
+np.array(((1,2),(2,3)))
+
+-- array([[1, 2],
+       [2, 3]])
+
+(11)
+
+print(np.zeros((10,)),'\n',np.ones((3,3)),'\n',np.empty((2,3,4)))
+
+-- 
+
+[0. 0. 0. 0. 0. 0. 0. 0. 0. 0.] 
+ [[1. 1. 1.]
+ [1. 1. 1.]
+ [1. 1. 1.]] 
+ [[[6.23042070e-307 4.67296746e-307 1.69121096e-306 1.20161458e-306]
+  [1.39071275e-307 1.42420617e-306 7.56587584e-307 1.78020169e-306]
+  [1.20161458e-306 1.29060531e-306 1.95821439e-306 8.01097889e-307]]
+
+ [[1.78020169e-306 7.56601165e-307 1.02359984e-306 3.56043054e-307]
+  [1.37961641e-306 1.33511562e-306 1.42421160e-306 8.06632988e-308]
+  [8.01106038e-307 6.89805151e-307 1.78020169e-306 1.42410974e-306]]]
+
+(np.empty() makes array of garbage values)
+
+(12) asarray ==> Convert input to ndarray, but do not copy if the input is already an ndarray
+
+identity Create a square N × N identity matrix (1s on the diagonal and 0s elsewhere)
+
+np.identity(3)
+--
+
+array([[1., 0., 0.],
+       [0., 1., 0.],
+       [0., 0., 1.]])
+
+(13)
+
+The data type or dtype is a special object containing the information 
+(or metadata, data about data) the ndarray needs to interpret a chunk of memory as a particular type of data:
+
+arr1 = np.array([1, 2, 3], dtype=np.float64)
+print(arr1,arr1.dtype)
+
+-- [1. 2. 3.] float64
+
+arr1 = np.array([1, 2, 3], dtype=np.str_)
+print(arr1,arr1.dtype)
+
+-- ['1' '2' '3'] <U1
+
+(14)
+
+# int32, uint32 ==> i4, u4 ==> Signed and unsigned 32-bit integer types
+# float16 ==> f2 ==> Half-precision floating point
+# float32 ==> f4 or f ==> Standard single-precision floating point; compatible with C float
+# float64 ==> f8 or d ==> Standard double-precision floating point; compatible with C double
+# object ==> O ==> Python object type; a value can be any Python object
+# unicode_ ==> U ==> Fixed-length Unicode type (number of bytes platform specific); same
+# specification semantics as string_ (e.g., 'U10')
+
+(15)
+
+You can explicitly convert or cast an array from one dtype to another using ndarray’s astype method:
+
+np.array([1,2,3]).astype(np.float32)
+
+-- array([1., 2., 3.], dtype=float32)
+
+(16)
+
+There are shorthand type code strings you can also use to refer to a dtype:
+
+empty_uint32 = np.empty(8, dtype='u4')
+empty_uint32
+
+-- 
+
+array([         0, 1075314688,          0, 1075707904,          0,
+       1075838976,          0, 1072693248], dtype=uint32)
+
+(17)
+
+Arrays are important because they enable you to express batch operations on data without writing any for loops. 
+NumPy users call this vectorization. Any arithmetic operations between equal-size arrays applies the operation element-wise:
+
+arr=np.array([1,2,3],dtype=np.float16)
+print(arr*arr,arr**3,1/arr)
+
+-- [1. 4. 9.] [ 1.  8. 27.] [1.     0.5    0.3333]
+
+(18) array comparison
+
+arr1=np.array([3,1,2])
+arr2=np.arange(3)
+print(arr1,arr2,arr1>arr2)
+
+-- [3 1 2] [0 1 2] [ True False False]
+
+(19)
+
+arr=np.arange(12)
+print(arr,arr[5],arr[3:7])
+arr[8:11]=arr[3:6]
+print(arr)
+
+-- 
+
+[ 0  1  2  3  4  5  6  7  8  9 10 11] 5 [3 4 5 6]
+[ 0  1  2  3  4  5  6  7  3  4  5 11]
+
+(20)
+
+arr3d=np.array([[[1,2],[3,4]],[[5,6],[7,8]]])
+arr2d=arr3d[0]
+print(arr3d,'\n\n',arr2d,arr2d.ndim)
+
+--
+
+[[[1 2]
+  [3 4]]
+
+ [[5 6]
+  [7 8]]] 
+
+ [[1 2]
+ [3 4]] 2
+
+print(arr2d[:1,:])
+
+-- [[1 2]]
+
+arr2d[:1,:]=0
+print(arr2d)
+
+-- 
+
+[[0 0]
+ [3 4]]
+
+(21) Like arithmetic operations, comparisons (such as ==) with arrays are also vectorized
+ 
+names=np.array(['ankit','kiio','summi','soumi','kiio','ankit','summi'])
+print(names=='kiio')
+data=np.random.randn(7,5)
+print(data,'\n')
+mask=(names=='kiio') | (names=='soumi')
+print(data[mask])
+
+--
+
+[False  True False False  True False False]
+[[ 1.61250593  0.23380297 -0.47848881 -0.54629809 -0.71015262]
+ [-1.27974498  1.53520966 -0.37040645  0.88698519  0.8471205 ]
+ [-1.24195893  1.2297313  -0.24093343 -0.72746334  0.02601651]
+ [ 0.65670592  1.10994663 -0.07632244 -0.22282552 -0.96544265]
+ [ 1.19621861  0.19908374 -0.47713838  0.68891161 -0.93707441]
+ [-0.49768442 -1.90020193  0.09660901 -0.93689603  0.11266448]
+ [ 0.16188527  0.00808846  0.67288595 -0.06607219  0.33945945]] 
+
+[[-1.27974498  1.53520966 -0.37040645  0.88698519  0.8471205 ]
+ [ 0.65670592  1.10994663 -0.07632244 -0.22282552 -0.96544265]
+ [ 1.19621861  0.19908374 -0.47713838  0.68891161 -0.93707441]]
+
+(22) Fancy Indexing: To select out a subset of the rows in a particular order, you can simply pass a list or ndarray of integers specifying the desired order:
+
+arr=np.empty((2,3))
+print(arr,'\n',arr[[1,0]],'\n',arr[1:,[1,0,2]])
+
+--
+
+[[-10.46881572 -17.16879344   6.73428886]
+ [-14.2858776  -15.49592774  12.746503  ]] 
+ [[-14.2858776  -15.49592774  12.746503  ]
+ [-10.46881572 -17.16879344   6.73428886]] 
+ [[-15.49592774 -14.2858776   12.746503  ]]
+
+(23)
+
+arr = np.arange(16).reshape((4, 4))
+print(arr)
+print(arr[[2,0],[1,3]]) # elements at position (2,1) and (0,3) will be selected
+
+--
+
+[[ 0  1  2  3]
+ [ 4  5  6  7]
+ [ 8  9 10 11]
+ [12 13 14 15]]
+[9 3]
+
+fancy indexing, unlike slicing, always copies the data into a new array.
+
+(24) Transposing Arrays and Swapping Axes:
+
+arr=np.array([[1,2],[3,4]])
+print(arr,'\n\n',arr.T)
+
+--
+
+[[1 2]
+ [3 4]] 
+
+ [[1 3]
+ [2 4]]
+
+arr.transpose()
+
+-- 
+
+array([[1, 3],
+       [2, 4]])
+
+(25)
+
+arr = np.arange(16).reshape((2, 2, 4))
+arr    
+
+--
+
+array([[[ 0,  1,  2,  3],
+        [ 4,  5,  6,  7]],
+
+       [[ 8,  9, 10, 11],
+        [12, 13, 14, 15]]])
+
+(25)
+
+arr.transpose((2,1,0))
+
+--
+
+array([[[ 0,  8],
+        [ 4, 12]],
+
+       [[ 1,  9],
+        [ 5, 13]],
+
+       [[ 2, 10],
+        [ 6, 14]],
+
+       [[ 3, 11],
+        [ 7, 15]]])
+
+Here, order is 2,1,0 and 2 comes from no. of columns, 1 comes from no of rows and 0 comes from no. of grids so it will show 4 grids, 2 rows and 2 columns and
+elements will be arranged in the order as column--> row--> grid
+
+(26)   
+
+To transpose an array, NumPy just swaps the shape and stride information for each axis.
+
+arr.strides
+-- (32, 16, 4)
+
+and 
+
+arr.dtype
+
+-- dtype('int32')
+
+So, each element has 4 bytes and from one grid to another grid, it has to cross 8 elements i.e. 32 bytes which is showing in the arr.strides and similary
+go from one row to another row, it has to cross 4 elements i.e. 16 bytes and from one column to another column, it has to cross 4 bytes.
+
+arr.transpose((2,1,0)).strides
+
+-- (4, 16, 32)
+
+(27)
+
+print(np.empty((2,2,3)),'\n\n',np.empty((2,2,3)).swapaxes(1,2))
+
+--
+
+[[[6.23042070e-307 1.20161458e-306 4.67296746e-307]
+  [1.39071275e-307 1.69121096e-306 1.42420617e-306]]
+
+ [[7.56587584e-307 1.29060531e-306 1.78020169e-306]
+  [1.95821439e-306 1.20161458e-306 3.11523242e-307]]] 
+
+ [[[6.23042070e-307 1.39071275e-307]
+  [1.20161458e-306 1.69121096e-306]
+  [4.67296746e-307 1.42420617e-306]]
+
+ [[7.56587584e-307 1.95821439e-306]
+  [1.29060531e-306 1.20161458e-306]
+  [1.78020169e-306 3.11523242e-307]]]
+
+(28) Universal Functions: Fast Element-Wise Array Functions:
+
+A universal function, or ufunc, is a function that performs element-wise operations on data in ndarrays. You can think of them as fast vectorized wrappers
+for simple functions that take one or more scalar values and produce one or more scalar results. Many ufuncs are simple element-wise transformations, like sqrt or exp:
+
+arr=np.array([1,2,3])
+print(np.sqrt(arr),np.exp(np.log(arr)))
+
+-- [1.         1.41421356 1.73205081] [1. 2. 3.]
+
+x=np.array([1,2,3])
+y=np.array([2,3,1])
+np.maximum(x,y)
+
+-- array([2, 3, 3])
+
+arr = np.random.randn(7) * 5
+remainder,whole_part=np.modf(arr)
+print(arr)
+print(whole_part,remainder)
+
+-- 
+
+[ 3.88969984  3.93102109  4.65143765 -3.32374675 -1.97423943  3.0639013
+ 10.15920952]
+[ 3.  3.  4. -3. -1.  3. 10.] [ 0.88969984  0.93102109  0.65143765 -0.32374675 -0.97423943  0.0639013
+  0.15920952]
+
+(29)
+
+# Table 4-3. Unary ufuncs
+# ---------------------------
+# Function --> Description
+# ---------------------------
+# abs, fabs --> Compute the absolute value element-wise for integer, foating-point, or complex values
+# sqrt --> Compute the square root of each element (equivalent to arr ** 0.5)
+# square --> Compute the square of each element (equivalent to arr ** 2)
+# exp --> Compute the exponent ex of each element
+# log, log10,log2, log1p --> Natural logarithm (base e), log base 10, log base 2, and log(1 + x), respectively
+# sign --> Compute the sign of each element: 1 (positive), 0 (zero), or –1 (negative)
+# ceil --> Compute the ceiling of each element (i.e., the smallest integer greater than or equal to that number)
+# floor --> Compute the foor of each element (i.e., the largest integer less than or equal to each element)
+# rint --> Round elements to the nearest integer, preserving the dtype
+# modf --> Return fractional and integral parts of array as a separate array
+# isnan --> Return boolean array indicating whether each value is NaN (Not a Number)
+# isfinite, isinf --> Return boolean array indicating whether each element is finite (non-inf, non-NaN) or infinite,respectively
+# cos, cosh, sin,sinh, tan, tanh --> Regular and hyperbolic trigonometric functions
+# arccos, arccosh,arcsin, arcsinh,arctan, arctanh --> Inverse trigonometric functions
+# logical_not --> Compute truth value of not x element-wise (equivalent to ~arr).
+
+(30)
+
+# Table 4-4. Binary universal functions  
+# ------------------------------------------
+# Function --> Description
+# ------------------------------------------
+# add --> Add corresponding elements in arrays
+# subtract --> Subtract elements in second array from first array
+# multiply --> Multiply array elements
+# divide, floor_divide --> Divide or foor divide (truncating the remainder)
+# power --> Raise elements in first array to powers indicated in second array
+# maximum, fmax --> Element-wise maximum; fmax ignores NaN
+# minimum, fmin --> Element-wise minimum; fmin ignores NaN
+# mod --> Element-wise modulus (remainder of division)
+# copysign --> Copy sign of values in second argument to values in first argument
+# greater, greater_equal,less, less_equal,equal, not_equal --> Perform element-wise comparison, yielding boolean array (equivalent to infix operators >, >=, <, <=, ==, !=)
+# logical_and, logical_or, logical_xor --> Compute element-wise truth value of logical operation (equivalent to infix operators & |, ^)
+
+
+(31)
+
+computing sqrt(x^2 + y^2) across a regular grid of values: 
+
+x=np.arange(-5,5,0.01)
+y=np.arange(-5,5,0.01)
+xs,ys=np.meshgrid(x,y)
+print(np.sqrt(xs**2+ys**2))
+
+--
+
+[[7.07106781 7.06400028 7.05693985 ... 7.04988652 7.05693985 7.06400028]
+ [7.06400028 7.05692568 7.04985815 ... 7.04279774 7.04985815 7.05692568]
+ [7.05693985 7.04985815 7.04278354 ... 7.03571603 7.04278354 7.04985815]
+ ...
+ [7.04988652 7.04279774 7.03571603 ... 7.0286414  7.03571603 7.04279774]
+ [7.05693985 7.04985815 7.04278354 ... 7.03571603 7.04278354 7.04985815]
+ [7.06400028 7.05692568 7.04985815 ... 7.04279774 7.04985815 7.05692568]]
+
+(32)
+
+x=np.array(['ankit','arpit'])
+y=np.array(['kiio','summi'])
+np.where([True,False],x,y)
+
+--
+
+array(['ankit', 'summi'], dtype='<U5')
+
+(33)
+
+arr=np.random.randn(5)
+print(arr)
+print(np.where(arr>0,2,-3))
+print(np.where(arr>0,2,arr))
+
+-- 
+
+[-0.16067905 -0.82819757 -0.38372826  0.8891427   0.12799428]
+[-3 -3 -3  2  2]
+[-0.16067905 -0.82819757 -0.38372826  2.          2.        ]
+
+(34)
+
+arr = np.random.randn(5, 4)
+print(arr,'\n',arr.mean(axis=1),np.mean(arr),arr.sum(axis=0))
+
+--
+
+[[-2.21310268 -1.38828456 -0.05513876  1.50115665]
+ [ 1.16405196  1.23995105 -0.67691371  0.28006248]
+ [-0.67493921  1.09608892 -2.10815388 -0.23773569]
+ [-1.17797897 -1.3298198   0.56002974 -0.57135021]
+ [ 1.34020369 -0.54264907 -0.21902362  0.52954884]] 
+ [-0.53884234  0.50178794 -0.48118497 -0.62977981  0.27701996] -0.17419984239196903 [-1.56176521 -0.92471347 -2.49920024  1.50168207]
+
+(35)
+
+arr = np.array([0, 1, 2, 3, 4, 5, 6, 7])
+arr.cumsum()
+
+-- array([ 0,  1,  3,  6, 10, 15, 21, 28], dtype=int32)
+
+arr = np.array([[0, 1, 2], [3, 4, 5], [6, 7, 8]])
+arr.cumsum(axis=0)
+
+-- 
+
+array([[ 0,  1,  2],
+       [ 3,  5,  7],
+       [ 9, 12, 15]])
+
+(36)
+
+arr.cumprod(axis=1)
+
+--
+
+array([[  0,   0,   0],
+       [  3,  12,  60],
+       [  6,  42, 336]], dtype=int32) 
+
+
+(37)
+
+# Method --> Description
+# sum --> Sum of all the elements in the array or along an axis; zero-length arrays have sum 0
+# mean --> Arithmetic mean; zero-length arrays have NaN mean
+# std, var --> Standard deviation and variance, respectively, with optional degrees of freedom adjustment (default denominator n)
+# min, max --> Minimum and maximum
+# argmin, argmax --> Indices of minimum and maximum elements, respectively
+# cumsum --> Cumulative sum of elements starting from 0
+# cumprod --> Cumulative product of elements starting from 1
+
+(38)
+
+bools=np.array([True,False,True])
+print(bools.sum(),bools.any(),bools.all())
+
+-- 2 True False
+
+z=np.array([[2,3,1],[6.1,2,8]])
+z.sort(axis=1)
+print(z)
+
+-- 
+
+[[1.  2.  3. ]
+ [2.  6.1 8. ]]
+
+(39)
+
+ints = np.array([3, 3, 3, 2, 2, 1, 1, 4, 4])
+np.unique(ints)
+
+-- array([1, 2, 3, 4])
+
+(40) File Input and Output with Arrays:
+
+NumPy is able to save and load data to and from disk either in text or binary format.
+
+np.save and np.load are the two workhorse functions for efficiently saving and loading array data on disk. 
+Arrays are saved by default in an uncompressed raw binary format with file extension .npy
+
+z=np.arange(16).reshape(2,4,2)
+np.save("saving array",z)
+np.load("saving array.npy")
+
+--
+
+array([[[ 0,  1],
+        [ 2,  3],
+        [ 4,  5],
+        [ 6,  7]],
+
+       [[ 8,  9],
+        [10, 11],
+        [12, 13],
+        [14, 15]]])
+
+(41)
+
+For multiple files:
+
+a=np.arange(12).reshape(2,2,3)
+b=np.arange(12).reshape(4,3)
+np.savez("archived.npz",a=a,b=b)
+arr=np.load("archived.npz")
+print(arr['a'])
+print(arr['b'])
+
+--
+
+[[[ 0  1  2]
+  [ 3  4  5]]
+
+ [[ 6  7  8]
+  [ 9 10 11]]]
+[[ 0  1  2]
+ [ 3  4  5]
+ [ 6  7  8]
+ [ 9 10 11]]
+
+(42)
+
+for compressed files:
+
+a=np.arange(12).reshape(2,2,3)
+b=np.arange(12).reshape(4,3)
+np.savez_compressed("compressed_archived.npz",a=a,b=b)
+arr=np.load("compressed_archived.npz")
+print(arr['a'])
+print(arr['b'])
+
+--
+
+[[[ 0  1  2]
+  [ 3  4  5]]
+
+ [[ 6  7  8]
+  [ 9 10 11]]]
+[[ 0  1  2]
+ [ 3  4  5]
+ [ 6  7  8]
+ [ 9 10 11]]
+
+(43) Linear Algebra:
+
+a=np.arange(6).reshape(2,3)
+b=np.arange(6).reshape(3,2)
+print(a.dot(b))
+print(np.dot(a,b))
+print(a @ b)
+
+-- 
+
+[[10 13]
+ [28 40]]
+[[10 13]
+ [28 40]]
+[[10 13]
+ [28 40]]
+
+The @ symbol (as of Python 3.5) also works as an infix operator that performs matrix multiplication:
+
+(44) 
+
+numpy.linalg has a standard set of matrix decompositions and things like inverse and determinant. These are implemented under the hood via the same industry standard
+linear algebra libraries used in other languages 
+like MATLAB and R, such as BLAS, LAPACK, or possibly (depending on your NumPy build) the proprietary Intel MKL (Math Kernel Library):
+
+(45)
+
+# diag --> Return the diagonal (or off-diagonal) elements of a square matrix as a 1D array, or convert a 1D array into a square matrix with zeros on the off-diagonal
+# dot --> Matrix multiplication
+# trace --> Compute the sum of the diagonal elements
+# det --> Compute the matrix determinant
+# eig  --> Compute the eigenvalues and eigenvectors of a square matrix
+# inv --> Compute the inverse of a square matrix
+# pinv --> Compute the Moore-Penrose pseudo-inverse of a matrix
+# qr --> Compute the QR decomposition
+# svd --> Compute the singular value decomposition (SVD)
+# solve --> Solve the linear system Ax = b for x, where A is a square matrix
+# lstsq --> Compute the least-squares solution to Ax = b
+
+(46)
+
+from numpy.linalg import inv,qr,svd
+import scipy.linalg
+u=np.arange(1,6,1).reshape(5,1)
+M=u.dot(u.T)
+#print("Inverse of M is: ", inv(M)) # M is singular, so inverse does not exist
+
+q,r=qr(M)
+#print("matrix q (orthonormal matrix) in qr decomposition is:\n\n",q)
+#print("\n\nmatrix r (upper triangular) in qr decomposition is:\n\n",r)
+
+P,L,U=scipy.linalg.lu(M)
+
+#print("\n\nmatrix P in LU decomposition is:\n\n",P)
+#print("\n\nmatrix L in LU decomposition is:\n\n",L)
+#print("\n\n matrix U in LU decomposition is:\n\n",U)
+
+U,Sigma,V_transpose=svd(M)
+print("Sum of Singular Values of M is: ", np.sum(Sigma))
+
+--
+
+Sum of Singular Values of M is:  55.00000000000001
+
+(47) Pseudorandom Number Generation:
+
+The numpy.random module supplements the built-in Python random with functions for efficiently generating whole arrays of sample values from many kinds of 
+probability distributions. For example, you can get a 4 × 4 array of samples from the standard normal distribution using normal:
+
+np.random.normal(size=(4,4))
+
+--
+
+array([[ 0.84522795,  1.01985819,  0.3208128 , -0.2554043 ],
+       [-0.40870156,  0.54036454, -0.13739211, -1.3323645 ],
+       [ 0.60798989,  0.01252402, -0.88852315,  0.29761162],
+       [-1.71481258, -1.293925  , -1.61182577,  1.45447524]])
+
+(48)
+
+We say that these are pseudorandom numbers because they are generated by an algorithm with deterministic behavior based on the seed of the random number generator. 
+You can change NumPy’s random number generation seed using np.random.seed:
+
+Seed is a global pseudo-random generator. However, randomstate is a pseudo-random generator isolated from others, which only impact specific variable.
+
+rng = np.random.RandomState(0)
+rng.rand(4)
+# Out[1]: array([0.5488135 , 0.71518937, 0.60276338, 0.54488318])
+rng = np.random.RandomState(0)
+rng.rand(4)
+# Out[2]: array([0.5488135 , 0.71518937, 0.60276338, 0.54488318])
+
+(49)
+
+By specifying a seed value, the function ensures that the sequence of random numbers generated remains the same across multiple runs, 
+providing deterministic behavior and allowing reproducibility in random number generation.
+
+for _ in range(3):
+    np.random.seed(1)
+    s=np.random.normal(size=(2,2))
+    print(s)
+
+--
+
+[[ 1.62434536 -0.61175641]
+ [-0.52817175 -1.07296862]]
+[[ 1.62434536 -0.61175641]
+ [-0.52817175 -1.07296862]]
+[[ 1.62434536 -0.61175641]
+ [-0.52817175 -1.07296862]]
+
+np.random.randint(1,6,2)
+
+-- array([4, 5]) # 2 random numbers between 1 and 6 
+
+# random walk
+a=np.random.randint(0,2,size=100)
+a=np.where(a>0,1,-1)
+walk=a.cumsum()
+import matplotlib.pyplot as plt
+plt.plot(walk)
+
+(np.abs(walk)>10).argmax() # finding the index where walk array has aboslute value 10 "first" time
+
+arr=np.array([1,2,3,4,5,6,7])
+print((arr>3),(arr>3).argmax())
+
+-- [False False False  True  True  True  True] 3
+
+The numpy.argmax() function returns indices of the max element of the array in a particular axis.
+
+np.argmax(np.array([1,2,5,4,-1]))
+
+-- 2
+
+np.argmax(np.array([[1,2,5],[5,-1,3]]),axis=0)
+
+-- array([1, 0, 0], dtype=int64)
+
+np.random.normal(loc=0, scale=0.25,size=10)
+
+-- 
+
+array([ 0.31207495, -0.18941854,  0.14707354,  0.08671483,  0.34175818,
+        0.16842902, -0.32289068, -0.21206098, -0.04164989,  0.22929901])
+
+(50)
+
+# seed --> Seed the random number generator
+# permutation --> Return a random permutation of a sequence, or return a permuted range
+# shuffle --> Randomly permute a sequence in-place
+# rand --> Draw samples from a uniform distribution
+# randint --> Draw random integers from a given low-to-high range
+# randn --> Draw samples from a normal distribution with mean 0 and standard deviation 1 (MATLAB-like interface)
+# binomial --> Draw samples from a binomial distribution
+# normal --> Draw samples from a normal (Gaussian) distribution
+# beta --> Draw samples from a beta distribution
+# chisquare --> Draw samples from a chi-square distribution
+# gamma --> Draw samples from a gamma distribution
+# uniform --> Draw samples from a uniform [0, 1) distribution
+
+----------------------------------------------------------------------------------------------------------------------------
+
+(51)
+
+pandas adopts significant parts of NumPy’s idiomatic style of array-based computing, especially array-based functions 
+and a preference for data processing without for loops
+
+While pandas adopts many coding idioms from NumPy, the biggest difference is that pandas is designed for working with tabular 
+or heterogeneous data. NumPy, by contrast, is best suited for working with homogeneous numerical array data.
+
+(52) from pandas import Series, DataFrame
+
+A Series is a one-dimensional array-like object containing a sequence of values (of similar types to NumPy types) and an associated array of data labels, 
+called its index. The simplest Series is formed from only an array of data:
+
+import pandas as pd
+pd.Series([1,'a',3])
+
+-- 
+
+0    1
+1    a
+2    3
+dtype: object
+
+The string representation of a Series displayed interactively shows the index on the left and the values on the right.
+
+(53)
+
+You can get the array representation and index object of the Series via its values and index attributes, respectively:
+
+series.index
+
+-- RangeIndex(start=0, stop=3, step=1)
+
+series.values
+
+-- array([1, 'a', 3], dtype=object)
+
+(54)
+
+ser=pd.Series(['ankit','kiio','summi'],index=['a','b','c'])
+print(ser)
+
+-- 
+
+a    ankit
+b     kiio
+c    summi
+dtype: object
+
+ser[['a','c']]
+
+--
+
+a    ankit
+c    summi
+dtype: object
+
+(55)
+
+ser[1]='soumi'
+ser
+
+--
+
+a    ankit
+b    soumi
+c    summi
+dtype: object
+
+ser['d']='kiio'
+ser
+
+--
+
+a    ankit
+b    soumi
+c    summi
+d     kiio
+dtype: object
+
+(56)
+
+Using NumPy functions or NumPy-like operations, such as filtering with a boolean array, scalar multiplication, or applying math functions, 
+will preserve the index-value link
+
+ser[(ser=='soumi') | (ser=='kiio')]
+
+--
+
+b    soumi
+d     kiio
+dtype: object
+
+ser*2
+
+--
+
+a    ankitankit
+b    soumisoumi
+c    summisummi
+d      kiiokiio
+dtype: object
+
+(57)
+
+Another way to think about a Series is as a fixed-length, ordered dict, as it is a mapping of index values to data values. 
+It can be used in many contexts where you might use a dict:
+
+'b' in ser
+
+-- True
+
+(58) 
+
+pd.Series({'a':'ankit',1:'kiio'})
+
+--
+
+a    ankit
+1     kiio
+dtype: object
+
+(59) I will use the terms “missing” or “NA” interchangeably to refer to missing data. The isnull and notnull functions in pandas should
+ be used to detect missing data:
+
+obj=pd.Series([1,2,None,4,5],index=['a','b','c','d','e'])
+print(obj,'\n\n',obj.isnull(),'\n\n',obj.isnull().sum())
+
+--
+
+a    1.0
+b    2.0
+c    NaN
+d    4.0
+e    5.0
+dtype: float64 
+
+ a    False
+b    False
+c     True
+d    False
+e    False
+dtype: bool 
+
+ 1
+
+(60)
+
+Both the Series object itself and its index have a name attribute
+
+obj.name='my series'
+obj.index.name='my index'
+print(obj)
+
+--
+
+my index
+a    1.0
+b    2.0
+c    NaN
+d    4.0
+e    5.0
+Name: my series, dtype: float64
+
+(61)
+
+obj=pd.Series([1,2,3,4,5],index=['a','b','c','d','e'],dtype=np.int16)
+
+(62) DataFrame:
+
+A DataFrame represents a rectangular table of data and contains an ordered 
+collection of columns, each of which can be a different value type (numeric, string, boolean, etc.). 
+
+There are many ways to construct a DataFrame, though one of the most common is from a dict of equal-length lists or NumPy arrays:
+
+data={'name':['ankit','kiio','summi','soumi'],'institute':['ISI','IIIT-D','ECIL','IISc'],'Priority':[4,1,2,3],'Marks':[0,100.0,100.0,100.0]}
+df=pd.DataFrame(data,index=['a','b','c','d'],columns=['name','institute','Marks','Priority'])
+print(df)
+
+--
+
+    name institute  Marks  Priority
+a  ankit       ISI    0.0         4
+b   kiio    IIIT-D  100.0         1
+c  summi      ECIL  100.0         2
+d  soumi      IISc  100.0         3
+
+df.head(3)
+df.columns
+
+(63) 
+
+df['name'] (dict like notation) or df.name
+
+a    ankit
+b     kiio
+c    summi
+d    soumi
+Name: name, dtype: object
+
+(64) column to numpy array
+
+df['name'].values
+
+-- array(['ankit', 'kiio', 'summi', 'soumi'], dtype=object)
+
+x=pd.Series({'a':1,'b':[1,2]},index=['b','a'])
+x['b']
+
+-- [1, 2]
+
+(65)
+
+df.loc[['c','d']]
+
+	name	institute Marks	Priority
+c	summi	ECIL	  100.0	2
+d	soumi	IISc	  100.0	3
+
+
+df.loc[df['name']=='kiio']
+
+
+	name	institute	Marks	Priority
+b	kiio	IIIT-D		100.0	1
+
+df['Marrital Statu']='No'
+
+
+	name	institute	Marks	Priority	Marrital Statu
+a	ankit	ISI		0.0	4		No
+b	kiio	IIIT-D		100.0	1		No
+c	summi	ECIL		100.0	2		No
+d	soumi	IISc		100.0	3		No
+
+
+(66)
+
+df['rank']=np.arange(1,5,1)
+print(df)
+
+--
+
+    name institute  Marks  Priority Marrital Statu  rank
+a  ankit       ISI    0.0         4             No     1
+b   kiio    IIIT-D  100.0         1             No     2
+c  summi      ECIL  100.0         2             No     3
+d  soumi      IISc  100.0         3             No     4
+
+(67) 
+
+df['rank']=pd.Series([4,1,2,3],index=['a','b','c','d'])
+print(df)
+
+--
+
+    name institute  Marks  Priority Marrital Statu  rank
+a  ankit       ISI    0.0         4             No     4
+b   kiio    IIIT-D  100.0         1             No     1
+c  summi      ECIL  100.0         2             No     2
+d  soumi      IISc  100.0         3             No     3
+
+(68)
+
+You can transpose the DataFrame (swap rows and columns) with similar syntax to a NumPy array:
+
+df.T (or) df.transpose()
+
+--
+
+                    a       b      c      d
+name            ankit    kiio  summi  soumi
+institute         ISI  IIIT-D   ECIL   IISc
+Marks             0.0   100.0  100.0  100.0
+Priority            4       1      2      3
+Marrital Statu     No      No     No     No
+rank                4       1      2      3
+
+(69)
+
+a DataFrame’s index and columns have their name attributes like series.
+
+(70)
+
+print(df['rank'].values)
+print(df.values)
+
+--
+
+[4 1 2 3]
+[['ankit' 'ISI' 0.0 4 'No' 4]
+ ['kiio' 'IIIT-D' 100.0 1 'No' 1]
+ ['summi' 'ECIL' 100.0 2 'No' 2]
+ ['soumi' 'IISc' 100.0 3 'No' 3]]
+
+(71)
+
+df1=pd.DataFrame({'Name':['ankit','kiio'],'Age':[30,25]},index=['a','b'])
+new_index=df1.index
+df2=pd.DataFrame({'College':['ISI','IIIT-D'],'Rank':[0,1]},index=new_index)
+print(df1)
+print(df2)
+
+--
+
+    Name  Age
+a  ankit   30
+b   kiio   25
+  College  Rank
+a     ISI     0
+b  IIIT-D     1
+
+Index objects are immutable and thus can’t be modified by the user
+
+(72)
+
+label=pd.Index(np.arange(2))
+df2=pd.DataFrame({'College':['ISI','IIIT-D'],'Rank':[0,1]},index=label)
+print(df2)
+
+(73)
+
+reindexing:
+
+df1=pd.DataFrame({'Name':['ankit','kiio'],'Age':[30,25]},index=['a','b'])
+df1=df1.reindex(['b','a','z'])
+print(df1)
+
+--
+
+    Name   Age
+b   kiio  25.0
+a  ankit  30.0
+z    NaN   NaN
+
+(74)
+
+For ordered data like time series, it may be desirable to do some interpolation or filling of values when reindexing. \
+The method option allows us to do this, using a method such as ffill, which forward-fills the values:
+
+df1=pd.DataFrame({'Name':['ankit','kiio'],'Age':[30,25]},index=['a','b'])
+df1=df1.reindex(['b','a','z'],method='ffill')
+print(df1)
+
+--
+
+    Name  Age
+b   kiio   25
+a  ankit   30
+z   kiio   25
+
+(75)
+
+df=pd.DataFrame([[1.2,'ankit'],[9.7,'kiio'],[9.5,'soumi']],index=['a','b','c'],columns=['Grade','Name'])
+print(df)
+df.drop('a',inplace=True)
+print(df)
+
+--
+
+   Grade   Name
+a    1.2  ankit
+b    9.7   kiio
+c    9.5  soumi
+   Grade   Name
+b    9.7   kiio
+c    9.5  soumi
+
+(76)
+
+df.drop(['Grade'],axis=1)
+
+--
+
+	Name
+b	kiio
+c	soumi
+
+df.drop(index=['b','c'])
+
+--
+
+Grade	Name
+
+(Empty Dataframe)
+
+(77)
+
+df=pd.Series(['ankit','kiio','summi','soumi'],index=['a','b','c','d'])
+print(df[1:4])
+print(df[['b','c']])
+
+--
+
+b     kiio
+c    summi
+d    soumi
+dtype: object
+b     kiio
+c    summi
+dtype: object
+
+(78)
+
+df=pd.DataFrame(['ankit','kiio','summi','soumi'],index=['a','b','c','d'],columns=['Name'])
+print(df[1:4]) # selecting rows
+print(df[['Name']]) # selecting columns
+print(df[df['Name']=='kiio']) # filtering condition
+--
+
+    Name
+b   kiio
+c  summi
+d  soumi
+    Name
+a  ankit
+b   kiio
+c  summi
+d  soumi
+   Name
+b  kiio
+
+(79)
+
+df=pd.DataFrame([[1.2,'ankit'],[9.7,'kiio'],[9.5,'soumi']],index=['a','b','c'],columns=['Grade','Name'])
+print(df)
+print(df.loc['a',['Grade','Name']])
+
+--
+
+   Grade   Name
+a    1.2  ankit
+b    9.7   kiio
+c    9.5  soumi
+Grade      1.2
+Name     ankit
+Name: a, dtype: object
+
+(80)
+
+print(df.iloc[1,[1,0]])
+
+--
+
+Name     kiio
+Grade     9.7
+Name: b, dtype: object
+
+(81)
+
+s1 = pd.Series([7.3, -2.5, 3.4, 1.5], index=['a', 'c', 'd', 'e'])
+s2 = pd.Series([-2.1, 3.6, -1.5, 4, 3.1],index=['a', 'c', 'e', 'f', 'g'])
+
+s1 + s2
+
+--
+
+a    5.2
+c    1.1
+d    NaN
+e    0.0
+f    NaN
+g    NaN
+dtype: float64
+
+(similar to outer join)
+
+In the case of DataFrame, alignment is performed on both the rows and the columns
+
+(82)
+
+df1 = pd.DataFrame(np.arange(12.).reshape((3, 4)),columns=list('abcd'))
+df2 = pd.DataFrame(np.arange(20.).reshape((4, 5)),columns=list('abcde'))
+df2.loc[1, 'b'] = np.nan
+df1 + df2
+
+--
+
+
+	a	b	c	d	e
+0	0.0	2.0	4.0	6.0	NaN
+1	9.0	NaN	13.0	15.0	NaN
+2	18.0	20.0	22.0	24.0	NaN
+3	NaN	NaN	NaN	NaN	NaN
+
+df1.add(df2, fill_value=0)
+
+--
+
+
+	a	b	c	d	e
+0	0.0	2.0	4.0	6.0	4.0
+1	9.0	5.0	13.0	15.0	9.0
+2	18.0	20.0	22.0	24.0	14.0
+3	15.0	16.0	17.0	18.0	19.0
+
+(83)
+
+arr = np.arange(12.).reshape((3, 4))
+print(arr)
+print(arr-arr[0])
+
+--
+
+When we subtract arr[0] from arr, the subtraction is performed once for each row. This is referred to as broadcasting.
+
+(84)
+
+If you want to instead broadcast over the columns, matching on the rows, you have to use one of the arithmetic methods.
+
+series3 = frame['d']
+frame
+
+--
+
+	b	d	e
+Utah	0.0	1.0	2.0
+Ohio	3.0	4.0	5.0
+Texas	6.0	7.0	8.0
+Oregon	9.0	10.0	11.0
+
+
+frame.sub(series3, axis='index')
+
+--
+
+	b	d	e
+Utah	-1.0	0.0	1.0
+Ohio	-1.0	0.0	1.0
+Texas	-1.0	0.0	1.0
+Oregon	-1.0	0.0	1.0
+
+The axis number that you pass is the axis to match on. In this case we mean to match on the DataFrame’s row index (axis='index' or axis=0) and broadcast across.
+
+(85)
+
+NumPy ufuncs (element-wise array methods) also work with pandas objects:
+
+frame = pd.DataFrame(np.random.randn(4, 3), columns=list('bde'),index=['Utah', 'Ohio', 'Texas', 'Oregon'])
+frame
+
+--
+
+		b	d	e
+Utah	0.546979	0.220407	-2.005660
+Ohio	0.166589	1.285297	2.852149
+Texas	-0.259623	0.490741	-0.231152
+Oregon	0.635178	-0.666540	0.805573
+
+np.abs(frame)
+
+--
+
+		b	d	e
+Utah	0.546979	0.220407	2.005660
+Ohio	0.166589	1.285297	2.852149
+Texas	0.259623	0.490741	0.231152
+Oregon	0.635178	0.666540	0.805573
+
+(86)
+
+Another frequent operation is applying a function on one-dimensional arrays to each column or row. DataFrame’s apply method does exactly this:
+
+f = lambda x: x.max() - x.min()
+frame.apply(f)
+
+--
+
+b    0.894801
+d    1.951837
+e    4.857809
+dtype: float64
+
+(87)
+
+If you pass axis='columns' to apply, the function will be invoked once per row instead:
+
+frame.apply(f, axis='columns')
+
+--
+
+Utah      2.552639
+Ohio      2.685560
+Texas     0.750364
+Oregon    1.472112
+dtype: float64
+
+(88)
+
+def f(x):
+    return pd.Series([x.min(), x.max()], index=['min', 'max'])
+frame.apply(f)
+
+--
+
+		b	d	e
+min	-0.259623	-0.666540	-2.005660
+max	0.635178	1.285297	2.852149
+
+(89)
+
+Element-wise Python functions can be used, too. Suppose you 
+wanted to compute a formatted string from each floating-point value in frame. You can do this with apply map:
+
+format = lambda x: '%.2f' % x
+frame.applymap(format)
+
+--
+
+	b	d	e
+Utah	0.55	0.22	-2.01
+Ohio	0.17	1.29	2.85
+Texas	-0.26	0.49	-0.23
+Oregon	0.64	-0.67	0.81
+
+(90)
+
+frame['e'].map(format)
+
+--
+
+Utah      -2.01
+Ohio       2.85
+Texas     -0.23
+Oregon     0.81
+Name: e, dtype: object
+
+(91) Sorting and Ranking:
+
+pd.Series([1,3,2,7],index=['d','b','a','c']).sort_index()
+
+--
+
+a    2
+b    3
+c    7
+d    1
+dtype: int64
+
+(same with frame)
+
+frame = pd.DataFrame(np.arange(8).reshape((2, 4)),index=['three', 'one'],columns=['d', 'a', 'b', 'c'])
+frame.sort_index()
+
+--
+
+	d	a	b	c
+one	4	5	6	7
+three	0	1	2	3
+
+frame.sort_index(axis=1,ascending=True)
+
+--
+
+	a	b	c	d
+three	1	2	3	0
+one	5	6	7	4
+
+
+(92)
+
+
+obj = pd.Series([4, 7, -3, 2])
+obj.sort_values()
+
+--
+
+2   -3
+3    2
+0    4
+1    7
+dtype: int64
+
+frame = pd.DataFrame({'b': [4, 7, -3, 2], 'a': [0, 1, 0, 1]})
+frame
+
+--
+
+	b	a
+0	4	0
+1	7	1
+2	-3	0
+3	2	1
+
+frame.sort_values(by='b')
+
+--
+
+	b	a
+2	-3	0
+3	2	1
+0	4	0
+1	7	1
+
+frame.sort_values(by=['a', 'b'])
+
+--
+
+	b	a
+2	-3	0
+0	4	0
+3	2	1
+1	7	1
+
+(93) Summarizing and Computing Descriptive Statistics
+
+df = pd.DataFrame([[1.4, np.nan], [7.1, -4.5],[np.nan, np.nan], [0.75, -1.3]],index=['a', 'b', 'c', 'd'],columns=['one', 'two'])
+df
+
+--
+
+	one	two
+a	1.40	NaN
+b	7.10	-4.5
+c	NaN	NaN
+d	0.75	-1.3
+
+calling DataFrame’s sum method returns a Series containing column sums:
+
+df.sum()
+
+--
+
+one    9.25
+two   -5.80
+dtype: float64
+
+Passing axis='columns' or axis=1 sums across the columns instead.
+Some methods, like idxmin and idxmax, return indirect statistics like the index value where the minimum or maximum values are attained.
+
+
+(94)
+
+df.describe()
+
+# Table 5-8. --> Descriptive and summary statistics
+# -------------------------------------------------
+# Method --> Description
+# ----------------------
+# count --> Number of non-NA values
+# describe --> Compute set of summary statistics for Series or each DataFrame column
+# min, max --> Compute minimum and maximum values
+# argmin, argmax --> Compute index locations (integers) at which minimum or maximum value obtained, respectively
+# idxmin, idxmax --> Compute index labels at which minimum or maximum value obtained, respectively
+# quantile --> Compute sample quantile ranging from 0 to 1
+# sum --> Sum of values
+# mean --> Mean of values
+# median --> Arithmetic median (50% quantile) of values
+# mad --> Mean absolute deviation from mean value
+# prod --> Product of all values
+# var --> Sample variance of values
+# std --> Sample standard deviation of values
+# skew --> Sample skewness (third moment) of values
+# kurt --> Sample kurtosis (fourth moment) of values
+# cumsum --> Cumulative sum of values
+# cummin, cummax --> Cumulative minimum or maximum of values, respectively
+# cumprod --> Cumulative product of values
+# diff --> Compute first arithmetic difference (useful for time series)
+# pct_change --> Compute percent changes
+
+(95)
+
+The corr method of Series computes the correlation of the overlapping, non-NA, aligned-by-index values in two Series. Relatedly, cov computes the covariance:
+
+returns['MSFT'].corr(returns['IBM'])
+returns['MSFT'].cov(returns['IBM'])
+
+(96)
+
+value_counts --> Return a Series containing unique values as its index and frequencies as its values, ordered count in
+# descending order
+
+import pandas as pd
+data = pd.DataFrame({'Qu1': [1, 3, 4, 3, 4],'Qu2': [2, 3, 1, 2, 3],'Qu3': [1, 5, 2, 4, 4]})
+data
+
+
+	Qu1	Qu2	Qu3
+0	1	2	1
+1	3	3	5
+2	4	1	2
+3	3	2	4
+4	4	3	4
+
+result = data.apply(pd.value_counts).fillna(0)
+result
+
+--
+
+	Qu1	Qu2	Qu3
+1	1.0	1.0	1.0
+2	0.0	2.0	1.0
+3	2.0	2.0	0.0
+4	2.0	0.0	2.0
+5	0.0	0.0	1.0
