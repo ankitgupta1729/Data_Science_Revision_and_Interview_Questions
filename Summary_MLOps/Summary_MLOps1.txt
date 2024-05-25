@@ -1,0 +1,1773 @@
+############################# Machine Learning in Production by Suhas Pote ####################################
+
+
+## Chapter 1 Python
+--------------------
+
+(1)  Installation:
+
+On Linux:
+
+Ubuntu 16.10 and 17.04:
+
+sudo apt update
+sudo apt install python3.6
+
+Ubuntu 17.10, 18.04 (Bionic) and onward:
+
+Ubuntu 17.10 and 18.04 already come with Python 3.6 as default. Just run python3
+in the terminal to invoke it.
+
+(2) Install code editor:
+
+Any of the following code editors can be chosen; however, the preferred one is Visual
+Studio Code:
+
+Visual Studio Code (https://code/visualstudio.com)
+Sublime Text (https://www.sublimetext.com)
+Notepad++ (https://notepad-plus-plus.org/downloads/)
+
+(3) Python is an interpreted, object-oriented, high-level programming language with
+dynamic semantics.It is developed under an OSI-approved open-source license, making it freely usable
+and distributable, even for commercial use.
+
+The Python Package Index (PyPI) hosts thousands of third-party modules for Python.
+
+(4) Array
+
+Arrays are collections of homogeneous items. One can use the same data type in a single array.
+
+Example: 1.2 Array data type
+
+import array as arr
+2.
+3. my_array = arr.array("i", (1, 2, 3, 4, 5))
+4.
+5. print(my_array)
+6. array('i', [1, 2, 3, 4, 5])
+7.
+8. print(my_array[1])
+9. 2
+
+(5) Class: A class acts like a template for the objects. It is defined using the class keyword
+like the def keyword is used while creating a new function. A Python class contains
+objects and methods, and they can be accessed using the period (.).
+
+Object: An object is an instance of a class. It depicts the structure of the class and
+contains class variables, instance variables, and methods.
+
+(6) 
+
+Reshaping array:
+
+Suppose you want to change the shape of a ndarray (N-dimension array) without
+losing the data; it can be done using the reshape() or flatten() method.
+
+1. # Rank 1 Array
+2. my_1array = np.array([1,2,3,4,5,6])
+3. print(my_1array)
+4. [1 2 3 4 5 6]
+1. # converting Rank 1 array to Rank 2 array
+2. my_2array = my_1array.reshape(2, 3)
+3. print(my_2array)
+4. [[1 2 3]
+5. [4 5 6]]
+1. #converting Rank 2 array to Rank 1 array
+2. my_1array = my_2array.flatten()
+3. print(my_1array)
+4. [1 2 3 4 5 6]
+Note: Here, you can use my_2array.reshape(6) instead of flatten().
+
+(7) Pamdas: loc - selection by label:
+
+A loc gets rows (and/or columns) with specific labels. To get all the rows in which
+fruit size is medium, loc is written as follows:
+
+Example: 1.21 Get the data by location
+
+1. df.loc[df['size'] == 'medium']
+2. fruit size quantity
+3. 1 banana medium 4
+4. 3 mango medium 6
+
+iloc - selection by position
+
+iloc gets rows (and/or columns) at the index’s locations. To get the row at index 2,
+iloc is written as follows:
+
+Example: 1.22 Get the data by position
+
+1. df.iloc[2]
+
+2. fruit orange
+3. size small
+4. quantity 8
+5. Name: 2, dtype: object
+
+To retrieve the rows from index 2 to 3 and columns 0 to 1, iloc is written as follows:
+
+1. df.iloc[2:4, 0:2]
+2. fruit size
+3. 2 orange small
+4. 3 mango medium
+
+You can call groupby() and pass the size, that is, the column you want the group on,
+and then use the sum() aggregate method.
+
+Example: 1.23 Group the data, then use an aggregate function
+
+1. df.groupby(['size'])['quantity'].sum()
+2. size
+3. large 5
+4. medium 10
+5. small 8
+6. Name: quantity, dtype: int64
+
+
+(8) Save and load Excel files:
+
+Example: 1.25 Save and load Excel files
+
+1. df.to_excel("fruit.xlsx", sheet_name="Sheet1")
+2. df = pd.read_excel("fruit.xlsx", "Sheet1", index_col=None)
+
+-----------------------------------------------------------------------------------------------------------
+
+## Chapter 2 Git and GitHub Fundamentals
+
+(9)
+
+It is difficult to maintain multiple versions of files while working in a team. Git
+solves this problem by allowing developers to collaborate and share files with other
+team members.
+
+(10)
+
+Git is an open-source Distributed Version Control System (DVCS). A version
+control system allows you to record changes to files over a period.
+
+Git is used to maintain the historical and current versions of source code. In a project,
+developers have a copy of all versions of the code stored in the central server.
+
+(11)
+
+Git allows developers to do the following:
+•	 Track the changes, who made the changes, and when
+•	 Rollback/restore changes
+•	 Allow multiple developers to coordinate and work on the same files
+•	 Maintain a copy of the files at the remote and local level
+
+(12)
+
+The following image depicts Git as a VCS in a team where developers can work
+simultaneously on the same files and keep track of who made the changes.
+
+(13)
+
+Git and GitHub are separate entities. Git is a command-line tool, whereas GitHub is a
+platform for collaboration. You can store files and folders on GitHub and implement
+changes to existing projects. By creating a separate branch, you can isolate these
+changes from your existing project files.
+
+(14)
+
+GitHub Actions makes it easy to automate all your software workflows with
+Continuous Integration/Continuous Deployment. You can build, test, and deploy
+the code right from GitHub.
+
+(15) Common Git workflow:
+
+It covers operations like
+creating or cloning the Git repository, updating the local repository by pulling files
+from the remote repository, and pushing the local changes to the remote repository.
+
+(16) Install Git and create a GitHub account:
+
+Linux (Debian/Ubuntu)
+
+In Ubuntu, open the terminal and install Git using the following commands:
+
+$ sudo apt-get update
+$ sudo apt-get install git
+
+(17) Common Git commands:
+
+A. Setup
+
+-- Set a name that is identifiable for credit when reviewing the version history:
+
+git config --global user.name “[firstname lastname]”
+
+-- Set an email address that will be associated with each history marker:
+
+git config --global user.email “[valid-email-id]”
+
+B. New repository
+
+-- Initialize an existing directory as a Git repository:
+
+git init
+
+-- Retrieve an entire repository from a hosted location via URL:
+
+git clone [url]
+
+C. Update
+
+-- Fetch and merge any commits from the remote branch:
+
+git pull
+
+-- Fetch all the branches from the remote Git repo:
+
+git fetch [alias]
+
+D. Changes
+
+-- View modified files in the working directory staged for your next commit:
+
+git status
+
+-- Add a file to your next commit (stage):
+
+git add [file]
+
+-- Commit your staged content as a new commit snapshot:
+
+git commit -m “[descriptive message]”
+
+-- Transfer local branch commits to the remote repository branch:
+
+git push [alias] [branch]
+
+E. Revert
+
+-- View all the commits in the current branch’s history:
+
+git log
+
+-- Switch to another branch:
+
+git checkout ['branch_name']
+
+(18) Let’s Git:
+
+A. Create a new directory code and switch to the code directory:
+
+suhas@test:~/code$ sudo chmod -R 777 /home/suhas/code
+
+B. Configuration.
+
+suhas@test:~/code$ git config --global user.name "Suhas"
+suhas@test:~/code$ git config --global user.email "suhasp.ds@gmail.com"
+
+C. Initialize the Git repository
+
+suhas@test:~/code$ git init
+
+D. Check Git status
+
+suhas@test:~/code$ git status
+
+E. Add a new file
+
+A new file hello.py has been added using the touch command:
+
+suhas@test:~/code$ touch hello.py
+
+You can notice the change in the output of the git status:
+
+suhas@test:~/code$ git status
+
+F. Add the hello.py file to staging:
+
+suhas@test:~/code$ git add hello.py
+
+suhas@test:~/code$ git status
+
+suhas@test:~/code$ git commit -m "New file"
+
+suhas@test:~/code$ git status
+
+G. Update the hello.py file using the nano command:
+
+suhas@test:~/code$ sudo nano hello.py
+
+Now, add the print (“Hello Word!”) to the hello.py file.
+
+You can see the changes in the output of the git status:
+
+suhas@test:~/code$ git status
+
+On branch master
+Changes not staged for commit:
+ (use "git add <file>..." to update what will be committed)
+ (use "git checkout -- <file>..." to discard changes in working
+directory)
+ modified: hello.py
+no changes added to commit (use "git add" and/or "git commit -a")
+
+H. Add the hello.py file to staging:
+
+suhas@test:~/code$ git add hello.py
+
+I. Commit along with the message added print text:
+
+suhas@test:~/code$ git commit -m "added print text"
+
+J. View the logs using the git log command:
+
+suhas@test:~/code$ git log
+
+commit af7cfeb53ff6dc49126d24aedb20a065c54ef4a0 (HEAD -> master)
+Author: “Suhas Pote” <“suhasp.ds@gmail.com”>
+Date: Sun Jul 5 21:34:15 2020 +0530
+added print text
+commit bd49a5e5280de35811848a80299d900e6e6509ce
+Author: “Suhas Pote” <“suhasp.ds@gmail.com”>
+Date: Sun Jul 5 21:26:12 2020 +0530
+New file
+
+
+(19)
+
+Git identifies each commit uniquely using the SHA1 (Secure Hash Algorithm) hash function, based on the
+contents of the committed files. So, each commit is identified with a 40-characterlong hexadecimal string.
+
+suhas@test:~/code$ git checkout af7cfeb53ff6dc49126d24aedb20a065c54ef4a0
+
+(this af7c... comes from git log command)
+
+Note: checking out 'bd49a5e5280de35811848a80299d900e6e6509ce'.
+You are in a 'detached HEAD' state. You can look around, make
+experimental changes and commit them, and you can discard any commits you make in
+this
+state without impacting any branches by performing another checkout.
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again.
+Example:
+ git checkout -b <new-branch-name>
+HEAD is now at bd49a5e New file
+
+(20)  If you notice, the hello.py file is backed to the previous state, that is, a blank file. It is
+like a time machine.
+
+(21) Now, let’s get back to the latest version of hello.py.
+
+suhas@test:~/code$ git reset --hard
+
+af7cfeb53ff6dc49126d24aedb20a065c54ef4a0
+
+(22) It’s time to push the files to the GitHub repo.
+
+suhas@test:~/code$ git remote add origin https://github.com/suhas-ds/
+myrepo.git
+
+suhas@test:~/code$ git push -u origin master
+
+Username for 'https://github.com': suhas-ds
+
+Password for 'https://suhas-ds@github.com':
+
+Counting objects: 6, done.
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (6/6), 477 bytes | 477.00 KiB/s, done.
+Total 6 (delta 0), reused 0 (delta 0)
+To https://github.com/suhas-ds/myrepo
+ * [new branch] master -> master
+Branch 'master' is set up to track remote branch 'master' from 'origin'.
+
+Note: Here, the origin acts as an alias or label for the URL, and the master is a
+branch name.
+
+(23)
+
+To pull the latest version of the file execute the following command.
+
+suhas@test:~/code$ git pull origin master
+
+From https://github.com/suhas-ds/myrepo
+ * branch master -> FETCH_HEAD
+Already up to date.
+
+(24) If you want to load files from another GitHub repository, or if you are working on
+another system and want to load files from your GitHub repository, you can achieve
+this by cloning it.
+
+suhas@test:~/myrepo$ git clone https://github.com/suhas-ds/myrepo.git
+
+Cloning into 'myrepo'...
+remote: Enumerating objects: 6, done.
+remote: Counting objects: 100% (6/6), done.
+remote: Compressing objects: 100% (2/2), done.
+remote: Total 6 (delta 0), reused 6 (delta 0), pack-reused 0
+Unpacking objects: 100% (6/6), done.
+You can practice frequently used Git commands with more files and Git repositories.
+
+--------------------------------------------------------------------------------------------------------------
+
+## Chapter 3 Challenges in ML Model Deployment:
+
+
+(25) A study found that 87% of Data Science and Machine Learning projects never make
+it into production.
+
+Deploying ML models is entirely based on your end goals, such as frequency of
+predictions, latency, number of users, single or batch predictions, and accessibility.
+
+ML life cycle:
+
+The machine learning life cycle is a periodic process. It starts with the business
+problem, and the last stage is monitoring and optimization. However, it is not so
+straightforward. For instance, if there is a modification in the business requirement,
+you may have to execute all the stages of the ML life cycle again. In some scenarios,
+you may have to go back to the previous stages of the ML life cycle to fulfill the
+criteria of that specific stage. For example, if you get lower accuracy of the model
+than the threshold, you need to revisit the previous stages to improve the accuracy.
+It can be done by adding new features, optimizing model parameters, and so on.
+
+Stages:
+
+A. Business impact
+
+The business impact could be anything, like an increase in revenue, a decrease in
+expenses, or reducing human errors. One needs to understand the business pain
+points and try to assess the possibilities of having an ML solution that will solve
+multiple business problems. In some scenarios, getting quick results is more
+important.
+
+B. Data collection
+
+Before collecting the data, you need to answer the following questions:
+
+•	 What data needs to be collected?
+•	 What are the different sources of the data?
+•	 What is the type of data?
+•	 What is the size of the data?
+
+In the real world, you may have to collect data from different sources, like relational
+databases, NoSQL databases, the web, and so on. To avoid any glitches or delays,
+you must build the pipeline for data collection.
+
+Here are a few ways to collect data:
+
+•	 E-surveys
+•	 Authorized web scraping tool
+•	 Click data
+•	 Social media platforms
+•	 Website tracking
+•	 Subscription/ registration data
+•	 Image data - CCTV/ camera
+
+C. Data preparation:
+
+The data collected usually is in a raw format. One needs to process it so that it can
+be used for further analysis and model development. This process of cleaning,
+restructuring, and standardization is known as data preparation.
+
+Around 70%-80% of the time goes into this stage of the ML project. This is a tedious
+task, but it is unavoidable. Data reduction technique is used when you have a large
+amount of data to be processed.
+
+Data preparation aims to transform the raw data into a format so that EDA, that is,
+Exploratory Data Analysis, can be performed efficiently to gain insights.
+
+Challenges:
+
+•	 Missing values
+•	 Outliers
+•	 Disparate data format
+•	 Data standardization
+•	 Noise in the data
+
+D. Feature engineering
+
+In this stage, you prepare the input data that can be fed to the model, which makes
+it easier for the machine learning model by deriving meaningful features, data
+transformations, and so on.
+
+Here are a few feature engineering techniques:
+
+•	 Label encoding
+•	 Combining features to create a new one
+•	 One hot encoding
+•	 Imputation
+•	 Scaling
+•	 Removing unwanted features
+•	 Log transformation
+
+Challenges:
+•	 Lack of domain knowledge
+•	 Creating new features from the existing set of features
+•	 Selecting useful features from a set of features
+
+
+E. Build and train the model
+
+First, you should have the training, test, and validation sets ready (for supervised
+algorithms). After a baseline model is created, it can be compared with new models.
+
+This process involves the development of multiple models to see which one is
+more efficient and gives better results. You must consider the computing resource
+requirements for this stage.
+
+Once the final model is built on the training data, the next step is to check its
+performance against the unseen, that is, the test data.
+
+Challenges:
+
+•	 Model complexity
+•	 Computational power
+•	 Identifying a suitable model
+•	 Model training time
+
+F. Test and evaluate
+
+Here, you will build the test cases and check how the model is performing against the
+new data. Pre-production or pre-deployment activities are done here. Performance
+results are analyzed and, if required, you have to go back to the previous stages to
+fix the issue.
+
+After passing this stage, you can push the ML model into the production phase.
+
+Challenges:
+
+•	 Insufficient test data
+•	 Reiterating the process until the output fulfills the requirements
+•	 Identifying the platform to evaluate model performance on real data
+•	 Deciding which test to use
+•	 Logging and analyzing test results
+
+
+G. Model deployment
+
+This refers to exposing the trained ML models to real-world users. Your model is
+performing well on test and validation sets, but if another system or users cannot
+utilize it, then it does not meet its purpose.
+
+Model deployment is crucial because you have to consider the following factors:
+
+•	 Number of times predictions to be delivered
+•	 Latency of the predictions
+•	 ML system architecture
+•	 ML model deployment and maintenance cost
+•	 Complexity of infrastructure
+
+Challenges:
+
+•	 Portability issues
+•	 Scalability issues
+•	 Data-related challenges
+•	 Security threats
+
+H. Monitoring and optimization
+
+Last but not least, monitoring and optimization is the stage where observing and
+tracking are required. You will have to check the model performance as it degrades
+over time.
+
+If the model metrics, such as accuracy, go below the predefined threshold, then
+it needs to be tracked, and a model needs to be retrained, either automatically or
+manually. Similarly, input data needs to be monitored because it may happen that
+the input data schema does not match or it contains missing values.
+
+Apart from this, the infrastructure metrics, such as RAM, free space, and system
+issues, need to be tracked.
+
+It is good to maintain the log records of metrics, intermediate outputs, warnings,
+and errors.
+
+Challenges:
+
+•	 Data drift
+•	 Deciding the threshold value for different metrics
+•	 Anomalies
+•	 Finalizing model evaluation metrics that need to be tracked
+
+(26) Types of model deployment
+
+There are various ways to deploy ML models into production.
+
+A. Batch predictions
+
+This is the simplest method. Here, the ML model is trained on static data to make
+predictions, which are saved in the database, such as MS-SQL, and can be integrated
+into existing applications or accessed by the business intelligence team.
+
+Generally, ML model artifacts are used for making predictions as it saves time.
+Model artifact needs to be updated on new data for better predictions.
+
+This method is well-suited for small organizations and beginners. You can schedule
+the cron job to make predictions after certain time intervals. 
+
+Pros:
+•	 Affordable
+•	 Less complex
+•	 Easy to implement
+Cons:
+•	 Moderate latency
+•	 Not suitable for ML-centric organizations
+
+B. Web service/REST API
+
+Web service/REST API is the popular method for deploying models. Unlike batch
+predictions, it does not process a bunch of records; it processes a single record at a
+time. In near real-time, it takes the parameters from users or existing applications
+and makes predictions.
+
+It can take inputs as well as return the outputs in JSON format. JSON is a popular
+and compatible format that makes it easy for software or website developers to
+integrate it into existing applications.
+
+When an event gets triggered, REST API passes the input parameters to the ML
+model and returns the predictions
+
+Pros:
+•	 Easy to integrate
+•	 Flexible
+•	 Economical (pay-as-you-go plan)
+•	 Near real-time predictions
+Cons:
+•	 Scalability issues
+•	 Prone to security threats
+
+C. Mobile and edge devices
+
+When there are situations such as actions/ decisions that need to be taken
+immediately or there is no internet connectivity, the ML model needs to be deployed
+on these devices.
+
+Edge devices include sensors, smartwatches, and cameras installed on robots.
+
+This type of deployment is different from the preceding methods. In this, input
+data may not go to remote servers for making predictions. There are cloud service
+providers, such as Microsoft Azure, that offer the required infrastructure for this.
+Tiny Machine Learning (TinyML) is another such alternative capable of performing
+on-device sensor data analytics at an extremely low power.
+
+ML models deployed on mobile devices are useful. Developing ML-based android/
+IOS applications, such as voice assistant or camera image-based attendance, are use
+cases of ML models deployed on mobiles.
+
+Pros:
+•	 Low power requirement
+•	 Cost-effective
+•	 Smaller sizes
+Cons:
+•	 Limited hardware resources
+•	 A complex and tedious process
+
+D. Real-time
+
+Here, analysis is to be done on streaming data. In this approach, the user
+passes input data for prediction and expects (near) real-time prediction. This
+is quite a challenging approach compared to the ones you studied previously.
+
+You can decrease the latency of the predictions by small-sized models,
+caching predictions, No-SQL databases, and so on.
+
+Pros:
+•	 Very low or no latency
+•	 Can work with streaming data
+Cons:
+•	 Complex architecture requirements
+•	 Computationally expensive
+
+(27) Challenges in deploying models in the production environment
+
+Team coordination
+Data-related challenges
+Portability
+Scalability
+Robustness
+Security
+
+(28) MLOps
+
+MLOps combines machine learning processes and best practices of DevOps to
+deliver consistent output with automated pipelines and management. 
+
+Subject matter experts understand and collect the requirements from
+the client. Then, data engineers collect the data from multiple sources and execute
+the ETL jobs. Once this is done, data scientists build the models and the DevOps team builds the CI/CD pipeline and monitors it. Finally, feedback is sent to the data
+scientist or the concerned team for validation.
+
+MLOps streamline and automate this process to speed up delivery and build efficient
+products/services.
+
+(29)
+
+MLOps is a combination of three disciplines- ML, DevOps, Data Engineering
+
+MLOps is different from DevOps because the code is usually static in the latter, but
+that’s not the case in MLOps.
+
+In MLOps, the model keeps training on new data, so a new model version gets
+generated recurrently. If it meets the requirements, it can be pushed into the
+production environment. This is why MLOps requires Continuous Training (CT)
+along with Continuous Integration (CI) and Continuous Delivery/Deployment
+(CD).
+
+In DevOps, developers write the code as per the requirements and then release it to
+the production environment, but in the case of machine learning, developers first
+need to collect the data and clean it. They write code for model building and then
+build the ML model. Finally, they release it into the production environment.
+
+(30) Benefits of MLOps:
+
+MLOps processes not only speed up the ML journey from experiments to production,
+but also reduce the number of errors. MLOps automates Machine Learning and Deep
+Learning model deployment in a production environment. Moreover, it reduces
+dependency on other teams by streamlining the processes.
+
+It is based on agile methodology. An automated CI/
+CD pipeline helps speed up the process of retraining models on new data, testing
+before the deployment, monitoring, and feedback loops. The current stage depends
+on the output of the preceding stages, so there are fewer chances of issues in the
+deployment process.
+
+There are many platforms (like GitHub Actions) available in the market that help
+you set up MLOps workflow.
+
+(31) Reproducibility
+
+Developer: It works on my machine.
+
+Manager: Then, we are going to ship your machine to the client.
+
+MLOps works on DRY (Don’t Repeat Yourself) principles and allows
+you to get consistent output.
+
+Given the same input, the replicated workflow should produce an identical
+output. For this, developers use container orchestration tools like Docker so
+that it will create and set up the same environment with dependencies in
+another machine or server for consistent output.
+
+(32) Automation
+
+Automation increases productivity,
+as you are less likely to test, deploy, scale, and monitor ML models manually
+
+(33) Tracking and feedback loop
+
+Tracking model performance, metrics, test results, and output becomes easy if you
+set up MLOps workflow properly. The model’s performance may degrade over
+time, hence one may need to retrain the model on new data.
+
+Thanks to tracking and feedback loops, it sends alerts about the model’s performance,
+metrics, and so on.
+
+For instance, if the feedback loop sends the information that model accuracy has
+dropped below 68%, then the model needs to be retrained. Again, it will check the
+model’s performance. If it is above the threshold level, it will pass on to the next
+stage; else, the model needs to be recalibrated using the latest data.
+
+(34)
+
+Container: A container is a standard unit of software that packages up the
+code and all its dependencies so that the application runs quickly and reliably
+despite the computing environment.
+
+Continuous Integration (CI): It is an automated process to build, test, and
+execute different pieces of code.
+
+Continuous Delivery/Deployment (CD): It is an automated process of
+frequently building tested code and deploying it to production.
+
+---------------------------------------------------------------------------------------------------
+
+
+## Packaging ML Models  
+
+(34) 
+
+In this chapter, you will learn how to modularize Python code and build ML packages
+that can be installed and consumed on another machine or server
+
+(35) Virtual environments:
+
+While working on multiple projects, ProjectA requires PackageY_version2.6,
+whereas ProjectB requires PackageY_version2.8. In such scenarios, you can’t
+keep both versions of the same package globally.
+
+The virtual environment is the solution. It allows you to isolate dependencies
+for each project. You can create the virtual environment anywhere and install the
+required packages in it. 
+
+Without the virtual environment, packages are installed globally at the default
+Python location:
+/home/suhas/.local/lib/python3.6/site-packages
+
+With the virtual environment, packages are installed inside the virtual environment’s
+Python location:
+/home/suhas/code/packages/venv_package/lib/python3.6/site-packages
+
+(36)
+
+Virtual environment installation:
+
+pip install virtualenv
+
+Creating a virtual environment:
+
+virtualenv venv_package
+
+Activating a virtual environment:
+
+source venv_package/bin/activate
+
+(venv_package) suhas@suhasVM:~/code/packages/prediction_model$
+
+Deactivating a virtual environment:
+
+deactivate
+
+To see the list of packages installed in the virtual environment:
+
+pip list
+Or
+pip freeze
+
+(37) Requirements file
+
+The requirements file holds the list of packages that can be installed using pip.
+
+To create the requirements file:
+
+pip freeze > requirements.txt
+
+To install the list of packages from the requirements file, you can use the following
+command:
+
+pip install -r requirements.txt
+
+Where -r refers to –-requirement.
+
+(38) Serializing and de-serializing ML models:
+
+Serializing is a process through which a Python object hierarchy is converted into a
+byte stream, whereas deserialize is the inverse operation, that is, a byte stream (from
+a binary file or bytes-like object) is converted back into an object hierarchy. In Python,
+serialization and deserialization refer to pickling and unpickling, respectively.
+
+Here, joblib.dump() and joblib.load() will be used as a replacement for a
+pickle.dump() and pickle.load respectively, to work efficiently on arbitrary
+Python objects containing large data, large NumPy arrays in particular, as shown
+here
+
+Import the joblib library:
+
+1. import joblib
+
+Then create an object to be persisted:
+
+2. joblib.dump(ML_model_object, filename)
+
+An object can be reloaded:
+
+3. joblib.load(filename)
+
+Note: If you are switching between Python versions, you may need to save a
+different joblib dump for each Python version.
+
+(39) Testing Python code with pytest
+
+Testing your code assures you that it is giving the expected results and its functions
+are working bug-free. pytest tool allows you to build and run tests with ease.
+
+pip install pytest
+
+To run the pytest, simply switch to the package directory and run the following
+command:
+
+pytest
+
+It searches for test_*.py or *_test.py files.
+
+The pytest output can be any of the following:
+•	 A dot (.) means that the test has passed.
+•	 An F means that the test has failed.
+•	 An E means that the test raised an unexpected exception.
+
+pytest -v
+
+-v or --verbose flag allows you to see whether individual tests are passing
+or failing.
+
+(40) pytest fixtures
+
+pytest fixtures are basic functions, and they run before the test functions are executed.
+pytest fixtures are useful when you are running multiple test cases with the same
+function return value.
+
+It can be declared by the @pytest.fixture marker. The following is an example:
+
+1. @pytest.fixture
+2. def xyz_func():
+3.   return “ABC”
+
+When pytest runs a test case, it looks at the parameters in that test function’s signature
+and then searches for fixtures that have the same names as those parameters. Once
+pytest finds them, it runs those fixtures, captures what they returned (if any), and
+passes those objects into the test functions as arguments.
+
+You can configure pytest using the pytest.ini file.
+
+(41) Python packaging and dependency management
+
+Suppose you have created the final ML model in a Python notebook. This Python
+notebook holds all the steps right from loading the data to predicting the test data.
+
+However, this notebook should not be used in the production environment for the
+following reasons:
+
+•	 Difficult to debug
+•	 Require changes at multiple locations
+•	 Lots of dependencies
+•	 No modularity in the code
+•	 Conflict of variables and functions
+•	 Duplicate code snippets
+
+(42) Modular programming
+
+Python is a modular programming language. Modular programming is a design
+approach in which code gets divided into separate files, such that each file contains
+everything necessary to execute a defined piece of logic and can return the expected
+output when imported by other files that will act as input for them. These separate
+files are called modules.
+
+A module is a Python file that can hold classes, functions, and variables. For instance,
+load.py is a module, and its name is load.
+
+A package contains one or more (relevant) modules, such that they are interlinked
+with each other. A package can contain a subpackage that holds the modules. It
+uses the inbuilt file hierarchy of directories for ease of access. A directory with
+subdirectories can be called a package if it contains the __init__.py file.
+
+Packages will be installed in the production environment as part of the deployment,
+so before you package anything, you’ll want to have answers to the following
+deployment questions:
+
+• Who are your app’s users? Will your app be installed by other developers
+doing software development, operations people in a data center, or a less
+software-savvy group?
+• Is your app intended to run on servers, desktops, mobile clients (phones,
+tablets, and so on), or embedded in dedicated devices?
+• Is your app installed individually, or in large deployment batches?
+
+(43)
+
+My_Package:
+  - SubPackageA
+      -- f1.py
+      -- f2.py
+      -- __init__.py
+
+  - SubPackageB
+      -- f2.py
+      -- __init__.py
+  - __init__.py
+  - f4.py
+  - f5.py
+
+Here, f1,f2,f3,f4 are the modules.
+
+
+(i) Import f4 module:
+
+1. from My_Package import f4
+2. from My_Package import f4 as load
+
+(ii) Import f1 module to use x():
+
+1. from My_Package.Sub_PackageA import f1
+2. f1.func()
+
+Or you can use the following method to import the module:
+
+1. from My_Package.Sub_PackageA.f1 import func
+2. func()
+
+(44) Developing, building, and deploying ML packages
+
+develop and build a custom Python package for ML models. The custom package is
+portable and can be reused for the given project. You will be able to install a custom
+package like any other Python package and make predictions on the new data.
+
+(45) Developing the Package
+
+See the experiment folder locally.
+
+__init__.py:
+
+The __init__.py module is usually empty. However, it facilitates importing other
+Python modules.
+
+This file indicates that the directory should be treated as a package.
+
+(46)  MANIFEST.in
+
+A MANIFEST.in file consists of commands, one per line, instructing setuptools to add
+or remove a set of files from the sdist (source distribution). In Python, distribution
+refers to the set of files that allows packaging, building, and distributing the modules.
+sdist contains archives of files, such as source files, data files, and setup.py file, in a
+compressed tar file (.tar.gz) on Unix.
+
+The following table lists the commands and the descriptions. However, this chapter
+will only cover a few of them.
+
+You can update MANIFEST.in as per the project requirements. Refer to the following
+table for general commands being used in the manifest file.
+
+
+You can update MANIFEST.in as per the project requirements. Refer to the following
+table for general commands being used in the manifest file.
+
+Command  --> Description
+
+include pat1 pat2 ... --> Add all files matching any of the listed patterns.
+
+exclude pat1 pat2 ... --> Remove all files matching any of the listed patterns.
+
+recursive-include dir-pattern pat1 pat2 ... --> Add all files under directories matching the dirpattern that matches any of the listed patterns.
+
+recursive-exclude dir-pattern pat1 pat2 ... --> Remove all files under directories matching the dirpattern that matches any of the listed patterns.
+
+global-include pat1 pat2... --> Add all files anywhere in the source tree matching any of the listed patterns.
+
+global-exclude pat1 pat2... --> Remove all files anywhere in the source tree matching
+any of the listed patterns.
+
+graft dir-pattern --> Add all files under directories matching the dirpattern.
+prune dir-pattern --> Remove all 
+
+(47)  config.py
+
+A configuration module contains constant variables, the path to the directories, and
+initial settings. 
+
+data_management.py
+
+This module contains functions required for loading the data, saving serialized ML
+model, and loading deserialized ML model using joblib.
+
+preprocessors.py
+This module holds all the fit and transform functions required by the sklearn pipeline:
+
+setup.py
+
+To configure and install packages from the source directory, create a setup.py file. It
+is specific to the package. PIP will use the setup.py file to install packages. Go to the
+directory where the setup.py file is located and install the packages using the pip
+install . (period) command.
+
+sdist:
+
+Python’s sdists are compressed archives (.tar.gz files) containing one or more
+packages or modules.
+
+This creates a dist directory containing a compressed archive of the package (for
+example, <PACKAGE_NAME>-<VERSION>.tar.gz in Linux).
+
+wheel:
+
+This is the binary distribution or bdist, and it supports Windows, Mac, and Linux.
+Wheels will speed up the installation if you have compiled code extensions, as the
+build step is not required. A wheel distribution is a built distribution for the current
+platform. The installable wheel will be created under the dist directory, and a build
+directory will also be created with the built code.
+
+test_predict.py:
+
+It fetches a single record from the validation data and verifies the output using
+assert statements.
+
+It validates the following checks:
+
+•	 The output is not null.
+•	 The output data type is str.
+•	 The output is Y for given data (fixed).
+
+
+(48) Set up environment variables and paths:
+
+You may need to add the path to the environment variables. It allows you to import
+modules and functions:
+
+Open the .bashrc file using terminal
+
+sudo nano ~/.bashrc
+
+Add the path to the package directory. Here’s an example:
+
+PYTHONPATH=/home/suhas/code/packages/prediction_model:$PYTHONPATH
+export PYTHONPATH
+
+(49) Build the package:
+
+1. Go to the project directory and install dependencies:
+
+pip install -r requirements.txt
+
+2. Create a pickle file:
+
+python prediction_model/train_pipeline.py
+
+3. Creating a source distribution and wheel:
+
+python setup.py sdist bdist_wheel
+
+(50) 
+
+Go to the project directory where the setup.py file is located and install this project
+with the pip command:
+
+To install the package in editable or developer mode:
+
+pip install -e .
+
+• . refers to the current directory.
+• -e refers to --editable mode.
+
+You can push the entire package to the GitHub repository.
+
+To install it from the GitHub repository.
+
+With git:
+
+pip install git+https://github.com/suhas-ds/prediction_model.git
+
+Without git:
+
+pip install https://github.com/suhas-ds/prediction_model/tarball/master
+
+Or:
+
+pip install https://github.com/suhas-ds/prediction_model/zipball/master
+
+Or:
+
+pip install https://github.com/suhas-ds/prediction_model/archive/master.zip
+
+
+(51) Package usage with example
+
+go to python shell and import prediction_model
+
+(52) Upload on PyPI
+
+A. To make your Python package available to people around the world, you’ll need to have an account with PyPi.
+
+B. pip install twine
+
+C. twine upload dist/*
+
+This command will upload the contents of the dist folder that was automatically generated when we ran python setup.py.
+You will get a prompt asking you for your PyPi username and password, so go ahead and type those in.
+
+• PYTHONPATH: It augments the default search path for modules. The
+PYTHONPATH variable contains a list of directories whose modules are to
+be accessed in the Python environment.
+
+• Joblib: Joblib is a set of tools to provide lightweight pipelining in Python. It
+is used to persist the model for future use, the following in particular:
+
+  o Transparent disk-caching of functions and lazy re-evaluation (memorize
+pattern).
+  o Simple parallel computing
+
+----------------------------------------------------------------------------------------------
+
+## MLflow-Platform to Manage the ML Life Cycle
+
+(53)  
+
+The Machine Learning life cycle involves many challenges. For instance, data
+scientists need to try different models containing multiple parameters and
+hyperparameters. They need to keep track of the model that is performing well and
+its parameters. Next, they need to save the serialized model for reusability. This
+chapter explains the role of MLflow in an ML life cycle. MLflow is a platform for
+streamlining machine learning development, including tracking experiments,
+packaging code into reproducible runs, and sharing and deploying models. It can
+manage a complete ML life cycle.
+
+(54)
+
+After studying this chapter, you should be able to train, reuse and deploy ML models
+using MLflow. You should also be able to track model evaluation metrics and model
+parameters, pickle the trained models, and compare two model results on MLflow
+UI.
+
+(55) Introduction to MLflow:
+
+MLflow is an open-source platform for managing the end-to-end machine learning
+life cycle.
+
+MLflow allows data scientists to run as many experiments as they want before
+deploying the model into production; however, it keeps track of model evaluation
+metrics, such as RMSE and AUC. It also tracks the hyperparameters used while
+building the model. It enables you to save the trained model along with its best
+hyperparameters. Finally, it allows you to deploy an ML model into a production
+server or cloud. You can even keep track of the models being used in staging and
+production so that other team members can be aware of this information.
+
+MLflow is library-agnostic, that is, you can use any popular ML library with it.
+Moreover, you can use any popular programming language for it as MLflow
+functions can be accessed via REST API and Command Line Interface (CLI).
+
+Integrating MLflow with your existing code is quite easy as it requires minimal
+changes. If you are working on a local system, it will automatically create a mlrun
+directory, wherein it stores the output, artifacts, and metadata. It creates a separate
+directory for each run. However, you can specify the path to create the mlrun
+directory. MLflow allows you to store information of each run into databases, such
+as MySQL or PostgreSQL.
+
+MLflow is more useful in the following scenarios:
+
+• Comparing different models: MLflow offers a UI that allows users to
+compare different models. You can compare Random Forest vs Logistic
+regression side by side, along with their model metric and parameters used.
+MLflow supports a wide range of model frameworks.
+
+• Cyclic model deployment: In production, it is required to push a new
+version of the model after every data change, when new requirements come
+up, or after building a model better than the current one. In these scenarios,
+MLflow helps keep track of the models that are in staging (pre-production)
+and models that are in production with versions and brief descriptions.
+
+• Multiple dependencies: If you are working on different projects or different
+frameworks, each of them will have a different set of dependencies. MLflow
+helps you to maintain dependencies along with your model.
+
+• Working with a large data science team: MLflow stores the model metrics,
+parameters, time created, versions, users, and so on. This information is
+accessible to other team members working on the same projects. They can
+track all the metadata using MLflow UI or SQL table (if you are storing it in
+the database).
+
+(56) Set up your environment and install MLflow :
+
+In this section, you will install miniconda and then install mlflow in the conda
+environment. However, if you already have anaconda or miniconda installed, you
+can create a conda environment and install mlflow using PIP.
+
+Let’s create a virtual environment:
+conda create -n venv python=3.7
+Where:
+
+• -n refers to the name of the virtual environment.
+• venv is the name of the virtual environment.
+
+(57)
+
+Once the conda environment is created, it needs to be activated by running the following command:
+
+conda activate venv
+
+Finally, install MLflow using pip:
+
+pip install mlflow
+
+Note: By default, the MLflow project uses conda for installing dependencies;
+however, you can proceed without conda by using the –no-conda option, for
+instance, mlflow run . –no-conda.
+
+After installing MLflow, type mlflow in the terminal and hit enter to check its usage,
+options, and commands.
+
+(58)
+
+To open the web UI of MLflow, run the following command in the terminal:
+
+mlflow ui
+
+(59)
+
+You can execute a series of experiments and capture multiple runs of the experiments.
+Each experiment can contain multiple runs. You can also capture notes for the
+experiments. Apart from this, there are many customization options available, such
+as sorting by the columns, showing or hiding the columns, and changing the view
+of the table.
+
+Note: Suppose you interrupted the running MLflow UI service and rerun the
+mlflow ui command; in that case, you may get the error.
+
+It is because the address port is in use; so, you have to release it first, and then
+you can rerun the mlflow ui. It can be done using the following command:
+sudo fuser -k 5000/tcp
+
+(60) MLflow components:
+
+MLflow is categorized into four components:
+
+• MLflow tracking
+• MLflow projects
+• MLflow models
+• MLflow registry
+
+you are free to serve a model using MLflow without using a tracking component. 
+
+(61) MLflow tracking:
+
+MLflow tracking is an API and UI for logging parameters, code versions, metrics,
+and artifacts when running your machine learning code and for visualizing the
+results.
+
+MLflow captures the following information in the form of runs, where each run
+means executing a block of code:
+
+• Start and end time: It records the start and end times of an experiment.
+
+• Source: It can be the name of the file to launch the run or the MLproject
+name.
+
+• Parameters: They contain the data in key-value pairs. These are nothing but
+the model input parameters you want to capture, such as the number of
+trees used in a random forest algorithm. For instance, n_estimators is key,
+and its value is 100. You need to call MLflow’s log_param() to store the
+parameters.
+
+• Metrics: A metric is used to measure the performance of the model, such as
+the accuracy of the model. It holds the data in a key-value pair; however, the
+value should be numeric only. You need to call MLflow’s log_metric() to
+store the metric.
+
+• Artifacts: When you want to store a file or object (such as a pickle file of the
+trained model), then the function of the artifacts comes to the rescue. You can
+store a serialized trained model, plot, or CSV file using this function, and it
+can be called using log_artifacts().
+
+First, you have to store the file or object in the local directory, and from there, you can
+save the file or object by providing the path of that directory.
+
+(62) Log data into the run:
+
+mlflow.set_tracking_uri()
+
+It connects to MLflow tracking Uniform Resource Identifier (URI). By default,
+tracking URI is set to the mlruns directory; however, you can set it to a remote server
+(HTTP/HTTPS), local directory path, or a database like MySQL.
+
+1. import mlflow
+2. mlflow.set_tracking_uri('http://localhost:5000')
+
+(63)
+
+1. import mlflow
+2. mlflow.set_tracking_uri('http://localhost:5000')
+
+This function will return the current tracking URI of MLflow.
+
+(64)
+
+mlflow.create_experiment()
+
+It will create a new experiment. You can capture the runs by providing the experiment
+ID while executing mlflow.start_run. The experiment name should be unique.
+
+1. exp_id = mlflow.create_experiment("Loan_Prediction")
+
+(65)
+
+mlflow.set_experiment()
+
+This method activates the experiment so that the runs will be captured under the
+provided experiment. A new experiment is created in case the mentioned experiment
+does not exist. By default, the experiment is set to ‘Default’.
+
+(66)
+
+mlflow.start_run()
+
+It starts a new run or returns the currently active run. You can pass the run name, run
+ID, and experiment’s name under the current run that needs to be tracked.
+
+1. # For single iteration
+2. run = mlflow.start_run()
+3.
+4. # For multiple iterations
+5. with mlflow.start_run(run_name="test_ololo") as run:
+
+(67)
+
+mlflow.end_run()
+
+It ends the currently active run (if any).
+
+(68)
+
+mlflow.log_param()
+
+It logs a single key-value parameter in the currently active run. The key and value
+are both strings. Use mlflow.log_params() to log multiple parameters at once.
+
+1. n_estimators = 100
+2. mlflow.log_param("n_estimators:", n_estimators)
+
+(69)
+
+mlflow.log_metric()
+
+This MLflow’s function will track the model metrics, such as the model’s accuracy.
+To track multiple metrics, use mlflow.log_metrics().
+
+1. accuracy = 0.8
+2. mlflow.log_metric("accuracy", accuracy)
+
+(70)
+
+mlflow.set_tag()
+
+It stores the data in a key-value pair. In this, you can set labels for the identification or
+any specific metric you want to track. To set multiple tags, use mlflow.set_tags().
+
+1. import mlflow
+2. with mlflow.start_run():
+3. mlflow.set_tag("model_version", "0.1.0")
+
+(71)
+
+mlflow.log_artifact()
+
+This function will log or store the files or objects in the artifacts directory; however,
+you would need to store it in the local directory first, and then it can pull the files or
+objects.
+
+1. import pandas as pd
+2. import mlflow
+3.
+4. dir_name = 'data_dir'
+5. file_name = 'data_dir/cust_sale.csv'
+6. data = pd.DataFrame({'Cust_id': [461,462,463], 'Sales':
+[2631,8462,4837]})
+7. data.to_csv(file_name, index=False)
+8. mlflow.log_artifacts(dir_name)
+
+(72)
+
+mlflow.get_artifact_uri()
+
+It will return the path to the artifact's root directory, where the artifacts are stored.
+
+1. import mlflow
+2. mlflow.get_artifact_uri()
+3. './mlruns/0/be1cd88ebd704e9ab7629fd364747e1e/artifacts'
+
+
+(73) Let’s consider the scenario of loan prediction, where the objective is to predict
+whether a customer is eligible for a loan.
+
+Check the mlflow_demo folder locally and its code.
+
+(74)
+
+A. pip install joblib==1.2.0
+
+B. create "plots" folder in current working directory
+
+C. run 
+
+mlflow ui
+
+and then
+
+python train.py
+
+This does not print anything, so one can check the output on MLflow’s UI.
+
+
+Now, check result on: http://127.0.0.1:5000
+
+(75) 
+
+
+Capture MLflow logs under the Loan_prediction experiment instead of the
+Default experiment.
+
+1. # Make predictions using ML models
+2. mlflow.set_experiment("Loan_prediction")
+3. mlflow_logs(dt_model, X_test, y_test, "DecisionTreeClassifier")
+4. mlflow_logs(lr_model, X_test, y_test, "LogisticRegression")
+5. mlflow_logs(rf_model, X_test, y_test, "RandomForestClassifier")
+
+By default, MLflow will capture the information under the experiment name Default.
+However, you can specify the experiment name in the command itself, as follows:
+
+python train.py –experiment-name Loan_prediction
+
+This command won’t print any output in the terminal as there are no print statements
+in the train.py file. 
+
+See again the result on mlflow ui
+
+(76) MLflow projects:
+
+Once you are done with the experimentation phase, your next step would be
+packaging all the code as a project with its dependencies. Let’s say you want to shift
+the codebase and dependencies to the server or to another machine; MLflow will do
+the job for you.
+
+MLflow allows you to package the codebase and its dependencies to make it
+reproducible and reusable. MLflow projects provide API and CLI capabilities that
+will help you integrate your model in MLOps.
+
+You can run the MLflow project directly from the remote git repository (provided
+it should contain all the necessary files); alternatively, you can run it from the local CLI.
+
+Following are the fields of the MLproject file:
+
+• Name: It is the name of the project, and it can be any text.
+
+• Environment: This is the environment that will be used at the time of
+execution of the entry point command. This will contain dependencies/
+packages required by the entry point or MLflow project.
+
+• Entry point: The entry point section holds the command to be executed
+inside the MLflow project environment. This command can take arguments;
+it is a mandatory field and cannot be left blank.
+
+• Parameters: This section holds one or more arguments that will be used by
+the entry point commands, but it is optional.
+
+(77)
+
+Switch to the directory where the MLproject file and the conda environment are
+present. Locate the YAML file and run:
+
+mlflow run . --experiment-name Loan_prediction
+
+(if any error to add --user in package installation then run python -m pip install --user --upgrade pip in anaconda prompt)
+
+(78) MLflow models:
+
+The MLflow models module lets you package the model in different ways, such
+as python function, Scikit-learn (sklearn), and Spark MLlib (spark). This flexibility
+helps you to connect associated downstream tools effortlessly.
+
+When you log the model using mlflow.sklearn.log_model(model, name), a
+model directory gets created, and it stores the files and metadata associated with the
+models. You will see the following directory structure:
+
+LogisticRegression/
+ ├── conda.yaml
+ ├── MLmodel
+ ├── model.pkl
+ └── requirements.txt
+
+(see this on mlflow ui page)
+
+(79)
+
+
+see the run id in mlflow ui with load-prediction experiment and logistic regression.
+
+Now open the Python console by typing python in the terminal. Here, the aim is to
+create a pandas DataFrame and pass it to the predict function. You can load the
+DataFrame from the local directory.
+
+
+pip install mlflow==1.30.1
+ 
+>>> import mlflow
+>>> logged_model = 'runs:/dbbc4cd64db2464bb689e3e9f64e4ea1/LogisticRegression'
+>>> loaded_model = mlflow.pyfunc.load_model(logged_model)
+>>> import pandas as pd
+>>> loaded_model.predict(pd.DataFrame([[1.0,0.0,0.0,0.0,0.0,4.8,360.0,1.0,2.0,8.67]]))
+output: array([1]) # prediction is 'yes'
+
+(80)  
+
+Now, deploy a local REST server to serve the predictions using the MLmodel.
+
+By default, the server runs on port 5000. If the port is already in use, you can use the
+--port or -p option to provide a different port. 
+
+For instance, mlflow models serve -m runs: /<RUN_ID>/model --port 1234
+
+here, in my case: mlflow models serve -m runs:/dbbc4cd64db2464bb689e3e9f64e4ea1/LogisticRegression --port 1234
+
+(81)
+
+To deploy to the server, run the following command:
+
+mlflow models serve -m C:/Users/ankit19.gupta/ankit/ankit/ML_Code/MLOps/mlflow_demo/mlruns/1/dbbc4cd64db2464bb689e3e9f64e4ea1/artifacts/LogisticRegression/ -p 1234
+
+So, the MLflow model generated using logistic regression is
+deployed.
+
+(82)
+
+Now run  the server is listening at http://127.0.0.1:1234
+
+Call the REST API using the following curl command:
+
+curl -X POST -H "Content-Type:application/json; format=pandas-split" --data '{"columns":["Gender","Married","Dependents","Education","Self_Employed","LoanAmount","Loan_Amount_
+Term","Credit_History","Property_Area","TotalIncome"],"data":[[1.0,0.0,0.0,0.0,0.0,4.85203026,360.0,1.0,2.0,8.67402599]]}'
+http://127.0.0.1:1234/invocations
+
+(83) MLflow registry:
+
+MLflow registry is a platform for storing and managing ML models through UI and
+a set of APIs.
+
+It keeps track of the model lineage, different versions, and transitions of the models
+from one state to another, like from staging to production. Every authorized team
+member can track all the preceding information.
+
+To explore this component, the database needs to be connected to MLflow. MLflow
+components explored earlier can be connected to a database for storing the
+information.
+
+Set up MLflow’s tracking URI using the following command:
+
+export MLFLOW_TRACKING_URI=http://localhost:5000
+
+(84) Set up the MySQL server for MLflow:
+
+(In MySQL command line after installation of MySQL server)
+
+First, create mlflow_user in MySQL using the following command:
+
+mysql -u mlflow_user
+
+CREATE USER 'mlflow_user'@'localhost' IDENTIFIED BY 'mlflow';
+GRANT ALL ON db_mlflow.* TO 'mlflow_user'@'localhost';
+FLUSH PRIVILEGES;
+
+Enter the password when prompted.
+
+Create and select the database:
+
+CREATE DATABASE IF NOT EXISTS db_mlflow;
+use db_mlflow;
+
+To know which user(s) have the access to db_mlflow database and its privileges, you
+can execute the following command:
+
+SELECT * FROM mysql.db WHERE Db = 'db_mlflow'\G;
+
+(85)
+
+Install the MySQLdb module:
+
+sudo apt-get install python3-mysqldb
+
+Install MySQL client for Python:
+
+pip install mysqlclient-1.3.13-cp37-cp37m-win_amd64.whl
+
+pip install mysqlclient
+
+(86)
+
+Here are the concepts and key features of the model registry:
+
+• Registered model: Once the model is registered using MLflow’s UI or
+API, the model is considered a registered model. MLflow’s model registry
+captures model versions and keeps track of the model’s stages (for example,
+production, and staging) and other metadata.
+
+• Model version: MLflow’s model registry maintains the version of each
+model after registering it. For instance, if you saved a model name with
+a classification model, then it would be assigned to version 1 by default.
+
+However, after saving that model with the same name again, it will be saved
+as version 2.
+
+• Model stage: For each model version, you can assign different stages, like
+staging, production, and archived. However, you cannot assign two stages
+to the same version of the model.
+
+• Annotations and descriptions: You can add comments, short descriptions,
+and annotations for models. Your team members will come to know about
+the model through the descriptions you add.
+
+(87) Start the MLflow server
+
+All the required steps to start the MLflow server with MySQL as a database have
+been completed.
+
+To start the MLflow server, you can use the following command:
+
+mlflow server --host 0.0.0.0 --port 5000 --backend-store-uri mysql://mlflow_user:mlflow@localhost/db_mlflow --default-artifact-root $PWD/mlruns
+
+The syntax to start the MLflow server is mlflow server <args>. In the preceding
+command, MLflow uses the backend store as MySQL server (provide MLflow
+username and database name) and the default artifacts store as the mlruns directory.
+
+You can run the MLproject and pass the experiment name as a parameter (optional).
+
+mlflow run . --experiment-name ‘Loan_prediction’
+
+You can see, in the MLflow UI, that the version column shows alphanumeric
+values. The model’s metrics parameters are displayed under the Loan_prediction
+experiment.
+
+
+
+(88) Using the show tables; command, you can see that new tables have been created,
+such as metrics and experiments.
+
+select * from experiments;
+
+(89)
+
+Now, go to the run ID on the Experiment tab and scroll down; then, click on the
+model directory in the UI.
+
+The Register Model button will appear.
+
+Click on the Register Model button, and a pop-up window will appear, as shown
+in the following figure. In the current case, the Create New Model option is selected
+from the drop-down menu, along with a model name; however, you can give any
+human-readable name to it. Finally, click on the Register button.
+
+Now, you should see the registered model on the Models tab. By default, it will label
+it as version 1. Since a state has not been assigned, you should see – (dash) in the
+staging and production columns.
+
+We can change the model’s state using MLflow UI or terminal. Here, the state is
+being changed to staging using MLflow’s UI.
+
+The registered model’s information can be found in the registered_models table 
+
+select * from registered_model
+
+
+(90) You have learned how to register models in MLflow, and now you are going to learn
+how to serve the model to make predictions on the given data.
+Deploy the model from MLflow’s registry using the following command:
+
+mlflow models serve -m "models:/Prediction_model_LR/Staging"
+
+
+1. import mlflow.pyfunc
+2.
+3. model_name = "Prediction_model_LR"
+4. stage = 'Staging'
+5. model=mlflow.pyfunc.load_model(model_uri=f"models:/{model_name}/
+{stage}")
+6.
+7. model.predict([[1.,1.,0.,1.,0.,4.55387689,360.,1.,2.,8.25556865]])
+8. array([1])
+
+
+Note: You can call the model’s REST API using postman.
+
+● MLflow helps you from the experimentation stage to the deployment stage
+of an ML project.
+● Except for the model registry, all the components can be used without being
+integrated with a database like MYSQL; however, it is a good practice to
+integrate them with a database like MYSQL.
+● By default, the MLflow project uses conda for installing dependencies;
+however, you can proceed without conda by using the –no-conda option.
+● Each MLflow component can be accessed separately; however, you can
+connect them to create the flow.
+
+-----------------------------------------------------------------------------------------------------
+
+## Docker for ML
+
+(91) 
+
+

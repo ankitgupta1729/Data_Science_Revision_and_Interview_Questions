@@ -1,0 +1,3472 @@
+(1) Machine learning --> derived knowledge from data in order to make predictions and improve the performance of predictive models
+ and make data-driven decisions.
+
+(2) 
+
+(A) Supervised Learning: Labelled data, Direct Feedback, Predict outcome/future
+(B) Unsupervised Learning: No labels/targets, No feedback, find hiddent structure in data
+(C) Reinforcement Learning: Decision Process, Reward Systems, Learn series of actions -- an agent can then use reinforcement learning to
+
+learn a series of actions that maximizes this reward via an exploratory trial-and-error
+approach or deliberative planning. A popular example of reinforcement learning is a chess engine. Here, the
+agent decides upon a series of moves depending on the state of the board (the environment) and the reward
+can be defined as win or lose at the end of the game:
+
+(3) dimensionality reduction can also be useful for visualizing data.
+
+(4) Workflow for using machine learning in predictive modeling:
+
+(i) Data Preprocessing (Raw Data+Labels --> Training+Test Data):
+
+(A) Meaningful Feature Extraction(ex. iris data can have color,height,hue etc but using domain expret,we decide)and Scaling
+(B) Feature Scaling (either make scaling on [0,1] or standard normal distribution with zero means and unit variance)
+(C) Dimensionality Reduction
+(D) Sampling
+
+(ii) Learning (decide the learning algorithm):
+
+(A) Model Selection
+(B) Cross-Validation (tarining=training set+validation set)
+(C) Performance Metrics
+(D) Hyperparameter Optimization
+
+(iii) Evaluation (on test data) (Final Model --> Lables)
+
+if we are satisfied by the performance on test data using AIC,adjusted R2, etc then this model to predict new, future data.
+
+[if incorrect lable then again go to 2nd stage]
+
+-- It is important to note that the parameters for the previously mentioned procedures,
+such as feature scaling and dimensionality
+reduction, are solely obtained from the training dataset, and the same parameters are
+later reapplied to transform the test dataset, as well as any new data samples
+
+(iv) Prediction
+
+
+
+
+(5) David Wolpert said: "No free lunch theorems" is that we can't get learning "for free".
+
+In practice, it is always recommended that you compare the performance
+of at least a handful of different learning algorithms to select the best model for
+the particular problem; these may differ in the number of features or samples, the
+amount of noise in a dataset, and whether the classes are linearly separable or not.
+
+(6) Rosenblatt's initial perceptron rule is fairly simple and can be summarized by the following steps:
+
+1. Initialize the weights to 0 or small random numbers.
+2. For each training sample x_i :
+a. Compute the output value yˆ using unit step function as
+   phi(z)=+1 if z>=0 o/w -1 where phi(z)=w^Tx=w0x0+w1x1+.... with w_0=bias and x_0=1 
+b. Update the weights: w_j=w_j-delta_w where delta_w=-eta*(y^(i)-hat(y^(i)))*x_j^(i) and 
+   eta (b/w 0 and 1) stands for the learning rate in the gradient descent algorithm.
+
+
+(7) It is important to note that all weights in the weight vector are being updated simultaneously.
+
+i.e delta_w0=-eta(y^(i)-hat(y)^(i))x_0^(i)= -eta(y^(i)-hat(y)^(i)) because x_0=1
+
+and  delta_w1=-eta(y^(i)-hat(y)^(i))x_1^(i) and delta_w2=-eta(y^(i)-hat(y)^(i))x_2^(i) etc
+
+(8) In the case of a wrong prediction, the weights are being pushed towards
+the direction of the positive or negative target class
+
+because delta_w_j=-eta(1-(-1))x_j=-eta(2)x_j and delta_w_j=-eta(-2)x_j
+
+(9) It is important to note that the convergence of the perceptron is only guaranteed if
+the two classes are linearly separable and learning is very small.
+
+(10) if two classes can't be separated by a linear decision boundary, we can set a maximum
+number of passes over the training dataset (epochs) and/or a threshold for the
+number of tolerated misclassifications the weights otherwise.
+
+(11) rgen=np.random.RandomState(1) is used to create random seed and rgen(loc=0,scale=0.01,size=1+x.shape[1])
+     for taking random values from normal distribution of mean=0 and s.d.=0.01
+
+(12) for angle between 2 vectors: # np.arccos(v1.dot(v2) / (np.linalg.norm(v1) * np.linalg.norm(v2))) 
+
+(13) np.where(y=='irsi-setosa',1,-1)
+
+(14) 
+
+scatter plot: plt.scatter(X[:50, 0], X[:50, 1],color='red', marker='o', label='setosa')
+plt.xlabel('sepal length [cm]')
+plt.ylabel('petal length [cm]')
+plt.legend(loc='upper left')
+plt.show()
+
+(15) dot product of two vectors: np.dot(X,self.w_[1:])+self.w_[0]
+
+(16) another type of single-layer neural network: Adaptive Linear Neurone(Adaline)
+
+(17) In Adaline,the linear activation function φ (z)=z. Here, weights are updated based on a linear
+activation function rather than a unit step function like in the perceptron.
+
+(18) The main advantage of this
+continuous linear activation function, in contrast to the unit step function, is that
+the cost function becomes differentiable. Another nice property of this cost function
+is that it is convex; thus, we can use a simple yet powerful optimization algorithm
+called gradient descent.
+
+(19) In Adaline, objective function or sometimes cost function is J(w)=1/2(y^(i)-phi(z^(i)))^2 where phi(z)=z=w^Tx
+
+So, using gradient descent, weight update rule: w_j=w_j-eta*grad(J(w))=w_j+eta*(y^(i)-phi(z^(i)))*x_j
+
+(20) Although the Adaline learning rule looks identical to the perceptron rule, we should
+note that the phi(z)=z is a real number and not an integer class label.
+
+(21) Here, the weight update is calculated based on all samples in the training set
+(instead of updating the weights incrementally after each sample) -- batch gradient descent
+
+(22) η (eta), as well as the number of epochs (n_iter),
+are the so-called hyperparameters of the perceptron and Adaline learning
+algorithms
+
+(23) A popular alternative to the batch gradient descent algorithm is stochastic gradient
+descent, sometimes also called iterative or online gradient descent. It is useful for the large dataset.
+
+(24) Here, we update the weights incrementally for each training sample. 
+
+(25) Although stochastic gradient descent can be considered as an approximation of
+gradient descent, it typically reaches convergence much faster because of the more
+frequent weight updates
+
+(26) To obtain
+satisfying results via stochastic gradient descent, it is important to present it training data in random order and also,
+we want to shuffle training set for each epoch to prevent cycles.
+
+(27) In SGD implementation, the fixed learning rate
+is often replaced by an adaptive learning rate that decreases over time.
+
+(28) Another advantage of stochastic gradient descent is that we can use it for online
+learning.In online learning, our model trained on the fly as new data arrives.
+------------------------------------------------------------------------------------------------------------
+
+
+(29) The 5 main steps that are involved in training a ML 
+algorithm can be summarized as follows:
+
+1. Selecting features and collecting training samples.
+2. Choosing a performance metric.
+3. Choosing a classifier and optimization algorithm
+4. Evaluating the performance of the model.
+5. Tuning the algorithm
+
+(30) Loading an available dataset using scikit-learn api:
+
+from sklearn import datasets
+iris = datasets.load_iris()
+
+(31) Although many scikit-learn functions and class methods also work with class labels
+in string format, using integer labels is a recommended approach to avoid technical
+glitches and improve computational performance due to a smaller memory footprint;
+furthermore, encoding class labels as integers is a common convention among most
+machine learning libraries.
+
+(32) To evaluate how well a trained model performs on unseen data, we will further split
+the dataset into separate training and test datasets.
+
+from sklearn.model_selection import train_test_split
+X_train,X_test,y_train,y_test=train_test_split(X,y,test_size=0.3,random_state=1,stratify=y)
+
+we randomly split the X and y arrays into 30 percent test data. Note that the train_test_split 
+function already shuffles the training set internally before splitting.random_state ensures
+that our results are reproducible. stratification ensures that train_test_split method returns training
+and test subsets that have the same proportions of class labels as the input dataset.
+
+np.bincount(y) --[50,50,50]
+np.bincount(y_train) --[35,35,35]
+gnp.bincount(y_test) --[15,15,15]
+
+(33) Many machine learning and optimization algorithms also require feature scaling
+for optimal performance, as we remember from the gradient descent:
+
+from sklearn.preprocessing import StandardScaler
+sc=StandardScaler()
+sc.fit(X_train)
+X_train_Std=sc.transform(X_train)
+X_test_Std=sc.transform(X_test)
+
+Using the preceding code, we loaded the StandardScaler class from the
+preprocessing module and initialized a new StandardScaler object that we
+assigned to the sc variable. Using the fit method, StandardScaler estimated the
+parameters Ǎ (sample mean) and ǔ (standard deviation) for each feature dimension
+from the training data. By calling the transform method, we then standardized the
+training data using those estimated parameters μ and σ . Note that we used the
+same scaling parameters to standardize the test set so that both the values in the
+training and test dataset are comparable to each other
+
+(34) Having standardized the training data, we can now train a perceptron model. Most
+algorithms in sklearn supports multiclass classification by default via 
+One-versus-Rest (OvR) method.
+
+from sklearn.linear_model import Perceptron
+ppn = Perceptron(max_iter=40,eta0=0.1,random_state=1)
+ppn.fit(X_train_Std,y_train)
+
+(35) If the learning rate is too large, the algorithm will overshoot the global cost
+minimum. If the learning rate is too small, the algorithm requires more epochs until
+convergence, which can make the learning slow—especially for large datasets.
+
+(36) prediction on test data:
+
+y_pred=ppn.predict(X_test_Std)
+print('Misclassification Error is %d' % (y_test!=y_pred).sum())
+
+Using Sklearn:
+
+from sklearn.metrics import accuracy_score
+accuracy_score(y_test,y_pred)
+
+(37) Now, see a more powerful linear classifier that converges to a class
+minimum even if the classes are not perfectly linearly separable -- Logistic Regression
+
+(38) Plotting the Sigmoid function:
+
+def sigmoid(z):
+    return 1.0 / (1.0 + np.exp(-z))
+z = np.arange(-7, 7, 0.1)
+phi_z = sigmoid(z)
+plt.plot(z, phi_z)
+plt.axvline(0.0, color='k')
+plt.ylim(-0.1, 1.1)
+plt.xlabel('z')
+plt.ylabel('$\phi (z)$')
+# y axis ticks and gridline
+plt.yticks([0.0, 0.5, 1.0])
+ax = plt.gca()
+ax.yaxis.grid(True)
+plt.show() 
+
+(39)  In Adaline,we used the identity function φ ( z)= z  as the activation function. In logistic
+regression, this activation function simply becomes the sigmoid function.
+
+(40) The output of the sigmoid function is then interpreted as the probability of a
+particular sample belonging to class, you can take threshold as 0.5.
+
+(41) Logistic regression is used in weather forecasting, for example,
+not only to predict if it will rain on a particular day but also to report the chance of
+rain.
+
+(42) In Logistic regression we have to use the concept of maximum likelihood principle and maximize the log likelihood
+i.e. Pi [p(y|x,w)]=Pi[sigma(z)^y_i * (1-sigma(z))^(1-y_i)] (or) minimize the cross-entropy loss.
+
+So, J(w)  = -[y log(sigma(z))+(1-y) log((1-sigma(z)))]
+
+Now, use the gradient descent.
+
+you can change activation function and cost in adaline to get the implementation of logistic regression.
+
+(43) Training a logistic regression using scikit-learn:
+
+from sklearn.linear_model import LogisticRegression
+lr=LogisticRegression(C=100,random_state=1)
+lr.fit(X_train_Std,y_train)
+
+lr.predict_proba(X_test_Std[:3,:]) -- predicted probabilities of 3 classes of iris dataset 
+lr.predict_proba(X_test_std[:3, :]).argmax(axis=1) -- to find predicted class
+(or) lr.predict(X_test_std[:3, :])  
+
+(44) If a model suffers from overfittiong, we say that model has a high variance which can be
+be caused by having too many parameters that lead to a model that is too complex
+given the underlying data. Similarly, our model can also suffer from underfitting
+(high bias), which means that our model is not complex enough to capture the
+pattern in the training data well and therefore also suffers from low performance on
+unseen data. 
+
+(45) One way of finding a good bias-variance tradeoff, is to tune the complexity of
+the model via regularization. Regularization is a very useful method to handle
+collinearity (correlation among the features), filter out the noise from the data and
+eventually prevent the overfittting.
+
+For regularization to work properly,
+we need to ensure that all our features are on comparable scales.
+
+(46) The cost function for logistic regression can be regularized by adding a simple
+regularization term. 
+
+J(w)  = -[y log(sigma(z))+(1-y) log((1-sigma(z)))]+1/2*(lambda*||w||^2)
+
+By increasing the value of λ, we increase the
+regularization strength.
+
+(47) The parameter C that is implemented for the LogisticRegression class in
+scikit-learn comes from a convention in support vector machines, which will be
+the topic of the next section. The term C is directly related to the regularization
+parameter λ , which is its inverse. Consequently, decreasing the value of the inverse
+regularization parameter C means that we are increasing the regularization strength.
+
+weight parameters decrease if we decrease parameter C
+
+(48) SVM:
+
+-- Support Vector Machine (SVM) can be considered an extension of the perceptron.
+
+-- Here, we mariximize the margin.The margin is defined as the
+distance between the separating hyperplane (decision boundary) and the training
+samples that are closest to this hyperplane, which are the so-called support vectors. 
+ 
+(49) Training of SVM model using scikit-learn:
+
+from sklearn.svm import SVC
+#from sklearn.svm import SVR
+svm= SVC(kernel='linear',C=1.0,random_state=1)
+svm.fit(X_train_Std,y_train)
+
+(50)
+In practical classification taskes, logistic regression and linear
+SVMs often yield very similar results. Logistic regression tries to
+maximize the conditional likelihoods of the training data, which
+makes it more prone to outliers than SVMs, which mostly care
+about the points that are closest to the decision boundary (support
+vectors). On the other hand, logistic regression has the advantage
+that it is a simpler model and can be implemented more easily.
+Furthermore, logistic regression models can be easily updated,
+which is attractive when working with streaming data.
+
+(51) Sometimes our datasets are too large to fit in the 
+computer memory. Thus, scikit-learn also offers alternative implementations via
+the SGDClassifier class, which also supports online learning via the partial_fit
+method. The concept behind the SGDClassifier class is similar to the stochastic
+gradient algorithm.
+
+from sklearn.linear_model import SGDClassifier
+ppn=SGDClassifier(loss='perceptron')
+lr=SGDClassifier(loss='log')
+svm=SGDClassifier(loss='hinge')
+
+(52) Non-linear classification using kernel trick
+
+svm=SVC(kernel='rbf',C=10.0,gamma=0.10,random_state=1)
+svm.fit(X_train_Std,y_train)
+
+(53) The γ parameter, which we set to gamma=0.1, can be understood as a cut-off
+parameter for the Gaussian sphere. If we increase the value for γ , we increase the
+influence or reach of the training samples which leads to a tighter and bumpier
+decision boundary. low gamma means soft decision boundary.This illustrates that the γ parameter
+also plays an important role in controlling overfitting.
+
+
+(54) Decision Tree Classifier:
+
+-- Decision tree classifiers are attractive models if we care about interpretability.
+
+-- Here objective function is: Information Gain. we need to maximize it.
+
+IG(D_p,f)=I(D_p)- Sigma_{j=1}^{j=m} (N_j/N_p)I(D_j)
+
+Here, f is the feature to perform the split, Dp and Dj are the dataset of the parent
+and jth child node, I is our impurity measure, N_p is the total number of samples at
+the parent node, and N_j is the number of samples in the jth child node.
+
+As we can
+see, the information gain is simply the difference between the impurity of the parent
+node and the sum of the child node impurities — the lower the impurity of the child
+nodes, the larger the information gain
+
+(55) The three impurity measures or splitting criteria that are commonly used in
+binary decision trees are Gini impurity ( I_G ), entropy ( I_H ), and the classification error (I_E).
+
+(56)
+
+Entropy Measure: I_H(t) = -Sigma_{i=1}^{c} p(i|t)log_2 p(i|t)
+
+Here, p(i|t) is the proportion of the samples that belong to class c for a particular
+node t.
+
+The entropy is therefore 0 if all samples at a node belong to the same class,
+and the entropy is maximal if we have a uniform class distribution. 
+
+(57) Gini Impurity Measure: I_G = 1- Sigma_{i=1}^{c} p(i|t)^2
+
+Similar to entropy, the Gini impurity is maximal if the classes are perfectly mixed.
+
+In practice both Gini impurity and entropy typically yield very similar
+results
+
+(58) Classification Impurity Measure: I_E = 1- max{p(i|t)}
+
+This is a useful criterion for pruning but not recommended for growing a decision
+tree, since it is less sensitive to changes in the class probabilities of the nodes.
+
+(59) Building the Decision Tree:
+
+Decision trees can build complex decision boundaries by dividing the feature
+space into rectangles.
+
+Note that feature scaling is not a requirement
+for decision tree algorithms
+
+from sklearn.tree import DecisionTreeClassifier
+tree=DecisionTreeClassifier(criterion='gini',max_depth=4,random_state=1)
+tree.fit(X_train,y_train)
+
+(60) Random forest:
+
+A random forest can be considered as an ensemble of decision trees.
+
+The idea behind a random forest is to average multiple (deep)
+decision trees that individually suffer from high variance, to build a more robust
+model that has a better generalization performance and is less susceptible to overfitting.
+
+Algorithm:
+
+(i) Draw a random bootstrap sample of size n (randomly choose n samples from
+the training set with replacement).
+
+(ii) Grow a decision tree from the bootstrap sample. At each node:
+
+(A) Randomly select d features without replacement.
+(B) Split the node using the feature that provides the best split according
+to the objective function, for instance, maximizing the information
+gain
+
+(iii) Repeat the steps 1-2 k times
+
+(iv) Aggregate the prediction by each tree to assign the class label by majority vote.
+
+(70) Although random forests don't offer the same level of interpretability as decision
+trees, a big advantage of random forests is that we don't have to worry so much
+about choosing good hyperparameter values.
+
+We typically don't need to prune the
+random forest since the ensemble model is quite robust to noise from the individual
+decision trees
+
+The only parameter that we really need to care about in practice is the
+number of trees k.Typically, the larger the number of trees, the better the performance of the random forest at the
+expense of an increased computational cost.
+
+(71) Decreasing the size of the bootstrap sample increases the diversity among the
+individual trees, since the probability that a particular training sample is included
+in the bootstrap sample is lower. Thus, shrinking the size of the bootstrap samples
+may increase the randomness of the random forest, and it can help to reduce the overfitting.
+
+However, smaller bootstrap samples results in a lower
+overall performance of the random forest.
+
+(72) In most implementations, including the RandomForestClassifier implementation
+in scikit-learn, the size of the bootstrap sample is chosen to be equal to the number
+of samples in the original training set, which usually provides a good bias-variance
+tradeoff. For the number of features d at each split, we want to choose a value that is
+smaller than the total number of features in the training set. A reasonable default that
+is used in scikit-learn and other implementations is d =sqrt{m}, where m is the number
+of features in the training set.
+
+(73) 
+
+from sklearn.ensemble import RandomForestClassifier
+forest=RandomForestClassifier(criterion='gini',n_estimators=25,random_state=1,n_jobs=2)
+forest.fit(X_train,y_train)
+
+Here, we trained a random forest from 25 decision trees via the
+n_estimators parameter and used the entropy criterion as an impurity measure to
+split the nodes.
+
+--  n_jobs parameter for demonstration purposes,
+which allows us to parallelize the model training using multiple cores of our
+computer (here two cores).
+
+(74) KNN: A lazy learner
+
+It is called lazy not because of its
+apparent simplicity, but because it doesn't learn a discriminative function from the
+training data, but memorizes the training dataset instead.
+
+(75) Parametric versus nonparametric models:
+
+Machine learning algorithms can be grouped into parametric and
+nonparametric models. Using parametric models, we estimate
+parameters from the training dataset to learn a function that can
+classify new data points without requiring the original training dataset
+anymore. Typical examples of parametric models are the perceptron,logistic regression, and the linear SVM.
+
+In contrast, nonparametric models can't charcaterized by a fixed set of parameters and
+number of parameters grows with the training data. Two examples of
+non-parametric models that we have seen so far are the decision tree/random forest and kernel SVM.
+
+KNN belongs to a subcategory of nonparametric models that is
+described as instance-based learning. Models based on instance-based
+learning are characterized by memorizing the training dataset, and lazy
+learning is a special case of instance-based learning that is associated
+with no (zero) cost during the learning process.
+
+(76) 
+
+from sklearn.neighbors import KNeighborsClassifier
+knn=KNeighborsClassifier(n_neighbors=5,p=2,metric='minkowski')
+knn.fit(X_train_Std,y_train)
+
+--However, if we are using a Euclidean
+distance measure, it is also important to standardize the data so that each feature
+contributes equally to the distance.
+
+-- KNN is very susceptible to overfitting  due to the curse of dimensionality. 
+
+-- The curse of dimensionality
+describes the phenomenon where the feature space becomes increasingly sparse for an increasing number of dimensions of a
+fixed-size training dataset. Intuitively, we can think of even the closest
+neighbors being too far away in a high-dimensional space to give a
+good estimate.
+
+However, in models where regularization is not applicable, such as decision trees
+and KNN, we can use feature selection and dimensionality reduction
+techniques to help us avoid the curse of dimensionality. 
+
+--------------------------------------------------------------------------------------------------------
+
+Data Preprocessing-- Building good Training Datasets
+
+(77) It involves: 
+
+Removing and imputing missing values from the dataset
+Getting categorical data into shape for machine learning algorithms
+Selecting relevant features for the model construction
+
+(78) It is not uncommon in real-world applications for our samples to be missing one
+or more values for various reasons. There could have been an error in the data
+collection process. certain measurements are not applicable or particular fields could
+have been simply left blank in a survey, for example.
+
+(79) 
+
+from io import StringIO
+csv_data = \
+'''A,B,C,D
+1.0,2.0,3.0,4.0
+5.0,6.0,,8.0
+10.0,11.0,12.0,'''
+df=pd.read_csv(StringIO(csv_data))
+
+The StringIO function allows us to read the string assigned to csv_data into a
+pandas DataFrame.
+
+(80) We can use the isnull method to return a DataFrame with Boolean values that
+indicate whether a cell contains a numeric value (False) or if data is missing (True).
+Using the sum method, we can then return the number of missing values per column
+as follows:
+
+df.isnull().sum()
+
+(81) One of the easiest ways to deal with missing data is to simply remove the
+corresponding features (columns) or samples (rows) from the dataset entirely; rows
+with missing values can be easily dropped via the dropna method dropna(axis=0):
+
+df.dropna(axis=1) # drop column with missing values
+
+(82) 
+
+# only drop rows where all columns are NaN
+# (returns the whole array here since we don't
+# have a row with where all values are NaN
+df.dropna(how='all')
+
+(83)
+
+# only drop rows where NaN appear in specific columns (here: 'C')
+df.dropna(subset=['C'])
+
+(84)
+
+# drop rows that have less than 4 real values
+df.dropna(thresh=4)
+
+(85)
+
+Although the removal of missing data seems to be a convenient approach, it also
+comes with certain disadvantages; for example, we may end up removing too
+many samples, which will make a reliable analysis impossible. Or, if we remove too
+many feature columns, we will run the risk of losing valuable information that our
+classifier needs to discriminate classes.
+
+(86) Imputing missing values:
+
+We can use different interpolation techniques to estimate the missing values from the other
+training samples in our dataset.
+
+To estimate the missing values from the other
+training samples in our dataset. One of the most common interpolation techniques
+is mean imputation, where we simply replace the missing value with the mean
+value of the entire feature column.
+
+from sklearn.impute import SimpleImputer
+import numpy as np
+imr=SimpleImputer(missing_values=np.nan, strategy='mean')
+imr=imr.fit(df[['D']])
+imputed_data = imr.transform(df[['D']])
+
+(87)
+
+Other options for the strategy parameter are median or
+most_frequent, where the latter replaces the missing values with the most frequent
+values. This is useful for imputing categorical feature values, for example, a feature
+column that stores an encoding of color names, such as red, green, and blue, and we
+will encounter examples of such data later in this chapter.
+
+(88) The Imputer class belongs to the so-called transformer
+classes in scikit-learn, which are used for data transformation. The two essential
+methods of those estimators are fit and transform. The fit method is used to
+learn the parameters from the training data, and the transform method uses those
+parameters to transform the data. Any data array that is to be transformed needs to
+have same number of features as the data qrray that needs
+to transform a training dataset as well as a new test dataset:
+
+
+(89) Classifiers that we discuused above belong to the so-called estimators in scikit-learn with an API that
+is conceptually very similar to the transformer class. Estimators have a predict
+method but can also have a transform method, as we will see later in this chapter.
+As you may recall, we also used the fit method to learn the parameters of a model in the training.
+
+(90) Handling Categorical Variables
+
+When we are talking about categorical data, we have to further distinguish between
+nominal and ordinal features. Ordinal features can be understood as categorical
+values that can be sorted or ordered. For example, t-shirt size would be an ordinal
+becasue we can define the order as XL > L > M. In contrast, nominal features
+don't imply any order and, to continue with the previous example, we could think of
+t-shirt color as a nominal feature since it typically doesn't make sense to say that, for
+example, red is larger than blue.
+
+(91) 
+
+import pandas as pd
+df = pd.DataFrame([
+    ['green', 'M', 10.1, 'class1'],
+    ['red', 'L', 13.5, 'class2'],
+    ['blue', 'XL', 15.3, 'class1']])
+df.columns = ['color', 'size', 'price', 'classlabel']
+
+size_mapping = {'XL': 3,'L': 2,'M': 1}
+df['size'] = df['size'].map(size_mapping)
+
+# df['classlabel'].map(lambda x: x.split('s'))
+
+-- to transform the values back
+
+inv_size_mapping = {v: k for k, v in size_mapping.items()}
+df['size'].map(inv_size_mapping)
+
+(92) Encoding Class Labels:
+
+Many machine learning libraries require that class labels are encoded as integer
+values. Although most estimators for classification in scikit-learn convert class
+labels to integers internally, it is considered good practice to provide class labels as
+integer arrays to avoid technical glitches. 
+
+class_mapping={classlabel:idx for idx,classlabel in enumerate(np.unique(df['classlabel']))}
+df['classlabel'] = df['classlabel'].map(class_mapping)
+
+(93) Alternatively, there is a convenient LabelEncoder class directly implemented in
+scikit-learn to achieve this:
+
+from sklearn.preprocessing import LabelEncoder
+class_le=LabelEncoder()
+y=class_le.fit_transform(df['classlabel'].values)
+
+# to reverse back: class_le.inverse_transform(y)
+
+(94) Perform One-hot encoding on Nominal Features:
+
+we could use a similar approach to transform the nominal color column of our
+dataset, as follows:
+
+X=df[['color','size','price']].values
+color_le=LabelEncoder()
+X[:,0]=color_le.fit_transform(X[:,0])
+
+Although the color values don't come in any particular order, a learning algorithm
+will now assume that green is larger than blue, and red is larger than green.
+Although this assumption is incorrect, the algorithm could still produce useful
+results. However, those results would not be optimal.
+
+(95)  A common workaround for this problem is to use a technique called one-hot
+encoding. The idea behind this approach is to create a new dummy feature for each
+unique value in the nominal feature column. Here, we would convert the color
+feature into three new features: blue, green, and red. Binary values can then be
+used to indicate the particular color of a sample; for example, a blue sample can be
+encoded as blue=1, green=0, red=0. To perform this transformation, we can use the
+OneHotEncoder that is implemented in the scikit-learn.preprocessing module:
+
+from sklearn.compose import ColumnTransformer 
+ct = ColumnTransformer([("Name_Of_Your_Step", OneHotEncoder(),[0])], remainder="passthrough") # The last arg ([0]) is the list of columns you want to transform in this step
+ct.fit_transform(X) 
+
+(96) An even more convenient way to create those dummy features via one-hot encoding
+is to use the get_dummies method implemented in pandas. Applied to a DataFrame,
+the get_dummies method will only convert string columns and leave all other
+columns unchanged:
+
+pd.get_dummies(df[['price','color','size']])
+
+(97) When we are using one-hot encoding datasets, we have to keep in mind that it
+introduces multicollinearity, which can be an issue for certain methods (for instance,
+methods that require matrix inversion). If features are highly correlated, matrices are
+computationally difficult to invert which can lead to numerically unstable estimate.
+To reduce the correlation among variables, we can simply remove one feature
+column from the one-hot encoded array. Note that we do not lose any important
+information by removing a feature column, though; for example, if we remove the
+column color_blue, the feature information is still preserved since if we observe
+color_green=0 and color_red=0, it implies that the observation must be blue.
+
+pd.get_dummies(df[['price','color','size']],drop_first=True)
+
+(98) Partitioning a dataset into train and test:
+
+If we are dividing a dataset into training and test datasets, we have to
+keep in mind that we are withholding valuable information that the
+learning algorithm could benefit from. Thus we don't want to allocate
+too much information to the test set. However, the smaller the test
+set, the more inaccurate the estimation of the generalization error.
+Dividing a dataset into training and test sets is all about balancing
+this trade-off. In practice, the most commonly used splits are 60:40,
+70:30, or 80:20, depending on the size of the initial dataset. However,
+for large datasets, 90:10 or 99:1 splits into training and test subsets
+are also common and appropriate.
+
+
+(99) Bringing fatures onto the same scale:
+
+Decision trees and random forests are two of the very few machine
+learning algorithms where we don't need to worry about feature scaling. Those
+algorithms are scale invariant.
+
+However, the majority of machine learning and
+optimization algorithms behave much better if features are on the same scale
+when we implemented the gradient descent optimization algorithm.
+
+
+Now, there are two common approaches to bring different features onto the same
+scale: normalization and standardization.
+
+
+normalization refers to the rescaling of the features to a range of [0, 1], which is a
+special case of min-max scaling
+
+from sklearn.preprocessing import MinMaxScaler
+mms=MinMaxScaler()
+X_train_norm=mms.fit_transform(X_train)
+X_test_norm=mms.fit_transform(X_test)
+
+(100) Using standardization, we center the feature columns at mean 0 with standard
+deviation 1 so that the feature columns takes the form of a normal distribution, which
+makes it easier to learn the weights. Furthermore, standardization maintains useful
+information about outliers and makes the algorithm less sensitive to them in contrast
+to min-max scaling, which scales the data to a limited range of values.
+
+from sklearn.preprocessing import StandardScaler
+stdsc = StandardScaler()
+X_train_std = stdsc.fit_transform(X_train)
+X_test_std = stdsc.transform(X_test)
+
+(101) Selecting Meaningful Features:
+
+-- Common solutions to reduce the generalization error are
+listed as follows:
+ 
+A. Collect more training data
+B. Introduce a penalty for complexity via regularization
+C. Choose a simpler model with fewer parameters
+D. Reduce the dimensionality of the data
+
+(102) We will look at common ways to reduce overfitting by regularisation and 
+dimensionality reduction via feature selection, which leads to simpler models by requiring fewer parameters
+to be fitted to the data.
+
+-- L2 regularization is one approach to reduce the complexity of a model by penalizing large individual weights.
+-- For regularized models in scikit-learn that support L1 regularization, we can simply
+set the penalty parameter to 'l1' to obtain a sparse solution:
+
+from sklearn.linear_model import LogisticRegression
+lr=LogisticRegression(penalty='l1')
+
+(103) There are two main categories of dimensionality reduction
+techniques: feature selection and feature extraction. Via feature selection, we select
+a subset of the original features, whereas in feature extraction, we derive information
+from the feature set to construct a new feature subspace.
+
+(104) Unfortunately, the SBS(Sequential Backward Selction) algorithm has not been implemented in scikit-learn yet. But
+since it is so simple, let us go ahead and implement it in Python from scratch: (see page 131)
+
+(105) Another useful approach to select relevant features
+from a dataset is to use a random forest
+
+-- Using a random
+forest, we can measure the feature importance as the averaged impurity decrease
+computed from all decision trees in the forest, without making any assumptions
+about whether our data is linearly separable or not
+
+-- Conveniently, the random forest
+implementation in scikit-learn already collects the feature importance values for us
+so that we can access them via the feature_importances_
+RandomForestClassifier. 
+
+(106)
+
+from sklearn.ensemble import RandomForestClassifier
+feat_labels=df_wine.columns[1:]
+forest=RandomForestClassifier(n_estimators=500,random_state=1)
+forest.fit(X_train,y_train)
+importances = forest.feature_importances_
+indices = np.argsort(importances)[::-1]
+for f in range(X_train.shape[1]):
+    print("%2d) %-*s %f" % (f + 1, 30,feat_labels[indices[f]],importances[indices[f]]))
+
+If two or more features are
+highly correlated, one feature may be ranked very highly while the information of
+the other feature(s) may not be fully captured. On the other hand, we don't need
+to be concerned about this problem if we are merely interested in the predictive
+performance of a model rather than the interpretation of feature importance values.
+--------------------------------------------------------------------------------------------------------
+
+Compressing Data via Dimensionality Reduction
+
+(107) . An alternative approach to feature selection for
+dimensionality reduction is feature extraction.
+
+(108) PCA Algorithm:
+
+1. Standardize the d-dimensional dataset.
+2. Construct the covariance matrix.
+3. Decompose the covariance matrix into its eigenvectors and eigenvalues.
+4. Sort the eigenvalues by decreasing order to rank the corresponding
+eigenvectors.
+5. Select N eigenvectors which correspond to the N largest eigenvalues, where N
+is the dimensionality of the new feature subspace ( k  ≤ d).
+6. Construct a projection matrix W from the "top" k eigenvectors.
+7. Transform the d-dimensional input dataset X using the projection matrix W
+to obtain the new k-dimensional feature subspace.
+
+(109) Using the linalg.eig function, we performed
+the eigendecomposition, which yielded a vector (eigen_vals) consisting of
+13 eigenvalues.
+
+df_wine = pd.read_csv('https://archive.ics.uci.edu/ml/machine-learning-databases/wine/wine.data',header=None)
+X, y = df_wine.iloc[:, 1:].values, df_wine.iloc[:, 0].values
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3,stratify=y,random_state=0)
+sc = StandardScaler()
+X_train_std = sc.fit_transform(X_train)
+X_test_std = sc.transform(X_test)
+cov_mat=np.cov(X_train_std.T)
+eigen_vals,eigen_vecs=np.linalg.eig(cov_mat)
+
+(110) A related function, numpy.linalg.eigh, has been implemented to
+decompose Hermetian matrices, which is a numerically more stable
+approach to work with symmetric matrices such as the covariance
+matrix; numpy.linalg.eigh always returns real eigenvalues.
+
+(111) The eigenvalues define the magnitude of the eigenvectors.
+
+(112) Before we collect those k most informative eigenvectors,
+      let us plot the variance explained ratios of the eigenvalues.
+
+(113) The variance explained ratio of an eigenvalue λ j is simply the fraction of an eigenvalue λ j and
+the total sum of the eigenvalues.
+
+(114) feature transformation:
+
+A. Select k eigenvectors, which correspond to the k largest eigenvalues, where k
+is the dimensionality of the new feature subspace ( k ≤ d).
+B. Construct a projection matrix W from the "top" k eigenvectors.
+C. Transform the d-dimensional input dataset X using the projection matrix W
+to obtain the new k-dimensional feature subspace.
+
+# Make a list of (eigenvalue, eigenvector) tuples
+eigen_pairs = [(np.abs(eigen_vals[i]), eigen_vecs[:, i]) for i in range(len(eigen_vals))]
+# Sort the (eigenvalue, eigenvector) tuples from high to low
+eigen_pairs.sort(key=lambda k: k[0], reverse=True)
+
+w = np.hstack((eigen_pairs[0][1][:, np.newaxis],eigen_pairs[1][1][:, np.newaxis]))
+# x' = xW
+X_train_std[0].dot(w)
+
+(115) PCA in scikit-learn
+
+The PCA class is another one of scikit-learn's transformer classes, where
+both the training data and the test dataset using the same model parameters.
+
+(116) 
+
+from sklearn.linear_model import LogisticRegression
+from sklearn.decomposition import PCA
+pca= PCA(n_components=2)
+lr=LogisticRegression()
+X_train_pca=pca.fit_transform(X_train_std)
+X_test_pca=pca.transform(X_test_std)
+lr.fit(X_train_pca,y_train)
+
+(117)  explained variance ratios of the different principal
+components:
+
+pca=PCA(n_components=None)
+pca.fit_transform(X_train_std)
+pca.explained_variance_ratio_
+
+(118) Fischer's LDA
+
+One assumption in LDA is that the data is normally distributed. Also, we assume
+that the classes have identical covariance matrices and that the features are
+statistically independent of each other.
+
+(119) Algorithm:
+
+1. Standardize the d-dimensional dataset (d is the number of features).
+2. For each class, compute the d-dimensional mean vector.
+3. Construct the between-class scatter matrix SB and the within-class scatter
+matrix Sw .
+4. Compute the eigenvectors and corresponding eigenvalues of the matrix Sw^{-1}S_B.
+ Sort the eigenvalues by decreasing order to rank the corresponding
+eigenvectors.
+6. Choose the k eigenvectors that correspond to the k largest eigenvalues to
+construct a d × k -dimensional transformation matrix W; the eigenvectors are
+the columns of this matrix.
+7. Project the samples onto the new feature subspace using the transformation
+matrix W.
+
+(120)
+
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
+lda = LDA(n_components=2)
+X_train_lda = lda.fit_transform(X_train_std, y_train)
+lr = LogisticRegression()
+lr = lr.fit(X_train_lda, y_train)
+X_test_lda = lda.transform(X_test_std)
+
+(121) we will take a look at a kernelized version of PCA, or KPCA, which
+relates to the concepts of kernel SVM.
+
+Using kernel PCA, we will learn how to
+transform data that is not linearly separable onto a new, lower-dimensional subspace
+that is suitable for linear classifiers.
+
+(122) Here, in covariance matrix in PCA, we use the kernel trick for dot product of two x's
+
+from sklearn.decomposition import KernelPCA
+X, y = make_moons(n_samples=100, random_state=123)
+scikit_kpca = KernelPCA(n_components=2,kernel='rbf', gamma=15)
+X_skernpca = scikit_kpca.fit_transform(X)
+
+----------------------------------------------------------------------------------------------
+
+Learning Best Practices for Model Evaluation and Hyperparameter Tuning
+
+(123)  Pipeline class in scikit-learn  allows us to fit a model including an arbitrary no. of transformation
+steps and apply it to make predictions about new data.
+
+(124)
+
+import pandas as pd
+df = pd.read_csv('https://archive.ics.uci.edu/ml/machine-learning-databases/breast-cancer-wisconsin/wdbc.data',header=None)
+from sklearn.preprocessing import LabelEncoder
+le=LabelEncoder()
+X=df.loc[:,2:].values
+y=df.loc[:,1].values
+y=le.fit_transform(y)
+from sklearn.model_selection import train_test_split
+X_train,X_test,y_train,y_test= train_test_split(X,y,test_size=0.20,stratify=y,random_state=1)
+
+(125) Instead of fitting and transformation steps for traing and
+and test datasets separately, we can chain the StandardScaler, PCA, and
+LogisticRegression objects in a pipeline:
+
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+from sklearn.linear_model import LogisticRegression
+from sklearn.pipeline import make_pipeline
+pipe_lr=make_pipeline(StandardScaler(),PCA(n_components=2),LogisticRegression(random_state=1))
+pipe_lr.fit(X_train,y_train)
+y_pred=pipe_lr.predict(X_test)
+print("accuracy is %3.f" % pipe_lr.score(X_test,y_test))
+
+(126) The make_pipeline function takes an arbitrary number of scikit-learn transformers
+(objects that support the fit and transform methods as input), followed by a
+scikit-learn estimator that implements the fit and predict methods.
+
+(127) Using k-fold cross-validation to assess model performance:
+
+the performance of the validation set is used
+for the model selection. Once we are satisfied with the tuning of hyperparameter values,
+we estimate the models' generalization performance on the test dataset.
+
+(128)
+
+original dataset --> train+test --> train=train+validation set -->model fit on train and check the
+performance of predictive model on validation set and if it is low performance then do hyperparameter tuning
+until we get good model and then at the last check final performance on test set.
+
+Once we have found satisfactory hyperparameter values, we can retrain the model
+on complete training set and find a final performance estimate on test set
+
+(129) A good standard value for k in k-fold cross-validation is 10, as empirical evidence
+shows.
+
+ if we are working with relatively small training sets, it can be useful
+to increase the number of folds. 
+
+On the other hand, if we are working with large datasets, we can choose
+a smaller value for k.
+
+(130) A slight improvement over the k-fold cross validation approach is stratified
+k-fold cross-validation, which can yield better bias and variance estimates, especially
+in cases of unequal class proportions.
+
+ In stratified cv, the class proportions are preserved in each fold to ensure
+that each fold is representative of the class proportions in the training dataset.
+
+from sklearn.model_selection import StratifiedKFold
+import numpy as np
+kfold=StratifiedKFold(n_splits=10).split(X_train,y_train)
+scores=[]
+for k, (train,test) in enumerate(kfold):
+    pipe_lr.fit(X_train[train],y_train[train])
+    score=pipe_lr.score(X_train[test],y_train[test])
+    scores.append(score)
+    print('fold: %d , class distribution: %s, accuracy: %.3f' % (k+1,np.bincount(y_train[train]),score))
+
+(131) Another way:
+
+from sklearn.model_selection import cross_val_score
+scores = cross_val_score(estimator=pipe_lr,X=X_train,y=y_train,cv=10,n_jobs=1)
+print('CV accuracy scores: %s' % scores)
+print('CV accuracy: %.3f +/- %.3f' % (np.mean(scores),np.std(scores)))
+
+(132) Debugging algorithms with learning and validation curves:
+
+two very simple yet powerful diagnostic
+tools that can help us improve the performance of a learning algorithm: learning
+curves and validation curves.
+
+we can use learning curves to diagnose whether a learning algorithm has a problem with
+overfitting or underfitting.
+
+(133) 
+often be very expensive or simply not feasible to collect more data. By plotting the
+model training and validation accuracies as functions of the training set size, we can
+easily detect whether the model suffers from high variance or high bias, and whether
+the collection of more data could help address this problem
+
+(134) To overcome overfitting, we increase more and more training examples that reduces the
+complexity of the model, or increase the regularization parameter.
+
+While collecting more training examples, it usually decrease the chance of overfitting, it may not
+always help, for example, if the training data is 
+extremely noisy or the model is already very close to optimal.
+
+(135) 
+
+from sklearn.model_selection import learning_curve
+import matplotlib.pyplot as plt
+train_sizes, train_scores,test_scores=learning_curve(estimator=pipe_lr,X=X_train,y=y_train,train_sizes=np.linspace(0.1,1,10),cv=10,n_jobs=1)
+train_mean=np.mean(train_scores,axis=1)
+train_std=np.std(train_scores,axis=1)
+test_mean=np.mean(test_scores,axis=1)
+test_std=np.std(test_scores,axis=1)
+plt.plot(train_sizes,train_mean,color='blue',marker='o',markersize=5,label='training accuracy')
+plt.fill_between(train_sizes,train_mean+train_std,train_mean-train_std,alpha=0.15,color='blue')
+plt.plot(train_sizes,test_mean,color='green',linestyle='--', marker='s',markersize=5,label='validation accuracy')
+plt.fill_between(train_sizes,test_mean+test_std,test_mean-test_std,alpha=0.15,color='green')
+plt.grid()
+plt.xlabel("Number of training samples")
+plt.ylabel("Accuracy")
+plt.legend(loc='lower right')
+plt.ylim([0.8,1.0])
+plt.show()
+
+By default, the learning_curve function uses the stratified cv to calculate the cv accuracy of a classifier. 
+
+As we can see in the preceding learning curve plot, our model performs quite well
+on both the training and validation dataset if it had seen more than 250 samples
+during training.
+
+(136) Addressing over and under fitting using validation curves:
+
+Validation curves are related to learning curves, but instead of plotting the training and test accuracies as functions
+of the sample size, we vary the values of the model parameters, for example, the
+inverse regularization parameter C in logistic regression.
+
+from sklearn.model_selection import validation_curve
+param_range=[0.001,0.01,0.1,1,10,100]
+train_scores,test_scores=validation_curve(estimator=pipe_lr,X=X_train,y=y_train,param_name='logisticregression__C',param_range=param_range,cv=10)
+train_mean=np.mean(train_scores,axis=1)
+train_std=np.std(train_scores,axis=1)
+test_mean=np.mean(test_scores,axis=1)
+test_std=np.std(test_scores,axis=1)
+plt.plot(param_range,train_mean,color='blue',marker='o',markersize=5,label='training accuracy')
+plt.fill_between(param_range,train_mean+train_std,train_mean-train_std,alpha=0.15,color='blue')
+plt.plot(param_range,test_mean,color='green',linestyle='--',marker='s',markersize=5,label='validation accuracy')
+plt.fill_between(param_range,test_mean+test_std,test_mean-test_std,alpha=0.15,color='green')
+plt.grid()
+plt.xscale('log')
+plt.legend(loc='lower right')
+plt.xlabel('Parameter C')
+plt.ylabel('Accuracy')
+plt.ylim([0.8, 1.03])
+plt.show()
+
+Similar to the learning_curve function, the validation_curve function uses
+ stratified k-fold cv to estimate the performance of the classifier.
+
+(137) Fine-tuning machine learning models via grid search:
+
+In machine learning, we have two types of parameters: those that are learned from
+the training data, for example, the weights in logistic regression, and the parameters
+of a learning algorithm that are optimized separately. The latter are the tuning
+parameters, also called hyperparameters, of a model, for example, the regularization
+parameter in logistic regression or the depth parameter of a decision tree.
+
+from sklearn.model_selection import GridSearchCV
+from sklearn.svm import SVC
+pipe_svc=make_pipeline(StandardScaler(),SVC(random_state=1))
+param_range=[0.0001,0.001,0.01,0.1,1,10,100,1000]
+param_grid=[{'svc__C':param_range,'svc__kernel':['linear']},{'svc__C':param_range,'svc__gamma':param_range,'svc__kernel':['rbf']}]
+gs=GridSearchCV(estimator=pipe_svc,param_grid=param_grid,scoring='accuracy',cv=10,n_jobs=-1)
+gs.fit(X_train,y_train)
+print(gs.best_score_)
+print(gs.best_params_)
+
+ In this particular
+case, the RBF-kernel SVM model with svc__C = 100.0 yielded the best k-fold crossvalidation accuracy: 98.5 percent.
+
+(138)
+
+Finally, we will use the independent test dataset to estimate the performance of the
+best-selected model, which is available via the best_estimator_ attribute of the
+GridSearchCV object:
+
+clf=gs.best_estimator_
+clf.fit(X_train,y_train)
+print('test accuracy: %.2f' % clf.score(X_test,y_test))
+
+(139)
+
+Although grid search is a powerful approach to find the optimal set of
+parameters, the evaluation of all possible parameter combinations is also
+computationally very expensive. An alternative approach to sampling
+different parameter combinations using scikit-learn is randomized search.
+Using the RandomizedSearchCV class in scikit-learn, we can draw
+random parameter combinations from sampling distributions with a specified budget.
+
+(140)
+
+If we want to select
+among different machine learning algorithms, though, another recommended
+approach is nested cross-validation.
+
+In nested cross-validation, we have an outer k-fold cross-validation loop to split
+the data into training and test folds, and an inner loop is used to select the model
+using k-fold cross-validation on the training fold. After model selection, the test fold
+is used to evaluate the model performance.
+
+(141)
+
+gs = GridSearchCV(estimator=pipe_svc,param_grid=param_grid,scoring='accuracy',cv=2)
+scores = cross_val_score(gs, X_train, y_train,scoring='accuracy', cv=5)
+print('CV accuracy: %.3f +/- %.3f' % (np.mean(scores),np.std(scores)))
+
+(142)
+
+The returned average cross-validation accuracy gives us a good estimate of what
+to expect if we tune the hyperparameters of a model and use it on unseen data.
+
+For example, we can use the nested cross-validation approach to compare an SVM
+model to a simple decision tree classifier; for simplicity, we only tune its depth
+parameter
+
+from sklearn.tree import DecisionTreeClassifier
+gs = GridSearchCV(estimator=DecisionTreeClassifier(random_state=0),param_grid=[{'max_depth': [1, 2, 3,4, 5, 6, 7, None]}],scoring='accuracy',cv=2)
+scores = cross_val_score(gs, X_train, y_train,scoring='accuracy', cv=5)
+print('CV accuracy: %.3f +/- %.3f' % (np.mean(scores),np.std(scores)))
+
+As we can see, the nested cross-validation performance of the SVM model (97.4
+percent) is notably better than the performance of the decision tree (93.4 percent),
+and thus, we'd expect that it might be the better choice to classify new data that
+comes from the same population as this particular dataset.
+
+(143) Looking at different performance evaluation metrics:
+
+In the previous sections and chapters, we evaluated our models using model
+accuracy, which is a useful metric with which to quantify the performance of a model
+in general. However, there are several other performance metrics that can be used to
+measure a model's relevance, such as precision, recall, and the F1-score.
+
+from sklearn.metrics import confusion_matrix
+pipe_svc.fit(X_train,y_train)
+y_pred=pipe_svc.predict(X_test)
+confmat=confusion_matrix(y_true=y_test,y_pred=y_pred)
+print(confmat)
+
+we can assume class 1 as positive(0).
+
+(144)
+
+ERR= (FP+FN)/(TP+TN+FP+FN)
+ACC=1-ERR
+
+The True positive rate (TPR) and False positive rate (FPR) are performance metrics
+that are especially useful for imbalanced class problems:
+
+FPR=FP/N=FP/(FP+TN)
+TPR=TP/P=TP/(TP+FN)
+
+PRECISION=TP/(TP+FP)
+RECALL= TPR
+F1-Score= Harmonic mean of precision and recall
+
+from sklearn.metrics import precision_score,recall_score,f1_score
+print('Precision: %.3f' % precision_score(y_true=y_test,y_pred=y_pred))
+print('Recall: %.3f' % recall_score(y_true=y_test,y_pred=y_pred))
+print('F1 Score: %.3f' % f1_score(y_true=y_test,y_pred=y_pred))
+
+(145)
+
+Remember that the positive class in scikit-learn is the class that is labeled as class 1.
+If we want to specify a different positive label, we can construct our own scorer via
+the make_scorer function, which we can then directly provide as an argument to
+the scoring parameter in GridSearchCV (in this example, using the f1_score as a
+metric):
+
+from sklearn.metrics import make_scorer, f1_score
+scorer=make_scorer(f1_score,pos_label=0)
+gs=GridSearchCV(estimator=pipe_svc,param_grid=param_grid,scoring=scorer,cv=10)
+gs=gs.fit(X_train,y_train)
+print(gs.best_score_)
+print(gs.best_params_)
+
+(146) Plotting a receiver operating characteristic:
+
+Receiver Operating Characteristic (ROC) graphs are useful tools to select models for
+classification based on their performance with respect to the FPR and TPR, which are
+computed by shifting the decision threshold of the classifier.
+
+The diagonals of an ROC  
+graph can be interpreted as random guessing and classification models that fall below the diagonal
+are considered as worse than random guessing.
+
+
+A perfect classifier would fall into the top left corner of the graph with a TPR of 1 and an FPR of 0. Based
+on the ROC curve, we can then compute the so-called ROC Area under the curve (ROC AUC) to characterize the 
+performance of a classification model.
+
+Similar to ROC curves, we can compute precision-recall curves for different probability thresholds of a classifier.
+
+from sklearn.metrics import roc_curve,auc
+from scipy import interp
+pipe_lr = make_pipeline(StandardScaler(),PCA(n_components=2),LogisticRegression(penalty='l2',random_state=1,C=100.0))
+X_train2=X_train[:,[4,14]]
+cv=list(StratifiedKFold(n_splits=3).split(X_train,y_train))
+fig=plt.figure(figsize=(7,5))
+mean_tpr=0
+mean_fpr=np.linspace(0,1,100)
+all_tpr=[]
+for i, (train,test) in enumerate(cv):
+    probas=pipe_lr.fit(X_train2[train],y_train[train]).predict_proba(X_train2[test])
+    fpr,tpr,thresholds=roc_curve(y_train[test],probas[:,1],pos_label=1)
+    mean_tpr += interp(mean_fpr,fpr,tpr)
+    mean_tpr[0]=0.0
+    roc_auc=auc(fpr,tpr)
+    plt.plot(fpr,tpr,label='ROC fold %d (area = %.2f)' % (i+1,roc_auc))
+plt.plot([0,1],[0,1],linestyle='--',color=(0.6,0.6,0.6),label='random guessing')
+mean_tpr /= len(cv)
+mean_tpr[-1]=1.0
+mean_auc = auc(mean_fpr, mean_tpr)
+plt.plot(mean_fpr, mean_tpr, 'k--',label='mean ROC (area = %0.2f)' % mean_auc, lw=2)
+plt.plot([0, 0, 1],[0, 1, 1],linestyle=':',color='black',label='perfect performance')
+plt.xlim([-0.05, 1.05])
+plt.ylim([-0.05, 1.05])
+plt.xlabel('false positive rate')
+plt.ylabel('true positive rate')
+plt.legend(loc="lower right")
+plt.show()
+
+The resulting ROC curve indicates that there is a certain degree of variance between the
+different folds, and the average ROC AUC (0.76) falls between a perfect score (1.0)
+and random guessing (0.5):
+
+Note if we are just interested in the ROC AUC score, we could also directly import
+the roc_auc_score function from the sklearn.metrics submodule
+
+(147) Reporting the performance of a classifier as the ROC AUC can yield further insights in a classifier's performance 
+with respect to imbalanced samples.
+
+(148) Scoring Metrics for multiclass classification:
+
+scikit-learn also implements macro and micro averaging methods to extend these scoring metrics to multiclass problem
+via one-versus-all  classification.
+
+PRE_macro = (PRE_1+...+PRE_k)/k
+PRE_micro= (TP_1+..+TP_k)/(TP_1+..+TP_k+FP_1+..+FP_k)
+
+Micro-averaging is useful if we want to weight each instance or prediction equally,
+whereas macro-averaging weights all classes equally to evaluate the overall performance
+of a classifier with regard to the most frequent class labels.
+
+In scikit-learn, a normalized or weighted variant of the macro-average is
+used by default.
+
+The weighted macro-average is calculated by weighting the score of
+each class label by the number of true instances when calculating the average. The
+weighted macro-average is useful if we are dealing with class imbalances, that is,
+different numbers of instances for each label.
+
+pre_scorer = make_scorer(score_func=precision_score,pos_label=1,greater_is_better=True,average='micro')
+ 
+(149) Dealing with class imbalance:
+
+Imagine the breast cancer dataset that we've been working with in this chapter
+consisted of 90 percent healthy patients. In this case, we could achieve 90 percent
+accuracy on the test dataset by just predicting the majority class (benign tumor) for
+all samples, without the help of a supervised machine learning algorithm. Thus,
+training a model on such a dataset that achieves approximately 90 percent test
+accuracy would mean our model hasn't learned anything useful from the features
+provided in this dataset.
+
+X_imb = np.vstack((X[y == 0], X[y == 1][:40]))
+y_imb = np.hstack((y[y == 0], y[y == 1][:40]))
+
+Here, we took all 357 benign tumor samples and stacked them with the first 40 malignant samples to create class imbalance.
+To compute the accuracy of a model that always predicts the majority class (benign,
+class 0), we would achieve a prediction accuracy of approximately 90 percent.
+
+When we fit classifiers on such datasets, it would make sense to focus on other
+metrics than accuracy when comparing different models, such as precision, recall,
+the ROC curve..
+
+One way to deal with class imbalanced proportions during the model fitting is to
+assign a larger penalty to wrong predictions on the minority class. Via scikit-learn,
+adjusting such a penalty is as convenient as setting the class_weight parameter to
+class_weight='balanced' which is implemented for most classifiers.
+
+(150) Other popular strategies for dealing with class imbalance include upsampling
+the minority class, downsampling the majority class, and the generation of
+synthetic training samples. Unfortunately, there's no universally best solution, no
+technique that works best across different problem domains. Thus, in practice, it is
+recommended to try out different strategies on a given problem, evaluate the results,
+and choose the technique that seems most appropriate.
+
+The scikit-learn library implements a simple resample function that can help with
+gthe upsampling of the minority class by drawing new samples from the dataset with
+replacement.
+
+from sklearn.utils import resample
+print('Number of class 1 samples before:',X_imb[y_imb == 1].shape[0])
+X_upsampled, y_upsampled = resample(X_imb[y_imb == 1],y_imb[y_imb == 1],replace=True,n_samples=X_imb[y_imb == 0].shape[0],random_state=123)
+print('Number of class 1 samples after:',X_upsampled.shape[0])
+
+After resampling, we can then stack the original class 0 samples with the upsampled
+class 1 subset to obtain a balanced dataset as follows:
+
+X_bal = np.vstack((X[y == 0], X_upsampled))
+y_bal = np.hstack((y[y == 0], y_upsampled))
+
+(151) Another technique for dealing with class imbalance is the generation
+of synthetic training samples.
+
+The probably most widely used algorithm for synthetic training sample
+generation is Synthetic Minority Over-sampling Technique (SMOTE).
+
+It is also highly recommended to check out imbalanced-learn, a
+Python library that is entirely focused on imbalanced datasets, including an implementation of SMOTE.
+--------------------------------------------------------------------------------------------------------
+
+Combining Different Models for Ensemble Learning:
+
+(152) it is easy to generalize the majority voting principle to
+multi-class settings, which is called plurality voting.Here, we select the class label
+that received the most votes (mode).
+
+(153) Using the training set, we start by training m different classifiers C1,C2,...,Cm depending on the technique,
+the ensemble can be built from different classification
+algorithms, for example, decision trees, support vector machines, logistic regression and so on.
+Alternatively, we can also use the same base classification algorithm, fitting different subsets of the training set.
+One example is: this approach is the random forest algorithm, which combines different decision.
+
+we assume that classifiers are independent
+and the error rates are not correlated
+
+(154) 
+
+from sklearn.base import BaseEstimator
+from sklearn.base import ClassifierMixin
+from sklearn.preprocessing import LabelEncoder
+import six
+from sklearn.base import clone
+from sklearn.pipeline import _name_estimators
+import numpy as np
+import operator
+
+class MajorityVoteClassifier(BaseEstimator,ClassifierMixin):
+    def __init__(self, classifiers,vote='classlabel', weights=None):
+        self.classifiers = classifiers
+        self.named_classifiers = {key: value for key, value in _name_estimators(classifiers)}
+        self.vote = vote
+        self.weights = weights
+    def fit(self, X, y):
+        # Use LabelEncoder to ensure class labels start
+        # with 0, which is important for np.argmax
+        # call in self.predict
+        self.lablenc_ = LabelEncoder()
+        self.lablenc_.fit(y)
+        self.classes_ = self.lablenc_.classes_
+        self.classifiers_ = []
+        for clf in self.classifiers:
+            fitted_clf = clone(clf).fit(X,self.lablenc_.transform(y))
+            self.classifiers_.append(fitted_clf)
+        return self
+
+def predict(self, X):
+    """ Predict class labels for X.
+    Parameters
+    ----------
+    X : {array-like, sparse matrix},
+    Shape = [n_samples, n_features]
+    Matrix of training samples.
+    Returns
+    ----------
+    maj_vote : array-like, shape = [n_samples]
+    Predicted class labels.
+    """
+    if self.vote == 'probability':
+        maj_vote = np.argmax(self.predict_proba(X),axis=1)
+    else: # 'classlabel' vote
+        # Collect results from clf.predict calls
+        predictions = np.asarray([clf.predict(X) for clf in self.classifiers_]).T
+        maj_vote = np.apply_along_axis(lambda x: np.argmax(np.bincount(x, weights=self.weights)), axis=1,arr=predictions)
+    maj_vote = self.lablenc_.inverse_transform(maj_vote)
+    return maj_vote
+def predict_proba(self, X):
+    probas = np.asarray([clf.predict_proba(X) for clf in self.classifiers_])
+    avg_proba = np.average(probas, axis=0, weights=self.weights)
+    return avg_proba
+def get_params(self, deep=True):
+    if not deep:
+        return super(MajorityVoteClassifier,self).get_params(deep=False)
+    else:
+        out = self.named_classifiers.copy() 
+        for name, step in six.iteritems(self.named_classifiers):
+            for key, value in six.iteritems(step.get_params(deep=True)):
+                out['%s__%s' % (name, key)] = value
+        return out
+ 
+
+(155) Using the training dataset, we now train 3 different classifiers:  
+       A. Logistic regression classifier
+       B. Decision tree classifier
+       C. k-nearest neighbors classifier
+We then evaluate the model performance of each classifier of 10-fold cross-
+validation on the training dataset before we combine them into an ensemble classifier.
+
+(156)the logistic regression and
+k-nearest neighbors algorithms (using the Euclidean distance metric) are not scaleinvariant, in contrast to decision trees.
+
+(157)
+
+We are going to compute the ROC curves from the test set to check that
+MajorityVoteClassifier generalizes well with unseen data. We shall remember
+that the test set is not to be used for model selection; its purpose is merely to report an
+unbiased estimate of the generalization performance of a classifier system.
+
+(158) In Maximum Voting classifier, we take different base classifiers as above. in Bagging, random forest, we use the same decision tree classifier.
+
+(159) random forests are a special case of bagging where we also use random feature subsets when
+
+fitting the individual decision trees.
+
+(160) A BaggingClassifier algorithm is already implemented in scikit-learn, which we
+can import from the ensemble submodule.
+
+from sklearn.ensemble import BaggingClassifier
+tree = DecisionTreeClassifier(criterion='entropy',random_state=1,max_depth=None)
+bag = BaggingClassifier(base_estimator=tree,n_estimators=500,max_samples=1.0,max_features=1.0,bootstrap=True,bootstrap_features=False,n_jobs=1,random_state=1)
+
+we will calculate the accuracy score of the prediction on the training and test
+dataset to compare the performance of the bagging classifier to the performance of a
+single unpruned decision tree:
+
+from sklearn.metrics import accuracy_score
+tree = tree.fit(X_train, y_train)
+y_train_pred = tree.predict(X_train)
+y_test_pred = tree.predict(X_test)
+tree_train = accuracy_score(y_train, y_train_pred)
+tree_test = accuracy_score(y_test, y_test_pred)
+print('Decision tree train/test accuracies %.3f/%.3f'% (tree_train, tree_test))
+--Decision tree train/test accuracies 1.000/0.833
+
+Based on the accuracy values that we printed here, the unpruned decision
+tree predicts all the class labels of the training samples correctly; however, the
+substantially lower test accuracy indicates high variance (overfitting) of the model.
+
+bag = bag.fit(X_train, y_train)
+y_train_pred = bag.predict(X_train)
+y_test_pred = bag.predict(X_test)
+bag_train = accuracy_score(y_train, y_train_pred)
+bag_test = accuracy_score(y_test, y_test_pred)
+print('Bagging train/test accuracies %.3f/%.3f' % (bag_train, bag_test))
+--Bagging train/test accuracies 1.000/0.917
+
+bagging classifier has a 
+slightly better generalization performance, as estimated on the test set.
+
+(161) Leveraging weak learners via adaptive boosting:
+
+In contrast to bagging, the initial formulation of boosting, the algorithm uses random
+subsets of training samples drawn from the training dataset without replacement;
+the original boosting procedure is summarized in the following four key steps:
+
+1. Draw a random subset of training samples d1 without replacement from
+training set D to train a weak learner C1 .
+
+2. Draw a second random training subset d2 without replacement from
+the training set and add 50 percent of the samples that were previously
+misclassified to train a weak learner C2.
+
+3. Find the training samples d3 in training set D , which C1 and C2 disagree
+upon, to train a third weak learner C3 .
+
+4. Combine the weak learners C1 , C2 , and C3 via majority voting.
+
+boosting can lead to a decrease in bias as well as variance compared to bagging
+models.
+
+ In practice, however, boosting algorithms such as AdaBoost are also
+known for their high variance that is the tendency to overfit the training data.
+
+AdaBoost uses
+the complete training set to train the weak learners where the training samples are
+reweighted in each iteration to build a strong classifier that learns from the mistakes of the previous weak learners in the ensemble.
+
+(162)
+
+Initially all training samples are assigned equal weights. Based on this training set, we train a decision stump (shown
+as a dashed line) that tries to classify the samples of the two classes.
+
+For the next round, we assign a larger weight to the two previously misclassified samples. Further we lower the weight of correctly classified samples.
+the next decision stump(boundary) will be more focused on training
+samples that have the largest weights- the training samples that are supposedly hard to classify.
+
+Assuming that our AdaBoost ensemble only consists of three rounds of boosting, we
+would then combine the three weak learners trained on different reweighted training
+subsets by a weighted majority vote.
+
+(163) Steps of Adaboost:
+
+A. The initial weights are shown in the
+fourth column; we initialize the weights uniformly (assigning the same constant
+value to all samples) and normalize them to sum to one.  In the case of the 10-sample training set,
+we therefore assign 0.1 to each weight wi in the weight vector w.
+g
+B. The predicted class labels hat(y) for splitting criteria x≤ 3.0 i.e 1 if x<=3 and -1 o/w. The last column of the table then
+ shows the updated weights based on the weighting rule.
+
+C. Compute the wigthed error rate as: epsilon= Sigma [weight of each training example * (0 if correct prediction otherwise 1)]
+
+D. Compute alpha = 0.5 log ((1-epsilon)/epsilon)
+
+E. Update weight of each training example using the rule = w:=w*exp(-alpha*y*hat(y)) 
+
+F. After we have updated each weight in the weight vector, we normalize the weights
+so that they sum up to one.
+
+(164) Applying AdaBoost using scikit-learn:
+
+from sklearn.ensemble import AdaBoostClassifier
+tree = DecisionTreeClassifier(criterion='entropy',random_state=1,max_depth=1)
+ada = AdaBoostClassifier(base_estimator=tree,n_estimators=500,learning_rate=0.1,random_state=1)
+tree = tree.fit(X_train, y_train)
+y_train_pred = tree.predict(X_train)
+y_test_pred = tree.predict(X_test)
+tree_train = accuracy_score(y_train, y_train_pred)
+tree_test = accuracy_score(y_test, y_test_pred)
+print('Decision tree train/test accuracies %.3f/%.3f'% (tree_train, tree_test))
+
+(165) It is considered bad practice to select a model based on the repeated usage of the test set.
+The estimate of the generalization performance may be over-optimistic.
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+Applying Machine Learning to Sentiment Analysis:
+
+(166) 
+
+Steps to perform Sentiment Analysis (subfield of NLP):
+
+A. Cleaning and preparing text data
+B. Building feature vectors from text documents
+C. Training a machine learning model to classify positive and negative
+movie reviews
+D. Working with large text datasets using out-of-core learning
+E. Inferring topics from document collections for categorization
+
+(167)
+
+Preparing the IMDb movie review data for
+text processing:
+
+[Sentiment analysis, sometimes also called opinion mining, It is concerned with analyzing the polarity of the documents.]
+
+-- A popular task in sentiment analysis is the classification of documents based on the 
+expressed opinions or emotions of the authors with regard to a particular topic.
+
+-- polar movie reviews that are labeled as either positive or negative; here, positive
+means that a movie was rated with more than six stars on IMDb, and negative review means that movie was rated with fewer than 5 stars on IMDb.
+
+(168) Introducing the bag-of-words model:
+
+-- bag-of-words, which allows us to represent text as numerical feature vectors
+
+-- The idea behind the bag-of-words model is quite simple and can be
+summarized as follows:
+
+1. We create a vocabulary of unique tokens—for example, words—from the
+entire set of documents.
+
+2. We construct a feature vector from each document that contains the counts of
+how often each word occurs in the particular document.
+
+(169) Since the unique words in each document represent only a small subset of all the
+words in the bag-of-words vocabulary, the feature vectors will mostly consist of
+zeros, which is why we call them sparse. Do not worry if this sounds too abstract; in
+the following subsections, we will walk through the process of creating a simple bagof-words model step-by-step.
+
+-- To construct a bag-of-words model based on the word counts in the respective
+documents, we can use the CountVectorizer class implemented in scikit-learn. As
+we will see in the following code section, CountVectorizer takes an array of text
+data, which can be documents or sentences, and constructs the bag-of-words model
+for us:
+
+import numpy as np
+from sklearn.feature_extraction.text import CountVectorizer
+count = CountVectorizer()
+docs = np.array(['The sun is shining','The weather is sweet','The sun is shining and the weather is sweet'])
+bag = count.fit_transform(docs)
+
+By calling the fit_transform method on CountVectorizer, we constructed
+the vocabulary of the bag-of-words model and transformed the following three
+sentences into sparse feature vectors.
+
+# it is only creating a dictionary and in this word is mapped to an index which means in dictionary
+# sequence is: [and,is,shining,sun,sweet,the,weather]
+print(count.vocabulary_)
+
+{'the': 5, 'sun': 3, 'is': 1, 'shining': 2, 'weather': 6, 'sweet': 4, 'and': 0}
+
+print(bag.toarray()) # it creates a feature vector for the dictionary and values here represents a count.
+# 0111010 means in first document, "and" comes 0 times, "is" comes 1 times, "shining" comes 1 time and so on 
+
+# These values
+# in the feature vectors are also called the raw term frequencies: tf (t,d )—the number
+# of times a term t occurs in a document d.
+
+(170) The sequence of items in the bag-of-words model that we just created
+is also called the 1-gram or unigram model—each item or token
+in the vocabulary represents a single word. More generally, the
+contiguous sequences of items in NLP—words, letters, or symbols—
+are also called n-grams. The choice of the number n in the n-gram
+model depends on the particular application.
+
+To summarize the concept of the
+n-gram representation, the 1-gram and 2-gram representations of our
+first document "the sun is shining" would be constructed as follows:
+
+ 1-gram: "the", "sun", "is", "shining"
+ 2-gram: "the sun", "sun is", "is shining"
+
+The CountVectorizer class in scikit-learn allows us to use different
+n-gram models via its ngram_range parameter. While a 1-gram
+representation is used by default, we could switch to a 2-gram
+representation by initializing a new CountVectorizer instance with
+ngram_range=(2,2).
+
+(171) term frequency-inverse document frequency
+(tf-idf) that can be used to downweight these frequently occurring words in the
+feature vectors. the tf-idf can be defined as a product of term fequency and
+the inverse document frequency:
+
+tf-idf(t,d)= tf(t,d)*idf(t,d)
+
+where idf(t,d)=log (n_d/(1+df(d,t))
+
+Here n_d is the total number of documents, and df(d, t) is the number of documents
+d that contain the term t.
+
+the log is used to ensure that low document frequencies are not
+given too much weight.
+
+(172) The scikit-learn library implements yet another transformer, the TfidfTransformer
+class, that takes the raw term frequencies from the CountVectorizer class as input
+and transforms them into tf-idfs:
+
+from sklearn.feature_extraction.text import TfidfTransformer
+tfidf = TfidfTransformer(use_idf=True,norm='l2',smooth_idf=True)
+np.set_printoptions(precision=2)
+print(tfidf.fit_transform(count.fit_transform(docs)).toarray())
+
+However, after
+transforming the same feature vector into tf-idfs, we see that the word 'is' is now
+associated with a relatively small tf-idf (0.45) in the third document, since it is also
+present in first and second document and thus is unlikely to contain any useful
+discriminatory information.
+
+The equations for the inverse document frequency implemented in scikit-learn is
+computed as follows:
+
+idf(t,d)=log ((1+n_d)/(1+df(d,t))
+
+Similarly, the tf-idf computed in scikit-learn deviates slightly from the default equation:
+
+
+tf-idf(t,d)= tf(t,d)*(1+idf(t,d))
+
+While it is also more typical to normalize the raw term frequencies before calculating
+the tf-idfs, TfidfTransformer class normalizes the tf-idfs directly. By default
+(norm='l2'), scikit-learn's TfidfTransformer applies the L2-normalization,
+which returns a vector of length 1 by dividing an un-normalized feature
+vector v by its L2-norm.
+
+(173) 
+
+we shall note that the order
+of the words doesn't matter in our bag-of-words model if our vocabulary consists
+of only one-word tokens.
+
+One way to tokenize
+documents is to split them into individual words by splitting the cleaned documents
+at its whitespace characters.
+
+In the context of tokenization, another useful technique is word stemming, which
+is the process of transforming a word into its root form. It allows us to map related
+words to the same stem. ( Porter stemmer algorithm)
+
+the word 'running' was stemmed to its root form 'run'.
+
+from nltk.stem.porter import PorterStemmer
+porter = PorterStemmer()
+def tokenizer_porter(text):
+    return [porter.stem(word) for word in text.split()]
+tokenizer_porter('runners like running and thus they run')
+
+(174) 
+
+The Porter stemming algorithm is probably the oldest and simplest
+stemming algorithm. Other popular stemming algorithms include the
+newer Snowball stemmer (Porter2 or English stemmer) and the Lancaster
+stemmer (Paice/Husk stemmer), which is faster but also more aggressive
+than the Porter stemmer.
+
+While stemming can create non-real words, such as 'thu' (from
+'thus'), as shown in the previous example, a technique called
+lemmatization aims to obtain the canonical (grammatically correct) forms
+of individual words—the so-called lemmas. However, lemmatization
+is computationally more difficult and expensive compared to stemming
+and, in practice, it has been observed that stemming and lemmatization
+have little impact on the text classification.
+
+(175)  Stop-words are simply those words that are extremely common
+in all sorts of texts and probably bear no (or only little) useful information that can
+be used to distinguish between different classes of documents. Examples of stopwords are is, and, has, and OLNH. Removing stop-words can be useful if we are working
+with raw or normalized term frequencies rather than tf-idfs, which are already
+downweighting frequently occurring words.
+
+In order to remove stop-words from the movie reviews, we will use the set of 127
+English stop-words that is available from the NLTK library, which can be obtained
+by calling the nltk.download function
+
+nltk.download('stopwords')
+
+(176) Training a logistic regression model for document Classification:
+
+we will use a GridSearchCV object to find the optimal set of parameters for our logistic regression model using 5-fold strstified cv.
+
+from sklearn.model_selection import GridSearchCV
+from sklearn.pipeline import Pipeline
+from sklearn.linear_model import LogisticRegression
+from sklearn.feature_extraction.text import TfidfVectorizer
+tfidf = TfidfVectorizer(strip_accents=None,lowercase=False,preprocessor=None)
+param_grid = [{'vect__ngram_range': [(1,1)],'vect__stop_words': [stop, None],'vect__tokenizer': [tokenizer,tokenizer_porter],'clf__penalty': ['l1', 'l2'],'clf__C': [1.0, 10.0, 100.0]},{'vect__ngram_range': [(1,1)],'vect__stop_words': [stop, None],'vect__tokenizer': [tokenizer,tokenizer_porter],'vect__use_idf':[False],'vect__norm':[None],'clf__penalty': ['l1', 'l2'],'clf__C': [1.0, 10.0, 100.0]}]
+lr_tfidf = Pipeline([('vect', tfidf),('clf',LogisticRegression(random_state=0))])
+gs_lr_tfidf = GridSearchCV(lr_tfidf, param_grid,scoring='accuracy',cv=5, verbose=1,n_jobs=1)
+gs_lr_tfidf.fit(X_train, y_train)
+
+(177)  
+
+A still very popular classifier for the text classification is the naive bayes classifier which gain popularity of email spam filtering.
+Naive Bayes classifiers are easy to implement, computationally efficient and tend to perform particularly well on relatively small datasets
+compared to other algorithms.
+
+out-of-core learning, which allows us to work with such large datasets by fitting the classifier incrementally on small batches of the datasets.
+
+Stochastic gradient descent, which is an optimization
+algorithm that updates the model's weights using one sample at a time. In this
+section, we will make use of the partial_fit function of the SGDClassifier in
+scikit-learn to stream the documents directly from our local drive, and train a logistic
+regression model using small mini-batches of documents.
+
+Unfortunately, we can't use CountVectorizer for out-of-core learning since it
+requires holding the complete vocabulary in memory.However, another useful vectorizer for text
+processing implemented in scikit-learn is HashingVectorizer. HashingVectorizer
+is data-independent and makes use of the hashing trick via the 32-bit MurmurHash3
+function.
+
+from sklearn.feature_extraction.text import HashingVectorizer
+from sklearn.linear_model import SGDClassifier
+vect = HashingVectorizer(decode_error='ignore',n_features=2**21,preprocessor=None,tokenizer=tokenizer)
+clf = SGDClassifier(loss='log', random_state=1, max_iter=1)
+doc_stream = stream_docs(path='movie_data.csv')
+
+(178)
+
+A more modern alternative to the bag-of-words model is word2vec.
+. The word2vec algorithm is an
+unsupervised learning algorithm based on neural networks that attempts
+to automatically learn the relationship between words. The idea behind
+word2vec is to put words that have similar meanings into similar clusters,
+and via clever vector-spacing, the model can reproduce certain words
+using simple vector math, for example, king-man+woman=queen
+
+(179) Topic modeling with Latent Dirichlet Allocation:
+
+In application of topic modeling, we them aim to assign category labels to those articles - for example, sports, finance,
+world news, politics, local news, and so forth.
+
+we can consider topic modeling as a clustering task, a
+subcategory of unsupervised learning.
+
+In this section, we will introduce a popular technique for topic modeling called
+Latent Dirichlet Allocation (LDA). However, note that while Latent Dirichlet
+Allocation is often abbreviated as LDA, it is not to be confused with Linear
+discriminant analysis, a supervised dimensionality reduction technique.
+
+
+LDA is quite requires knowledge about Bayesian inference.
+
+LDA is a generative probabilistic model that tries to find groups of words that appear
+frequently together across different documents. These frequently appearing words
+represent our topics, assuming that each document is a mixture of different words.
+The input to an LDA is the bag-of-words model we discussed earlier in this chapter.
+Given a bag-of-words matrix as input, LDA decomposes it into two new matrices:
+
+A. A document to topic matrix
+B. A word to topic matrix
+
+LDA decomposes the bag-of-words matrix in such a way that if we multiply those
+two matrices together, we would be able to reproduce the input, the bag-of-words
+matrix, with the lowest possible error.
+
+In practice, we are interested in those topics
+that LDA found in the bag-of-words matrix. The only downside may be that we must
+define the number of topics beforehand-- the number of topics is a hyperparameter of LDA
+that has to be specified manually.
+
+we will use the LatentDirichletAllocation class implemented
+in scikit-learn to decompose the movie review dataset and categorize it into different
+topics.
+
+Notice that we set the maximum document frequency of words to be considered
+to 10 percent (max_df=.1) to exclude words that occur too frequently across
+documents. The rationale behind the removal of frequently occurring words is that
+these might be common words appearing across all documents and are therefore
+less likely associated with a specific topic category of a given document. Also, we
+limited the number of words to be considered to the most frequently occurring 5,000
+words (max_features=5000), to limit the dimensionality of this dataset so that it
+improves the inference performed by LDA. However, both max_df=.1 and max_
+features=5000 are hyperparameter values that I chose arbitrarily, and readers are
+encouraged to tune them while comparing the results.
+
+The following code demonstrate how to fit LatentDirichletAllocation
+estimator to the bag-of-words matrix and infer the 10 different topics from the
+documents:
+
+from sklearn.decomposition import LatentDirichletAllocation
+lda = LatentDirichletAllocation(n_components=10,random_state=123,learning_method='batch')
+X_topics = lda.fit_transform(X)
+
+By setting learning_method='batch', we let the lda estimator do its estimation
+based on all available training data (the bag-of-words matrix) in one iteration,
+which is slower than the alternative 'online' learning method but can lead to more
+accurate results (setting learning_method='online' is analogous to online or
+mini-batch learning.
+
+The scikit-learn library's implementation of LDA uses the ExpectationMaximization (EM) algorithm to update its parameter estimates
+iteratively.
+
+-----------------------------------------------------------------------------------------------------------------------------------
+
+(180) Embedding a Machine Learning Model into a Web Application:
+
+we don't want to train our model every time we close our Python interpreter and want to make a new prediction or reload our web application
+persistence is Python's in-built pickle module.which allows us to serialize and deserialize Python object
+structure to compact bytecode so that we can save our classifier in its current state 
+and reload it if we want to classify new samples, without needing the model to learn
+from the training data all over again.
+
+import pickle
+import os
+dest = os.path.join('movieclassifier', 'pkl_objects')
+
+if not os.path.exists(dest):
+    os.makedirs(dest)
+pickle.dump(stop,open(os.path.join(dest, 'stopwords.pkl'),'wb'),protocol=4)
+pickle.dump(clf,open(os.path.join(dest, 'classifier.pkl'), 'wb'),protocol=4)
+
+Using the preceding code, we created a movieclassifier directory where we will
+later store the files and data for our web application. Within this movieclassifier
+directory, we created a pkl_objects subdirectory to save the serialized Python
+objects to our local drive. Via the dump method of the pickle module, we then
+serialized the trained logistic regression model as well as the stop word set from the
+Natural Language Toolkit (NLTK) library, so that we don't have to install the NLTK
+vocabulary on our server.
+
+The dump method takes as its first argument the object that we want to pickle, and for second argument we provided an open file object that python object
+will be written to. Via the wb argument inside the open function, we opened the file 
+in binary mode for pickle, and we set protocol=4 to choose the latest and most
+efficient protocol that has been added to
+Python 3.4 or newer. If you have problems using protocol=4, please check whether
+you are using the latest Python 3 version. Alternatively, you may consider choosing
+a lower protocol number.
+
+(181) A more efficient way to serialize numpy arrays
+is to use the alternative joblib library.
+
+(182) Sqlite connection:
+
+ import sqlite3
+>>> import os
+>>> if os.path.exists('reviews.sqlite'):
+... os.remove('reviews.sqlite')
+>>> conn = sqlite3.connect('reviews.sqlite')
+>>> c = conn.cursor()
+>>> c.execute('CREATE TABLE review_db'\' (review TEXT, sentiment INTEGER, date TEXT)')
+>>> example1 = 'I love this movie'
+>>> c.execute("INSERT INTO review_db"\
+... " (review, sentiment, date) VALUES"\
+... " (?, ?, DATETIME('now'))", (example1, 1))
+>>> example2 = 'I disliked this movie'
+>>> c.execute("INSERT INTO review_db"\
+]... " (review, sentiment, date) VALUES"\
+... " (?, ?, DATETIME('now'))", (example2, 0))
+>>> conn.commit()
+>>> conn.close()
+
+ conn = sqlite3.connect('reviews.sqlite')
+>>> c = conn.cursor()
+>>> c.execute("SELECT * FROM review_db WHERE date"\
+... " BETWEEN '2017-01-01 00:00:00' AND DATETIME('now')")
+
+results = c.fetchall()
+>>> conn.close()
+>>> print(results)
+[('I love this movie', 1, '2017-04-24 00:14:38'),
+ ('I disliked this movie', 0, '2017-04-24 00:14:38')
+
+(183) Flask:
+
+Flask is also known as a microframework, which means that its
+core is kept lean and simple but can be easily extended with other
+libraries.
+
+ app.py:
+
+from flask import Flask, render_template
+app = Flask(__name__)
+@app.route('/')
+def index():
+ return render_template('first_app.html')
+if __name__ == '__main__':
+ app.run()
+
+After looking at the previous code example, let's discuss the individual pieces step
+by step:
+1. We ran our application as a single module; thus we initialized a new Flask
+instance with the argument __name__ to let Flask know that it can find the
+HTML template folder (templates) in the same directory where it is located.
+2. Next, we used the route decorator (@app.route('/')) to specify the URL
+that should trigger the execution of the index function.
+3. Here, our index function simply rendered the first_app.html html file 
+which is located in the templates folder.
+4. Lastly, we used the run function to only run the application on the server
+when this script is directly executed by the Python interpreter, which we
+ensured using the if statement with __name__ == '__main__'.
+
+--------------------------------------------------------------------------------------------------------
+
+Predicting Continuous Target Variables with Regression Analysis
+
+(184) 
+
+Exploratory Data Analysis (EDA) is an important and recommended first step prior
+to the training of a machine learning model.
+
+In the rest of this section, we will use
+some simple yet useful techniques from the graphical EDA toolbox that may help
+us to visually detect the presence of outliers, the distribution of the data, and the
+relationships between features.
+
+First, we will create a scatterplot matrix that allows us to visualize the pair-wise
+correlations between the differet features in this dataset in one place. To plot the
+scatterplot matrix, we will use the pairplot function from the Seaborn library
+(http://stanford.edu/~mwaskom/software/seaborn/), which is a Python library
+for drawing statistical plots based on Matplotlib.
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+cols = ['LSTAT', 'INDUS', 'NOX', 'RM', 'MEDV']
+sns.pairplot(df[cols], size=2.5)
+plt.tight_layout()
+plt.show()
+
+(185)
+
+Note that in contrast to common belief, training a linear regression
+model does not require that the explanatory or target variables
+are normally distributed. The normality assumption is only a
+requirement for certain statistics and hypothesis tests.
+
+Intuitively, we can interpret the correlation matrix
+as a rescaled version of the covariance matrix. In fact, the correlation matrix is
+identical to a covariance matrix computed from standardized features.
+
+The correlation matrix is a square matrix that contains the Pearson product-moment
+(often abbreviated as Pearson's r), which measure the linear dependence between the pairs of features.
+The correlation coefficients are in the range -1 
+to 1. Two features have a perfect positive correlation if r =1, no correlation if r = 0 ,
+and a perfect negative correlation if r = −1. As mentioned previously, Pearson's
+correlation coefficients can simply be calculated as the covariance between
+features x and y (numerator) divided by the product of their standard deviations
+(denominator).
+
+sigma_{xy} = 1/n Sigma_{i=1}^n {x^(i) - mu_x}{y^(i) - mu_y}
+
+import numpy as np
+cm = np.corrcoef(df[cols].values.T)
+sns.set(font_scale=1.5)
+hm = sns.heatmap(cm,cbar=True,annot=True,square=True,fmt='.2f',annot_kws={'size': 15},yticklabels=cols,xticklabels=cols)
+plt.show()
+
+(186)
+
+To fit a linear regression model, we are interested in those features that have a high
+correlation with our target variable MEDV. Looking at the previous correlation matrix,
+we see that our target variable MEDV shows the largest correlation with the LSTAT
+variable (-0.74); however, as you might remember from inspecting the scatterplot
+matrix, there is a clear nonlinear relationship between LSTAT and MEDV. On the other
+hand, the correlation between RM and MEDV is also relatively high (0.70). Given the
+linear relationship between these two variables that we observed in the scatterplot,
+RM seems to be a good choice for an exploratory variable to introduce the concepts of
+a simple linear regression model in the following section.
+
+Essentially, OLS regression can be
+understood as Adaline without the unit step function so that we obtain continuous
+target values instead of the class labels -1 and 1.
+
+(187)
+
+To see our LinearRegressionGD regressor in action, let's use the RM (number of
+rooms) variable from the Housing dataset as the explanatory variable and train a
+model that can predict MEDV (house prices). Furthermore, we will standardize the
+variables for better convergence of the GD algorithm. The code is as follows:
+
+X = df[['RM']].values
+y = df['MEDV'].values
+from sklearn.preprocessing import StandardScaler
+sc_x = StandardScaler()
+sc_y = StandardScaler()
+X_std = sc_x.fit_transform(X)
+y_std = sc_y.fit_transform(y[:, np.newaxis]).flatten()
+lr = LinearRegressionGD()
+lr.fit(X_std, y_std)
+
+
+(188)
+
+Notice the workaround regarding y_std, using np.newaxisx and flatten. Most
+transformers in scikit-learn expect data to be stored in two-dimensional arrays. In the
+previous code example, the use of np.newaxis in y[:, np.newaxis] added a new
+dimension to the array. Then, after the StandardScaler returned the scaled variable,
+we converted it back to the original one-dimensional array representation using the
+flatten() method for our convenience.
+
+it is always a good idea to plot the cost as a function of the
+number of epochs passes over the training dataset when we are using optimization
+algorithms, such as gradient descent, to check the algorithm converged to a cost
+minimum (here, a global cost minimum):
+
+sns.reset_orig() # resets matplotlib style
+plt.plot(range(1, lr.n_iter+1), lr.cost_)
+plt.ylabel('SSE')
+plt.xlabel('Epoch')
+plt.show()
+
+
+(189) Next, let's visualize how well the linear regression line fits the training data.
+     To do so, we will define a simple helper function that will plot a scatter plot
+
+of the training samples and add the regression line.
+
+def lin_regplot(X, y, model):
+... plt.scatter(X, y, c='steelblue', edgecolor='white', s=70)
+... plt.plot(X, model.predict(X), color='black', lw=2)
+... return None
+
+
+Now, we will use this lin_regplot function to plot the number of rooms against
+house price:
+
+lin_regplot(X_std, y_std, lr)
+plt.xlabel('Average number of rooms [RM] (standardized)')
+plt.ylabel('Price in $1000s [MEDV] (standardized)')
+plt.show()
+
+
+(190)
+
+Although this observation makes intuitive sense, the data also tells us that the
+number of rooms does not explain the house prices very well in many cases.
+
+ In certain applications, it may also be
+important to report the predicted outcome variables on their original scale. To scale
+the predicted price outcome back onto the Price in $1000s axis, we can simply
+apply the inverse_transform method of the StandardScaler:
+
+num_rooms_std = sc_x.transform([5.0])
+price_std = lr.predict(num_rooms_std)
+print("Price in $1000s: %.3f" % sc_y.inverse_transform(price_std))
+
+On a side note, it is also worth mentioning that we technically don't have to update
+the weights of the intercept if we are working with standardized variables since
+the y-axis intercept is always zero in those cases.
+
+print('Slope: %.3f' % lr.w_[1])
+--Slope: 0.695
+print('Intercept: %.3f' % lr.w_[0])
+--Intercept: -0.000
+
+
+(191) Estimating coefficients of a linear regression model via scikit-learn
+
+For example many of scikit-learn's estimators for regression make
+use of the LIBLINEAR library, advanced optimization algorithms, and other code
+optimizations that work better with unstandardized variables, which is sometimes
+desirable for certain applications:
+
+
+from sklearn.linear_model import LinearRegression
+slr = LinearRegression()
+slr.fit(X, y)
+print('Slope: %.3f' % slr.coef_[0])
+print('Intercept: %.3f' % slr.intercept_)
+
+(192) Fitting a robust regression model using RANSAC
+
+As an alternative to throwing out outliers, we will look at a robust method of
+regression using the RANdom SAmple Consensus (RANSAC) algorithm that fits 
+a regression model to a subset of the data, the so-called inliers.
+
+We can summarize the iterative RANSAC algorithm as follows:
+
+1. Select a random number of samples to be inliers and fit the model.
+2. Test all other data points against the fitted model and add those points that
+   fall within a user-given tolerance to the inliers.
+3. Refit the model using all inliers.
+4. Estimate the error of the fitted model versus the inliers.
+5. Terminate the algorithm if the performance meets a certain user-defined threshold or if a fixed number of iterations
+   were reached; go back to step 1 otherwise.
+
+Let us now wrap our linear model in the RANSAC algorithm using scikit-learn's
+RANSACRegressor class:
+
+from sklearn.linear_model import RANSACRegressor
+ransac = RANSACRegressor(LinearRegression(),max_trials=100,min_samples=50,loss='absolute_loss',residual_threshold=5.0,random_state=0)
+ransac.fit(X, y)
+
+We set the maximum number of iterations of the RANSACRegressor to 100, and using
+min_samples=50, we set the minimum number of the randomly chosen samples to
+be at least 50. Using the 'absolute_loss' as an argument for the residual_metric
+parameter, the algorithm computes absolute vertical distances between the fitted linea
+and the sample points. By setting the residual_threshold parameter to 5.0, we
+only allowed samples to be included in the inlier set if their vertical distance to the fitted line is within 5 distance units, which works well on this dataset.
+
+(193) By default, scikit-learn uses the MAD estimate to select the inlier threshold, where
+MAD stands for the Median Absolute Deviation of the target values y. However,
+the choice of an absolute value for the inlier threshold is problem-specific, which 
+is one disadvantage of RANSAC. Many different approaches have been developed
+in recent years to select a good inlier threshold automatically.
+
+inlier_mask = ransac.inlier_mask_
+outlier_mask = np.logical_not(inlier_mask)
+line_X = np.arange(3, 10, 1)
+line_y_ransac = ransac.predict(line_X[:, np.newaxis])
+plt.scatter(X[inlier_mask], y[inlier_mask],c='steelblue', edgecolor='white',marker='o', label='Inliers')
+plt.scatter(X[outlier_mask], y[outlier_mask],c='limegreen', edgecolor='white',marker='s', label='Outliers')
+plt.plot(line_X, line_y_ransac, color='black', lw=2)
+plt.xlabel('Average number of rooms [RM]')
+plt.ylabel('Price in $1000s [MEDV]')
+plt.legend(loc='upper left')
+plt.show() 
+
+When we print the slope and intercept of the model by executing the following code,
+we can see that the linear regression line is slightly different from the fit that we
+obtained in the previous section without using RANSAC:
+
+print('Slope: %.3f' % ransac.estimator_.coef_[0])
+--Slope: 10.735
+print('Intercept: %.3f' % ransac.estimator_.intercept_)
+--Intercept: -44.089
+
+Using RANSAC, we reduced the potential effect of the outliers in this dataset, but
+we don't know if this approach has a positive effect on the predictive performance
+for unseen data. Thus, in the next section we will look at different approaches
+to evaluating a regression model, which is a crucial part of building systems for
+predictive modeling.
+
+(194) Evaluating the performance of linear regression models
+
+from sklearn.model_selection import train_test_split
+X = df.iloc[:, :-1].values
+y = df['MEDV'].values
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=0)
+slr = LinearRegression()
+slr.fit(X_train, y_train)
+y_train_pred = slr.predict(X_train)
+y_test_pred = slr.predict(X_test)
+
+Residual plots are a commonly used graphical tool for diagnosing regression
+models. They can help detect nonlinearity and outliers, and check whether the errors
+are randomly distributed.
+
+Using the following code, we will now plot a residual plot where we simply subtract
+the true target variables from our predicted responses:
+
+plt.scatter(y_train_pred, y_train_pred - y_train,c='steelblue', marker='o', edgecolor='white',label='Training data')
+plt.scatter(y_test_pred, y_test_pred - y_test,c='limegreen', marker='s', edgecolor='white',label='Test data')
+plt.xlabel('Predicted values')
+plt.ylabel('Residuals')
+plt.legend(loc='upper left')
+plt.hlines(y=0, xmin=-10, xmax=50, color='black', lw=2)
+plt.xlim([-10, 50])
+plt.show()
+
+In case of a perfect prediction, the residuals would be exactly zero, which we will
+probably never encounter in realistic and practical applications. However, for a good
+regression model, we would expect that the errors are randomly distributed and
+the residuals should be randomly scattered around the centerline. If we see patterns
+in a residual plot, it means that our model is unable to capture some explanatory
+information, which has leaked into the residuals, as we can slightly see in our
+previous residual plot. Furthermore, we can also use residual plots to detect outliers,
+which are represented by the points with a large deviation from the centerline.
+
+Another useful quantitative measure of a model's performance is the so-called
+Mean Squared Error (MSE), which is simply the averaged value of the SSE cost
+that we minimized to fit the regression model.
+
+(194)
+
+from sklearn.metrics import mean_squared_error
+print('MSE train: %.3f, test: %.3f' % (mean_squared_error(y_train, y_train_pred),mean_squared_error(y_test, y_test_pred)))
+--MSE train: 19.958, test: 27.196
+(Overfitting)
+
+Sometimes it may be more useful to report the coefficient of determination
+( R^2 ), which can be understood as a standardized version of the MSE, for better
+interpretability of the model's performance.
+
+For the training dataset, the R^2 is bounded between 0 and 1, but it can become
+negative for the test set. If R^2 =1 then the model fits the data perfectly with a corresponding MSE = 0 .
+
+from sklearn.metrics import r2_score
+print('R^2 train: %.3f, test: %.3f' % (r2_score(y_train, y_train_pred), r2_score(y_test, y_test_pred)))
+-- R^2 train: 0.765, test: 0.673
+
+(195) Using Regularized methods for regression:
+
+it shrinks the parameter values of the model to induce a penalty against complexity. 
+
+a limitation of LASSO is that it selects at most n variables if m>n.
+
+A compromise between Ridge regression and LASSO is Elastic Net, which has an L1
+penalty to generate sparsity and an L2 penalty to overcome some of the limitations
+of LASSO, such as the number of selected variables.
+
+from sklearn.linear_model import Ridge
+ridge = Ridge(alpha=1.0)
+
+Note that the regularization strength is regulated by the parameter alpha, which is
+similar to the parameter λ.
+
+from sklearn.linear_model import Lasso
+lasso = Lasso(alpha=1.0)
+
+
+from sklearn.linear_model import ElasticNet
+elanet = ElasticNet(alpha=1.0, l1_ratio=0.5)
+
+
+For example, if we set the l1_ratio to 1.0, the ElasticNet regressor
+would be equal to LASSO regression
+
+(196)
+
+In housing datset, cubic fit (polynomial regression) captures the relationship better than linear and quadratic.
+adding more and more polynomial features increases the complexity of a model
+and so increases the chance of overfitting. So it is
+recommended to evaluate the performance of the model on a separate test dataset to
+estimate the generalization performance.
+
+(197) Random Forest Regression:
+
+To use a decision tree for regression, however, we need an impurity metric that is suitable
+for continuous variables, so we define the impurity measure as MSE instead.
+
+In the context of decision tree regression, the MSE is often also referred to as
+within-node variance, which is why the splitting criterion is also better known as
+variance reduction.
+
+from sklearn.tree import DecisionTreeRegressor
+X = df[['LSTAT']].values
+y = df['MEDV'].values
+tree = DecisionTreeRegressor(max_depth=3)
+tree.fit(X, y)
+sort_idx = X.flatten().argsort()
+lin_regplot(X[sort_idx], y[sort_idx], tree)
+plt.xlabel('% lower status of the population [LSTAT]')
+plt.ylabel('Price in $1000s [MEDV]')
+plt.show()
+
+
+In addition, we need to be careful about choosing an appropriate value for the depth of the tree to not overfit or underfit the data.
+
+(198) Random forest regression:
+
+random forest algorithm is an ensemble technique that combines multiple decision
+trees. A random forest usually has a better generalization performance than an
+individual decision tree due to randomness, which helps to decrease the model's
+variance.
+
+Other advantages of random forests are that they are less sensitive to
+outliers in the dataset and don't require much parameter tuning.
+
+The only parameter in random forests that we typically need to experiment with is the number of trees in
+the ensemble.
+
+the only difference is that we use the
+MSE criterion to grow the individual decision trees, and the predicted target variable
+is calculated as the average prediction over all decision trees.
+
+X = df.iloc[:, :-1].values
+y = df['MEDV'].values
+X_train, X_test, y_train, y_test =train_test_split(X, y,test_size=0.4,random_state=1)
+from sklearn.ensemble import RandomForestRegressor
+forest = RandomForestRegressor(n_estimators=1000,criterion='mse',random_state=1,n_jobs=-1)
+forest.fit(X_train, y_train)
+y_train_pred = forest.predict(X_train)
+y_test_pred = forest.predict(X_test)
+print('MSE train: %.3f, test: %.3f' % (mean_squared_error(y_train, y_train_pred),mean_squared_error(y_test, y_test_pred)))
+-- MSE train: 1.642, test: 11.052
+print('R^2 train: %.3f, test: %.3f' % (r2_score(y_train, y_train_pred),r2_score(y_test, y_test_pred)))
+-- R^2 train: 0.979, test: 0.878
+
+Unfortunately, there is now a universal approach for dealing with non-randomness
+in residual plots, and it requires experimentation. Depending on the data that is
+available to us, we may be able to improve the model by transforming variables,
+tuning the hyperparameters of the learning algorithm, choosing simpler or more
+complex models, removing outliers, or including additional variables.
+
+SVMs can also be used in nonlinear regression.
+
+--------------------------------------------------------------------------------------------------------------------------------
+
+(199) Working with Unlabeled Data – Clustering Analysis:
+
+
+The goal of clustering is to find a natural grouping in data so that the items in 
+the same cluster are more similar to each other than to those from different clusters.
+
+Clustering (or cluster analysis) is a technique that allows us to find groups of similar objects, objects
+that are more related to each other than to objects in other groups. Examples of
+business-oriented applications of clustering include the grouping of documents, music,
+and movies by different topics or finding customers that share similar interests based
+on common purchase behaviors as a basis for recommendation engines.
+
+(200) The k-means algorithm belongs to the category
+of prototype-based clustering. We will discuss two other categories of clustering,
+hierarchical and density-based clustering, later in this chapter.
+
+(201)
+
+Prototype-based clustering means that each cluster is represented by a prototype,
+which can either be the centroid (average) of similar points with continuous features,
+or the medoid (the most representative or most frequently occurring point) in the
+case of categorical features.
+
+(202)
+
+While k-means is very good at identifying clusters with
+a spherical shape, one of the drawbacks of this clustering algorithm is that we have
+to specify the number of clusters, k, a priori. An inappropriate choice for k can result
+in poor clustering performance. Later in this chapter, we will discuss the elbow
+method and silhouette plots, which are useful techniques to evaluate the quality of a
+clustering to help us determine the optimal number of clusters k.
+
+(203) 
+
+from sklearn.datasets import make_blobs
+X, y = make_blobs(n_samples=150,n_features=2,centers=3,cluster_std=0.5,shuffle=True,random_state=0)
+import matplotlib.pyplot as plt
+plt.scatter(X[:,0],X[:,1],c='white',marker='o',edgecolor='black',s=50)
+plt.grid()
+plt.show()
+
+(204) K-Means Steps:
+
+1. Randomly pick N centroids from the sample points as initial cluster centers.
+2. Assign each sample to the nearest centroid mu^(j) , j ∈{1,2,…,k} .
+3. Move the centroids to the center of the samples that were assigned to it.
+4. Repeat steps 2 and 3 until the cluster assignments do not change or a user-defined tolerance or maximum number of iterations
+   are reached.
+
+(205)
+
+we can define the similarity as the opposite of distance, and a commonly used distance for clustering
+samples with continuous features is the squared Euclidean distance between two
+points x and y in m-dimensional space.
+
+(206)
+
+Based on this Euclidean distance metric, we can describe the k-means
+algorithm as a simple optimization problem, an iterative approach for minimizing
+the within-cluster Sum of Squared Errors (SSE), which is sometimes also called
+cluster inertia.
+
+from sklearn.cluster import KMeans
+km = KMeans(n_clusters=3,init='random',n_init=10,max_iter=300,tol=1e-04,random_state=0)
+y_km = km.fit_predict(X)
+
+Using the preceding code, we set the number of desired clusters to 3; specifying the
+number of clusters a priori is one of the limitations of k-means
+
+We set n_init=10 to
+run the k-means clustering algorithms 10 times independently with different random centroids to choose the final model as the one with lowest SSE.
+
+Via max_iter parameter, we specify the maximum number of iterations for each single run (here,
+300). Note that the k-means implementation in scikit-learn stops early if it converges
+before the maximum number of iterations is reached. However, it is possible that
+k-means does not reach convergence for a particular run, which can be problematic
+(computationally expensive) if we choose relatively large values for max_iter. One
+way to deal with convergence problems is to choose larger values for tol, which
+is a parameter that controls the tolerance with regard to the changes in the withincluster sum-squared-error to declare convergence. In the preceding code, we chose a
+tolerance of 1e-04 (=0.0001)
+
+(207)
+
+A problem with k-means is that one or more clusters can be empty. Note that this
+problem does not exist for k-medoids or fuzzy C-means.
+
+However, this problem is accounted for in the current
+k-means implementation in scikit-learn. If a cluster is empty, the algorithm will
+search for the sample that is farthest away from the centroid of the empty cluster.
+Then it will reassign the centroid to be this farthest point.
+
+plt.scatter(X[y_km == 0, 0],X[y_km == 0, 1],s=50, c='lightgreen',marker='s', edgecolor='black',label='cluster 1')
+plt.scatter(X[y_km == 1, 0],X[y_km == 1, 1],s=50, c='orange',
+... marker='o', edgecolor='black',
+... label='cluster 2')
+>>> plt.scatter(X[y_km == 2, 0],
+... X[y_km == 2, 1],s=50, c='lightblue',
+... marker='v', edgecolor='black',
+... label='cluster 3')
+>>> plt.scatter(km.cluster_centers_[:, 0],
+... km.cluster_centers_[:, 1],
+... s=250, marker='*',
+... c='red', edgecolor='black',
+... label='centroids')
+>>> plt.legend(scatterpoints=1)
+>>> plt.grid()
+>>> plt.show()
+
+(208)
+
+The other properties of k-means are that clusters do not
+overlap and are not hierarchical, and we also assume that there is at least one item
+in each cluster.
+
+hierarchical and density-based clustering algorithms don't
+requires us to specify the number of clusters upfront or assume spherical structures
+in our dataset.
+
+In the next subsection, we will introduce a popular variant of the classic k-means
+algorithm called k-means++. While it doesn't address those assumptions and
+drawbacks of k-means discussed in the previous paragraph, it can greatly improve
+the clustering results through more clever seeding of the initial cluster centers.
+
+(209) A smarter way of placing the initial cluster centroids using k-means++  :
+
+classic k-means algorithm that uses a random
+seed to place the initial centroids, which can sometimes result in bad clusterings
+or slow convergence if the initial centroids are chosen poorly.
+
+One way to address
+this issue is to run the k-means algorithm multiple times on a dataset and choose
+the best performing model in terms of the SSE. Another strategy is to place the
+initial centroids far away from each other via the k-means++ algorithm, which
+leads to better and more consistent results than the classic k-means.
+
+The initialization in k-means++ can be summarized as follows:
+
+1. Initialize an empty set M to store the N centroids being selected.
+2. Randomly choose the first centeroid mu^(j) from the input samples and assign it to M.
+3. For each sample x^(i) that is not in M, find the minimum squared distance d(x^(i),M)^2 to any of the centeroid M/ 
+4. To randomly select the next centroid mu^(p) , use a weighted probability
+distribution equal to
+
+(d(mu^(p),M)^2)/(Sigma_i d(x^(i),M)^2)
+
+5. Repeat steps 2 and 3 until N centroids are chosen.
+6. Proceed with the classic k-means algorithm.
+
+(210)
+
+To use k-means++ with scikit-learn's KMeans object, we just need to set the init
+parameter to 'k-means++'. In fact, 'k-means++' is the default argument to the
+init parameter, which is strongly recommended in practice. The only reason why
+we haven't used it in the previous example was to not introduce too many concepts
+all at once. The rest of this section on k-means will use k-means++, but readers are
+encouraged to experiment more with the two different approaches (classic k-means
+via init='random' versus k-means++ via init='k-means++') for placing the initial
+cluster centroids.
+
+(211) Hard versus soft clustering:
+
+Hard clustering describes a family of algorithms where each sample in a dataset
+is assigned to exactly one cluster, as in the k-means algorithm that we discussed in
+the previous subsection. In contrast, algorithms for soft clustering (sometimes also
+called fuzzy clustering) assign a sample to one or more clusters. A popular example
+of soft clustering is the fuzzy C-means (FCM) algorithm (also called soft k-means or
+fuzzy k-means).
+
+The exponent m, any number greater than or equal to one (typically
+m=2), is the so-called fuzziness coefficient (or simply fizzifier) that controls the
+degree of fuzziness. The larger the value of m the smaller the cluster membership
+w^(i,j) becomes, which leads to fuzzier clusters.
+
+Unfortunately, the FCM algorithm is currently not implemented in scikit-learn.
+However, it has been found in practice that both k-means and FCM produce very
+similar clustering outputs.
+
+(212) Using the elbow method to find the optimal number of clusters:
+
+Thus, to quantify the quality of clustering, we need to use
+intrinsic metrics—such as the within-cluster SSE (distortion) that we discussed
+earlier in this chapter—to compare the performance of different k-means clusterings.
+Conveniently, we don't need to compute the within-cluster SSE explicitly when
+we are using scikit-learn, as it is already accessible via the inertia_ attribute after
+fitting a KMeans model:
+
+print('Distortion: %.2f' % km.inertia_)
+-- Distortion: 72.48
+
+(213)
+
+Based on the within-cluster SSE, we can use a graphical tool, the so-called elbow
+method, to estimate the optimal number of clusters N for a given task. Intuitively, we
+can say that, if N increases, the distortion will decrease. This is because the samples
+will be closer to the centroids they are assigned to. The idea behind the elbow
+method is to identify the value of N where the distortion begins to increase most
+rapidly, which will become clearer if we plot the distortion for different values of N:
+
+
+distortions = []
+for i in range(1, 11):
+    km = KMeans(n_clusters=i,init='k-means++',n_init=10,max_iter=300,random_state=0)
+    km.fit(X)
+    distortions.append(km.inertia_)
+
+plt.plot(range(1,11), distortions, marker='o')
+plt.xlabel('Number of clusters')
+plt.ylabel('Distortion')
+plt.show()
+
+(214) Quantifying the quality of clustering via silhouette plots:
+
+Another intrinsic metric to evaluate the quality of a clustering is silhouette analysis,
+which can also be applied to clustering algorithms other than k-means that we will
+discuss later in this chapter. Silhouette analysis can be used as a graphical tool to plot
+a measure of how tightly grouped the samples in the clusters are. To calculate the
+silhoutte coefficient of a single sample in our dataset, we can apply the following
+three steps:
+
+1. Calculate the cluster cohesion a^(i) as the average distance between a sample
+x^(i) and all other points in the same cluster.
+
+2. Calculate the cluster separation b^(i) from the next closest cluster as the average
+distance between the sample x^(i) and all samples in the nearest cluster.
+
+3. Calculate the silhouette s^(i) as the difference between cluster cohesion and
+separation divided by the greater of the two, as shown here:
+
+s^(i) = (b^(i) - a^(i))/(max(b^(i),a^(i)))
+
+It has value between -1 and 1.
+
+we get close to an ideal silhouette coefficient of 1 if b^(i) >> a^(i)  , since b^(i) quantifies how dissimilar a sample is to other
+clusters, and a^(i) tells us how similar it is to the other samples in its own cluster.
+
+The silhouette_scores function calculates the average silhouette coefficient across all samples.
+
+km = KMeans(n_clusters=3,init='k-means++',n_init=10,max_iter=300,tol=1e-04,random_state=0)
+y_km = km.fit_predict(X)
+from matplotlib import cm
+from sklearn.metrics import silhouette_samples
+cluster_labels = np.unique(y_km)
+n_clusters = cluster_labels.shape[0]
+silhouette_vals = silhouette_samples(X,y_km,metric='euclidean')
+y_ax_lower, y_ax_upper = 0, 0
+yticks = []
+for i, c in enumerate(cluster_labels):
+    c_silhouette_vals = silhouette_vals[y_km == c]
+    c_silhouette_vals.sort()
+    y_ax_upper += len(c_silhouette_vals)
+    color = cm.jet(float(i) / n_clusters)
+    plt.barh(range(y_ax_lower, y_ax_upper),c_silhouette_vals,height=1.0,edgecolor='none',color=color)
+    yticks.append((y_ax_lower + y_ax_upper) / 2.)
+    y_ax_lower += len(c_silhouette_vals)
+silhouette_avg = np.mean(silhouette_vals)
+plt.axvline(silhouette_avg,color="red",linestyle="--")
+plt.yticks(yticks, cluster_labels + 1)
+plt.ylabel('Cluster')
+plt.xlabel('Silhouette coefficient')
+plt.show()
+
+
+as we can see in the silhoutte plot, coeffs
+are not even close to 0, which is in this case an indicator of a good clustering.
+Furthermore, to summarize the goodness of our clustering, we added the average coeffs to the plot.
+
+(215)
+
+If in the the resulting plot, the silhouettes now have visibly different lengths
+and widths, which is evidence for a relatively bad or at least suboptimal clustering.
+
+(216) Organizing Clusters as a hierarichal trees
+
+In this section, we will take a look at an alternative approach to prototype-based
+clustering: hierarchical clustering.
+
+One advantage of hierarchical clustering
+algorithms is that it allows us to plot dendrograms (visualizations of a binary
+hierarchical clustering), which can help with the interpretation of the results by
+creating meaningful taxonomies. Another useful advantage of this hierarchical
+approach is that we do not need to specify the number of clusters up front.
+
+The two main approaches to hierarchical clustering are agglomerative and divisive
+hierarchical clustering. In divisive hierarchical clustering, we start with one cluster
+that encompasses all our samples, and we iteratively split the cluster into smaller
+clusters until each cluster only contains one sample. In this section, we will focus
+on agglomerative clustering, which takes the opposite approach. We start with each
+sample as an individual cluster and merge the closest pairs of clusters until only one
+cluster remains.
+
+(217) Apart from single and complete linkage, other commonly used algorithms for agglomerative hierarchical
+clustering include average linkage and Ward's linkage. In average
+linkage, we merge the cluster pairs based on the minimum average
+distances between all group members in the two clusters. In Ward's
+linkage, the two clusters that lead to the minimum increase of the
+total within-cluster SSE are merged.
+
+(218) Performing hierarchical clustering on a distance matrix:
+
+import pandas as pd
+import numpy as np
+np.random.seed(123)
+variables = ['X', 'Y', 'Z']
+labels = ['ID_0','ID_1','ID_2','ID_3','ID_4']
+X = np.random.random_sample([5,3])*10
+df = pd.DataFrame(X, columns=variables, index=labels)
+from scipy.spatial.distance import pdist, squareform
+row_dist = pd.DataFrame(squareform(pdist(df, metric='euclidean')),columns=labels, index=labels)
+
+
+Using the preceding code, we calculated the Euclidean distance between each pair
+of sample points in our dataset based on the features X, Y, and Z. We provided
+the condensed distance matrix—returned by pdist—as input to the squareform
+function to create a symmetrical matrix of the pair-wise distances as shown here.
+
+Next, we will apply the complete linkage agglomeration to our clusters using the
+linkage function from SciPy's cluster.hierarchy submodule, which returns a
+so-called linkage matrix.
+
+from scipy.cluster.hierarchy import linkage
+
+Based on the function description, we conclude that we can use a condensed distance
+matrix (upper triangular) from the pdist function as an input attribute. Alternatively,
+we could also provide the initial data array and use the 'euclidean' metric as a
+function argument in linkage. However, we should not use the squareform distance
+matrix that we defined earlier since it would yield different distance values than expected.
+
+
+row_clusters = linkage(pdist(df, metric='euclidean'),method='complete')
+
+(or)
+
+row_clusters = linkage(df.values,method='complete',metric='euclidean')
+
+
+pd.DataFrame(row_clusters,columns=['row label 1','row label 2','distance','no. of items in clust.'],index=['cluster %d' %(i+1) for i in range(row_clusters.shape[0])])
+
+Now that we have computed the linkage matrix, we can visualize the results in the
+form of a dendrogram:
+
+from scipy.cluster.hierarchy import dendrogram
+# make dendrogram black (part 1/2)
+# from scipy.cluster.hierarchy import set_link_color_palette
+# set_link_color_palette(['black'])
+row_dendr = dendrogram(row_clusters,labels=labels,# make dendrogram black (part 2/2)# color_threshold=np.inf)
+plt.tight_layout()
+plt.ylabel('Euclidean distance')
+plt.show()
+
+(219)  there is also an AgglomerativeClustering
+implementation in scikit-learn, which allows us to choose the number of clusters that
+we want to return. This is useful if we want to prune the hierarchical cluster tree.
+By setting the n_cluster parameter to 3, we will now cluster the samples into three
+groups using the same complete linkage approach based on the Euclidean distance
+metric, as before.
+
+from sklearn.cluster import AgglomerativeClustering
+ac = AgglomerativeClustering(n_clusters=3,affinity='euclidean',linkage='complete')
+labels = ac.fit_predict(X)
+print('Cluster labels: %s' % labels)
+--Cluster labels: [1 0 0 2 1]
+
+first and fifth samples
+(ID_0 and ID_4) were assigned to one cluster (label 1), and the samples ID_1 and
+ID_2 were assigned to a second cluster (label 0). The sample ID_3 was put into
+its own cluster (label 2). Overall, the results are consistent with the results that
+we observed in the dendrogram. We shall note though that ID_3 is more similar
+to ID_4 and ID_0 than to ID_1 and ID_2, as shown in the preceding dendrogram.
+
+(220) Locating regions of high density via DBSCAN(Density-based Spatial Clustering of Applications with Noise):
+
+It does not make assumptions about spherical clusters like k-means, nor does it partition the dataset
+into hierarchies that require a manual cut-off point. As its name implies, densitybased clustering assigns cluster labels based on dense regions of points.
+In DBSCAN, the notion of density is defined as the number of points within a specific radius ε .
+
+According to the DBSCAN algorithm, a special label is assigned to each sample
+(point) using the following criteria:
+ 
+A. A point is considered a core point if at least a specified number (MinPts) of
+neighboring points fall within the specified radius ε
+
+B. A border point is a point that has fewer neighbors than MinPts within ε ,
+but lies within the ε radius of a core point
+
+C. All other points that are neither core nor border points are considered
+noise points.
+
+After labeling the points as core, border, or noise, the DBSCAN algorithm can be
+summarized in two simple steps:
+
+1. Form a separate cluster for each core point or connected group of core points
+(core points are connected if they are no farther away than ε ).
+
+2. Assign each border point to the cluster of its corresponding core point.
+
+One of the main advantages of using DBSCAN is that it does not assume that the
+clusters have a spherical shape as in k-means. Furthermore, DBSCAN is different
+from k-means and hierarchical clustering in that it doesn't necessarily assign each
+point to a cluster but is capable of removing noise points.
+
+from sklearn.datasets import make_moons
+X, y = make_moons(n_samples=200,noise=0.05,random_state=0)
+plt.scatter(X[:,0], X[:,1])
+plt.show()
+
+f, (ax1, ax2) = plt.subplots(1, 2, figsize=(8, 3))
+km = KMeans(n_clusters=2,random_state=0)
+y_km = km.fit_predict(X)
+ax1.scatter(X[y_km==0,0],X[y_km==0,1],c='lightblue',edgecolor='black',marker='o',s=40,label='cluster 1')
+ax1.scatter(X[y_km==1,0],X[y_km==1,1],c='red',edgecolor='black',marker='s',s=40,label='cluster 2')
+ax1.set_title('K-means clustering')
+
+ac = AgglomerativeClustering(n_clusters=2,affinity='euclidean',linkage='complete')
+y_ac = ac.fit_predict(X)
+ax2.scatter(X[y_ac==0,0],X[y_ac==0,1],c='lightblue',edgecolor='black',marker='o',s=40,label='cluster 1')
+ax2.scatter(X[y_ac==1,0],X[y_ac==1,1],c='red',edgecolor='black',marker='s',s=40,label='cluster 2')
+ax2.set_title('Agglomerative clustering')
+plt.legend()
+plt.show()
+
+
+now,half-moon-shaped clusters using a density-based approach:
+
+from sklearn.cluster import DBSCAN
+db = DBSCAN(eps=0.2,min_samples=5,metric='euclidean')
+y_db = db.fit_predict(X)
+plt.scatter(X[y_db==0,0],X[y_db==0,1],c='lightblue',edgecolor='black',marker='o',s=40,label='cluster 1')
+plt.scatter(X[y_db==1,0],X[y_db==1,1],c='red',edgecolor='black',marker='s',s=40,label='cluster 2')
+plt.legend()
+plt.show()
+
+The DBSCAN algorithm can successfully detect the half-moon shapes, which
+highlights one of the strength of DBSCAN.
+
+However, we shall also note some of the disadvantages of DBSCAN. With an
+increasing number of features in the dataset-- assuming a fixed number of
+examples—the negative effect of the curse of dimensionality increases. This is
+especially a problem if we are using the Euclidean distance metric. However, the
+problem of the curse of dimensionality is not unique to DBSCAN; it also affects other
+clustering algorithms that use the Euclidean distance metric, for example, k-means
+and hierarchical clustering algorithms. In addition, we have two hyperparameters in
+DBSCAN (MinPts and ε ) that need to be optimized to yield good clustering results.
+Finding a good combination of MinPts and ε can be problematic if the density
+differences in the dataset are relatively large.
+
+I also want to mention a fourth class of more
+advanced clustering algorithms that we have not covered in this chapter:
+graph-based clustering. Probably the most prominent members of the
+graph-based clustering family are the spectral clustering algorithms.
+Although there are many different implementations of spectral
+clustering, they all have in common that they use the eigenvectors
+of a similarity or distance matrix to derive the cluster relationships
+
+Note that, in practice, it is not always obvious which clustering algorithm will
+perform best on a given dataset, especially if the data comes in multiple dimensions
+that make it hard or impossible to visualize. Furthermore, it is important to
+emphasize that a successful clustering not only depends on the algorithm and
+its hyperparameters. Rather, the choice of an appropriate distance metric and the
+use of domain knowledge that can help guide the experimental setup can be even
+more important.
+
+In the context of the curse of dimensionality, it is thus common practice to
+apply dimensionality reduction techniques prior to performing clustering. Such
+dimensionality reduction techniques for unsupervised datasets include principal
+component analysis and RBF kernel principal component analysis.Also, it is particularly
+common to compress datasets down to two-dimensional subspaces, which allows
+us to visualize the clusters and assigned labels using two-dimensional scatterplots,
+which are particularly helpful for evaluating the results.
+
+-------------------------------------------------------------------------------------------
+
+(221) Implementing a Multilayer Artificial Neural Network from Scratch:
+
+
+Activating a neural network via forward propagation:
+
+A. Starting at the input layer, we forward propagate the patterns of the training
+data through the network to generate an output.
+
+B. Based on the network's output, we calculate the error that we want to
+minimize using a cost function that we will describe later.
+
+C. We backpropagate the error, find its derivative with respect to each weight in 
+the network, and update the model.
+
+(222)
+
+MLP is a typical example of a feedforward artificial neural network. The term feedforward refers to the fact that each layer serves as the input to the next layer
+without loops, in contrast to recurrent neural networks.
+
+The term multilayer perceptron may sound a little bit confusing since the artificial neurons in this network architecture
+are typically sigmoid units, not perceptrons. Intuitively, we can think of the neurons
+in the MLP as logistic regression units that return values in the continuous range
+between 0 and 1.
+
+(223) To improve convergence in gradient based optimization through input scaling is batch normalization.
+
+When we are working with
+numpy arrays, an efficient yet most convenient method to save multidimensional
+arrays to disk is NumPy's savez function.
+
+The savez function produces zipped archives of our data,
+producing .npz files that contain files in the .npy format.
+
+Further, instead of using savez,
+we will use savez_compressed, which uses the same syntax as savez, but further compress the output file down to substantially smaller file sizes.
+
+After we created the .npz file, we can load the processed MNIST image arrays
+using NumPy's load function as follows:
+
+>>> mnist = np.load('mnist_scaled.npz')
+
+(224) Mini-batch learning
+is a special form of stochastic gradient descent where we compute the gradient
+based on a subset k of the n training samples with 1<k<n.
+
+Mini-batch learning
+has the advantage over online learning that we can make use of our vectorized implementations to improve computational efficiency.
+
+However, we can update the
+weights much faster than in regular gradient descent. Intuitively, you can think of
+mini-batch learning as predicting the voter turnout of a presidential election from a
+poll by asking only a representative subset of the population rather than asking the
+entire population (which would be equal to running the actual election).
+
+we do not want our algorithm to get trapped in
+local minima. By increasing the learning rate, we can more readily escape such local
+minima. On the other hand, we also increase the chance of overshooting the global
+optimum if the learning rate is too large. Since we initialize the weights randomly, we
+start with a solution to the optimization problem that is typically hopelessly wrong.
+
+------------------------------------------------------------------------------------------------------
+
+Parallelizing Neural Network Training with TensorFlow
+
+(225) 
+
+TensorFlow is one of the most popular deep learning libraries currently available , and it can let us
+implement neural networks much more efficiently than any of our previous numpy implementations.
+
+We'll explore:
+
+A. How TensorFlow improves training performance
+B. Working with TensorFlow to write optimized machine learning code
+C. Using TensorFlow high-level APIs to build a multilayer neural network
+D. Choosing activation functions for artificial neural networks
+E. Introducing Keras, a high-level wrapper around TensorFlow, for implementing common deep learning architectures most conveniently
+
+
+(226) By default, Python is limited to execution on one core due to the Global Interpreter Lock(GIL).
+
+The obvious solution to this problem is to use GPUs, which are real work horses.
+You can think of a graphics card as a small computer cluster inside our machine.
+Another advantage is that modern GPUs are relatively cheap compared to the
+state-of-the-art CPUs.
+
+At 70 percent of the price of a modern CPU, we can get a GPU that has 450 times
+more cores and is capable of around 15 times more floating-point calculations per
+second. So, what is holding us back from utilizing GPUs for our machine learning tasks ?
+
+(227)
+
+The challenge is that writing code to target GPUs is not as simple as executing
+Python code in our interpreter. There are special packages, such as CUDA and
+OpenCL, that allow us to target the GPU. However, writing code in CUDA or
+OpenCL is probably not the most convenient environment for implementing and
+running machine learning algorithms. The good news is that this is what TensorFlow
+was developed for!
+
+(228) What is TensorFlow?
+
+TensorFlow is a scalable and multiplatform programming interface for implementing
+and running machine learning algorithms, including convenience wrappers for deep
+learning.
+
+TensorFlow was developed by the researchers and engineers of the Google Brain
+team; and while the main development is led by a team of researchers and software
+engineers at Google, its development also involves many contributions from the
+open source community. TensorFlow was initially built for only internal use at
+Google, but it was subsequently released in November 2015 under a permissive open
+source license
+
+To improve the performance of training machine learning models, TensorFlow allows
+execution on both CPUs and GPUs. However, its greatest performance capabilities
+can be discovered when using GPUs. TensorFlow supports CUDA-enabled GPUs officially.
+
+(229)
+
+TensorFlow currently supports frontend interfaces for a number of programming
+languages. Lucky for us as Python users, TensorFlow's Python API is currently the
+most complete API, thereby attracting many machine learning and deep learning practioners.
+TensorFlow has an official API in C++.
+
+TensorFlow computations rely on constructing a directed graph for
+representing the data flow. Even though the building the graph may sound complicated,
+TensorFlow comes with high-level APIs that has made it very easy
+
+(230)
+
+In case you want to use GPUs, the CUDA Toolkit as well as the NVIDIA cuDNN
+library need to be installed; then you can install TensorFlow with GPU support, as
+follows
+
+pip install tensorflow-gpu
+
+(231)
+
+TensorFlow is built around a computation graph composed of a set of nodes. Each
+node represents an operation that may have zero or more input or output. The
+values that flow through the edges of the computation graph are called tensors.
+
+Tensors can be understood as a generalization of scalars, vectors, matrices, and so
+on. More concretely, a scalar can be defined as a rank-0 tensor, a vector as a 
+rank-1 tensor, a matrix as a rank-2 tensor, and matrices stacked in a third dimension as
+rank-3 tensors.
+
+(232)
+
+For computing z=w*x+b, The following code shows the implementation of this equation in the low-level
+TensorFlow API:
+
+import tensorflow as tf
+## create a graph
+g = tf.Graph()
+with g.as_default():
+ x = tf.placeholder(dtype=tf.float32,shape=(None), name='x')
+ w = tf.Variable(2.0, name='weight')
+ b = tf.Variable(0.7, name='bias')
+ z = w*x + b
+ init = tf.global_variables_initializer()
+
+## create a session and pass in graph g
+with tf.Session(graph=g) as sess:
+ ## initialize w and b:
+ sess.run(init)
+ ## evaluate z:
+ for t in [1.0, 0.6, -1.8]:
+    print('x=%4.1f --> z=%4.1f'%(
+    t, sess.run(z, feed_dict={x:t})))
+
+After executing the previous code, you should see the following output:
+x= 1.0 --> z= 2.7
+x= 0.6 --> z= 1.9
+x=-1.8 --> z=-2.9
+
+(233)
+
+Here, we created a placeholder for x with shape=(None). This allows us to feed
+the values in an element-by-element form and as a batch of input data at once,
+as follows:
+
+with tf.Session(graph=g) as sess:
+	sess.run(init)
+	print(sess.run(z, feed_dict={x:[1., 2., 3.]}))
+
+(234)
+
+Let's discuss how to use array structures in TensorFlow. By executing the following
+code, we will create a simple rank-3 tensor of size batchsize*2*3, reshape it, and
+calculate the column sums using TensorFlow's optimized expressions. Since we do
+not know the batch size a priori, we specify None for the batch size in the argument
+for the shape parameter of the placeholder x:
+
+import tensorflow as tf
+import numpy as np
+g = tf.Graph()
+with g.as_default():
+ x = tf.placeholder(dtype=tf.float32,shape=(None, 2, 3),name='input_x')
+ x2 = tf.reshape(x, shape=(-1, 6),name='x2')
+ ## calculate the sum of each column
+ xsum = tf.reduce_sum(x2, axis=0, name='col_sum')
+ ## calculate the mean of each column
+ xmean = tf.reduce_mean(x2, axis=0, name='col_mean')
+with tf.Session(graph=g) as sess:
+ x_array = np.arange(18).reshape(3, 2, 3)
+ print('input shape: ', x_array.shape)
+ print('Reshaped:\n',sess.run(x2, feed_dict={x:x_array}))
+ print('Column Sums:\n',sess.run(xsum, feed_dict={x:x_array}))
+ print('Column Means:\n',sess.run(xmean, feed_dict={x:x_array}))
+
+
+The output shown after executing the preceding code is given here:
+input shape: (3, 2, 3)
+Reshaped:
+ [[ 0. 1. 2. 3. 4. 5.]
+ [ 6. 7. 8. 9. 10. 11.]
+ [ 12. 13. 14. 15. 16. 17.]]
+Column Sums:
+ [ 18. 21. 24. 27. 30. 33.]
+Column Means:
+ [ 6. 7. 8. 9. 10. 11.]
+
+(235)
+
+Note that for reshaping, we used the value -1 for the first
+dimension. This is because we do not know the value of batch size; when reshaping
+a tensor, if you use -1 for a specific dimension, the size of that dimension will be
+computed according to the total size of the tensor and the remaining dimension.
+Therefore, tf.reshape(tensor, shape=(-1,)) can be used to flatten a tensor.
+
+(236)
+
+Now that we have familiarized ourselves with TensorFlow, let's take a look at a
+really practical example and implement Ordinary Least Squares (OLS) regression. 
+
+Let's start by creating a small one-dimensional toy dataset with 10 training samples:
+
+import tensorflow as tf
+import numpy as np
+X_train = np.arange(10).reshape((10, 1))
+y_train = np.array([1.0, 1.3, 3.1,2.0, 5.0, 6.3,6.6, 7.4, 8.0,9.0])
+
+Given this dataset, we want to train a linear regression model to predict the output
+y from the input x. Let's implement this model in a class, which we name TfLinreg.
+For this, we would need two placeholders—one for the input x and one for y for feeding the data into our model. Next, we need to define the trainable variables-
+weights w and bias b. Then we can define the linear regression model as: z=w*x+b, followed by defining
+the cost function to be the Mean of Squared Error (MSE). To learn the weight
+parameters of the model, we use the gradient descent optimizer. The code is as
+follows:
+
+class TfLinreg(object):
+ def __init__(self, x_dim, learning_rate=0.01,random_seed=None):
+ self.x_dim = x_dim
+ self.learning_rate = learning_rate
+ self.g = tf.Graph()
+ ## build the model
+ with self.g.as_default():
+    ## set graph-level random-seed
+    tf.set_random_seed(random_seed)
+    self.build()
+    ## create initializer
+    self.init_op = tf.global_variables_initializer()
+
+ def build(self):
+   ## define placeholders for inputs
+   self.X = tf.placeholder(dtype=tf.float32,shape=(None, self.x_dim),name='x_input')
+   self.y = tf.placeholder(dtype=tf.float32,shape=(None),name='y_input')
+   print(self.X)
+   print(self.y)
+   ## define weight matrix and bias vector
+   w = tf.Variable(tf.zeros(shape=(1)),name='weight')
+   b = tf.Variable(tf.zeros(shape=(1)),name="bias")
+   print(w)
+   print(b)
+   self.z_net = tf.squeeze(w*self.X + b,name='z_net')
+   print(self.z_net)
+   sqr_errors = tf.square(self.y - self.z_net,name='sqr_errors')
+   print(sqr_errors)
+   self.mean_cost = tf.reduce_mean(sqr_errors,name='mean_cost')
+   optimizer = tf.train.GradientDescentOptimizer(learning_rate=self.learning_rate,name='GradientDescent')
+   self.optimizer = optimizer.minimize(self.mean_cost)
+
+So far, we have GHÀQHGDFODVVWR construct our model. We will create an instance of
+this class and call it lrmodel, as follows:
+
+lrmodel = TfLinreg(x_dim=X_train.shape[1], learning_rate=0.01)
+
+The print statements that we wrote in the build method will display information
+about six nodes in the graph—X, y, w, b, z_net, and sqr_errors—with their names
+and shapes.
+
+For Model Training:
+
+def train_linreg(sess, model, X_train, y_train, num_epochs=10):
+ ## initialiaze all variables: W and b
+ sess.run(model.init_op)
+
+ training_costs = []
+ for i in range(num_epochs):
+   _, cost = sess.run([model.optimizer, model.mean_cost],feed_dict={model.X:X_train,model.y:y_train})
+   training_costs.append(cost)
+
+ return training_costs
+
+
+So, now we can create a new TensorFlow session to launch the lrmodel.g graph and
+pass all the required arguments to the train_linreg function for training:
+
+sess = tf.Session(graph=lrmodel.g)
+training_costs = train_linreg(sess, lrmodel, X_train, y_train)
+
+Let's visualize the training costs after these 10 epochs to see whether the model is
+converged or not:
+
+import matplotlib.pyplot as plt
+plt.plot(range(1,len(training_costs) + 1), training_costs)
+plt.tight_layout()
+plt.xlabel('Epoch')
+plt.ylabel('Training Cost')
+plt.show()
+
+Prediction:
+
+def predict_linreg(sess, model, X_test):
+ y_pred = sess.run(model.z_net,feed_dict={model.X:X_test})
+ return y_pred
+
+plt.scatter(X_train, y_train,marker='s', s=50,label='Training Data')
+plt.plot(range(X_train.shape[0]),predict_linreg(sess, lrmodel, X_train),color='gray', marker='o',markersize=6, linewidth=3,label='LinReg Model')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.legend()
+plt.tight_layout()
+plt.show()
+
+
+(237)
+
+In this section, we will take a look at two high-level TensorFlow APIs—the Layers
+API (tensorflow.layers or tf.layers) and the Keras API (tensorflow.contrib.
+keras).
+
+Keras can be installed as a separate package. It supports Theano or TensorFlow as backend.
+
+import tensorflow as tf
+n_features = X_train_centered.shape[1]
+n_classes = 10
+random_seed = 123
+np.random.seed(random_seed)
+g = tf.Graph()
+with g.as_default():
+ tf.set_random_seed(random_seed)
+ tf_x = tf.placeholder(dtype=tf.float32,shape=(None, n_features),name='tf_x')
+ tf_y = tf.placeholder(dtype=tf.int32,shape=None, name='tf_y')
+ y_onehot = tf.one_hot(indices=tf_y, depth=n_classes)
+ h1 = tf.layers.dense(inputs=tf_x, units=50,activation=tf.tanh,name='layer1')
+ h2 = tf.layers.dense(inputs=h1, units=50,activation=tf.tanh,name='layer2')
+ logits = tf.layers.dense(inputs=h2,units=10,activation=None,name='layer3')
+ predictions = {
+ 'classes' : tf.argmax(logits, axis=1,name='predicted_classes'),
+ 'probabilities' : tf.nn.softmax(logits,name='softmax_tensor')
+ }
+
+## define cost function and optimizer:
+with g.as_default():
+ cost = tf.losses.softmax_cross_entropy(
+ onehot_labels=y_onehot, logits=logits)
+ optimizer = tf.train.GradientDescentOptimizer(
+ learning_rate=0.001)
+ train_op = optimizer.minimize(
+ loss=cost)
+ init_op = tf.global_variables_initializer()
+
+(238)
+
+Similar to TensorFlow, the Keras allows us to utilize our GPUs to accelerate neural
+network training. One of its prominent features is that it has a very intuitive and
+user-friendly API, which allows us to implement neural networks in only a few
+lines of code.
+
+import tensorflow as tf
+import tensorflow.contrib.keras as keras
+
+y_train_onehot = keras.utils.to_categorical(y_train)
+
+model = keras.models.Sequential()
+model.add(
+ keras.layers.Dense(
+ units=50,
+ input_dim=X_train_centered.shape[1],
+ kernel_initializer='glorot_uniform',
+ bias_initializer='zeros',
+ activation='tanh'))
+model.add(
+ keras.layers.Dense(
+ units=50,
+ input_dim=50,
+ kernel_initializer='glorot_uniform',
+ bias_initializer='zeros',
+ activation='tanh'))
+model.add(
+ keras.layers.Dense(
+ units=y_train_onehot.shape[1],
+ input_dim=50,
+ kernel_initializer='glorot_uniform',
+ bias_initializer='zeros',
+ activation='softmax'))
+sgd_optimizer = keras.optimizers.SGD(
+ lr=0.001, decay=1e-7, momentum=.9)
+model.compile(optimizer=sgd_optimizer,
+ loss='categorical_crossentropy')
+
+First, we initialize a new model using the Sequential class to implement a
+feedforward neural network. Then, we can add as many layers to it as we like.
+
+
+Glorot
+initialization (also known as Xavier initialization) is a more robust
+way of initialization for deep neural networks
+
+history = model.fit(X_train_centered, y_train_onehot,batch_size=64, epochs=50,verbose=1,validation_split=0.1)
+
+y_train_pred = model.predict_classes(X_train_centered, verbose=0)
+print('First 3 predictions: ', y_train_pred[:3])
+--First 3 predictions: [5 0 4]
+
+(239)
+
+Technically, we can use any function as an activation function in multilayer
+neural networks as long as it is differentiable.
+
+However, in practice, it would not be very useful to use linear
+activation functions for both hidden and output layers since we want to introduce
+nonlinearity in a typical ANN to be able to tackle complex
+problems. The sum of linear functions yields a linear function after all.
+
+
+logistic activation functions can be problematic if we have highly negative
+input since the output of the sigmoid function would be close to zero in this case. If
+the sigmoid function returns output that are close to zero, the neural network would
+learn very slowly and it becomes more likely that it gets trapped in the local minima
+during training. This is why people often prefer a hyperbolic tangent as an activation
+function in hidden layers.
+
+the logistic function, often just
+called the sigmoid function, is in fact a special case of a sigmoid function.
+
+Another Sigmoid function that is often used in the hidden layers of ANN is
+the hyperbolic tangent (commonly known as tanh), which can be
+interpreted as a rescaled version of the logistic function:
+
+phi_tanh(z)=2*phi_logistic(2z)-1
+
+The advantage of the hyperbolic tangent over the logistic function is that it has a
+broader output spectrum and ranges in the open interval (-1, 1), which can improve
+the convergence of the back propagation algorithm.
+
+The shapes of the two sigmoidal curves look very similar; however,
+the tanh function has 2× larger output space than the logistic function:
+
+(240)
+
+ReLU is still a nonlinear function that is good for learning complex functions with
+neural networks. Besides this, the derivative of ReLU, with respect to its input, is
+always 1 for positive input values. Therefore, it solves the problem of vanishing
+gradients, making it suitable for deep neural networks. We will use the ReLU
+activation function in the next chapter as an activation function for multilayer
+convolutional neural networks.
+-------------------------------------------------------------------------------------------------------
+
+Going Deeper – The Mechanics of TensorFlow:
+
+(241)
+
+The TensorFlow library lets user defines operations and functions over tensors
+as computational graphs. Tensors are a generalizable mathematical notation for
+multidimensional arrays holding data values, where the dimensionality of a tensor is
+typically referred to as its rank.
+
+We can use the tf.rank function to get the rank of a tensor.
+
+For example, if X is a tensor, we can get
+its shape using X.get_shape(), which will return an object of a special class called
+TensorShape.
+
+import tensorflow as tf
+import numpy as np
+g = tf.Graph()
+## define the computation graph
+with g.as_default():
+	## define tensors t1, t2, t3
+	t1 = tf.constant(np.pi)
+	t2 = tf.constant([1, 2, 3, 4])
+	t3 = tf.constant([[1, 2], [3, 4]])
+	## get their ranks
+	r1 = tf.rank(t1)
+	r2 = tf.rank(t2)
+	r3 = tf.rank(t3)
+	## get their shapes
+	s1 = t1.get_shape()
+	s2 = t2.get_shape()
+	s3 = t3.get_shape()
+	print('Shapes:', s1, s2, s3)
+-- Shapes: [] (4,) (2, 2)
+with tf.Session(graph=g) as sess:
+	print('Ranks:',r1.eval(),r2.eval(),r3.eval())
+
+-- Ranks: 0 1 2
+
+
+
+(242)
+
+As we can see, the computation graph is simply a network of nodes. Each node
+resembles an operation, which applies a function to its input tensor or tensors and
+returns zero or more tensors as the output.
+
+TensorFlow builds this computation graph and uses it to compute the gradients
+accordingly. The individual steps for building and compiling such a computation
+graph in TensorFlow are as follows:
+
+1. Instantiate a new, empty computation graph.
+2. Add nodes (tensors and operations) to the computation graph.
+3. Execute the graph:
+	a. Start a new session
+	b. Initialize the variables in the graph
+	c. Run the computation graph in this session
+
+g = tf.Graph()
+with g.as_default():
+	a = tf.constant(1, name='a')
+	b = tf.constant(2, name='b')
+	c = tf.constant(3, name='c')
+	z = 2*(a-b) + c
+
+
+(243)
+
+In this code, we added nodes to the g graph using with g.as_default(). If we do
+not explicitly create a graph, there is always a default graph, and therefore, all the
+nodes are added to the default graph.
+
+After launching a graph in a TensorFlow session, we can execute its nodes; that is,
+evaluating its tensors or executing its operators. Evaluating each individual tensor
+involves calling its eval method inside the current session. When evaluating a
+specific tensor in the graph, tensorflow has to execute all the preceding nodes in the 
+graph until it reaches that particular one. In case there are one or more placeholders,
+they would need to be fed.
+
+Quite similarly, executing operations can be done using a session's run method.
+
+Remember that we define tensors and operations in a computational graph context 
+within TensorFlow. A TensorFlow session is then used to execute the operations in
+the graph and fetch and evaluate the results.
+
+(244) Placeholders in TensorFlow:
+
+TensorFlow has special mechanisms for feeding data. One of these mechanisms is the
+use of placeholders, which are predefined tensors with specific types and shapes.
+
+These tensors are added to the computation graph using the tf.placeholder
+function, and they do not contain any data. However, upon the execution of certain
+nodes in the graph, these placeholders need to be fed with data arrays.
+
+
+(245) Defining placeholders:
+
+import tensorflow as tf
+g = tf.Graph()
+with g.as_default():
+	tf_a = tf.placeholder(tf.int32, shape=[],name='tf_a')
+	tf_b = tf.placeholder(tf.int32, shape=[],name='tf_b')
+	tf_c = tf.placeholder(tf.int32, shape=[],name='tf_c')
+	r1 = tf_a-tf_b
+	r2 = 2*r1
+	z = r2 + tf_c
+
+(246) Feeding placeholders with data:
+
+When we execute a node in the graph, we need to create a python dictionary to
+feed the values of placeholders with data arrays. We do this according to the type
+and shape of the placeholders. This dictionary is passed as the input argument
+feed_dict to a session's run method.
+
+In the previous graph, we added three placeholders of the type tf.int32 to feed
+scalars for computing z. Now, in order to evaluate the result tensor z, we can feed
+arbitrary integer values (here, 1, 2, and 3) to the placeholders, as follows:
+
+with tf.Session(graph=g) as sess:
+	feed = {tf_a: 1,tf_b: 2,tf_c: 3}
+	print('z:',sess.run(z, feed_dict=feed))
+--z: 1
+
+(247) Variables in TensorFlow:
+
+In the context of TensorFlow, variables are a special type of tensor objects that allow
+us to store and update the parameters of our models in a TensorFlow session during
+training. The following section explain how we can define variables in a graph,
+initialize those variables in a session, organize variables via the so-called variable
+scope, and reuse existing variables.
+
+2 ways:
+
+A. tf.Variable(<initial-value>, name="variable-name")
+B. tf.get_variable(name, ...)
+
+The first one tf.Variable, is a class that creates an object for a new variable and
+adds it to the graph. Note that tf.Variable does not have an explicit way to
+determine shape and dtype; the shape and type are set to be the same as those of the
+initial values.
+
+The second option, tf.get_variable, can be used to reuse an existing variable
+with a given name (if the name exists in the graph) or create a new one if the name
+does not exist. In this case, the name becomes critical; that's probably why it has to
+be placed the first argument to this function. Furthermore, tf.get_variable
+provides an explicit way to set shape and dtype; these parameters are only required
+when creating a new variable, not reusing existing ones.
+
+import tensorflow as tf
+import numpy as np
+g1 = tf.Graph()
+with g1.as_default():
+	w = tf.Variable(np.array([[1, 2, 3, 4],[5, 6, 7, 8]]), name='w')
+	print(w)
+-- <tf.Variable 'w:0' shape=(2, 4) dtype=int64_ref>
+
+(248) 

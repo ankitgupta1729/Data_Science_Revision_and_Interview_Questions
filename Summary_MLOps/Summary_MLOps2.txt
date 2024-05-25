@@ -1,0 +1,1370 @@
+# Chapter 1: Introduction to MLOps (Machine Learning Operations)
+
+(1) 
+
+The ML engineers, in turn, are applying established DevOps best practices to the emerging machine learning technologies.
+The major cloud vendors (AWS, Azure, and GCP) all have certifications targeting these practitioners.
+
+(2) Certifications:
+
+Azure: https://learn.microsoft.com/en-us/credentials/certifications/azure-data-scientist/?practice-assessment-type=certification
+GCP:   https://cloud.google.com/learn/certification/guides/machine-learning-engineer
+AWS:   https://aws.amazon.com/certification/certified-machine-learning-specialty/ 
+
+(3)
+
+One way to look at data science versus machine learning engineering is to consider science versus engineering itself.
+Science gears toward research, and engineering gears toward production.
+
+(4) Tools and processes used in machine learning engineering:
+
+A. Cloud native ML platforms:
+
+AWS SageMaker, Azure ML Studio, and GCP AI Platform
+
+B. Containerized workflows:
+
+Docker format containers, Kubernetes, and private and public container registries
+
+C. Serverless technology:
+
+AWS Lambda, AWS Athena, Google Cloud Functions, Azure Functions
+
+D. Specialized hardware for machine learning:
+
+GPUs, Google TPU (TensorFlow Processing Unit), Apple A14, AWS Inferentia Elastic inference
+
+E. Big data platforms and tools:
+
+Databricks, Hadoop/Spark, Snowflake, Amazon EMR (Elastic Map Reduce), Google Big Query
+
+(5) One clear pattern about machine learning is how deeply tied it is to cloud computing. This is because the raw
+ingredients of machine learning happen to require massive compute, extensive data, and specialized hardware. Thus,
+there is a natural synergy with deep integration with cloud platforms and machine learning engineering.
+
+(6) MLOps shares a lineage with DevOps in that DevOps philosophically demands automation.A common
+expression is if it is not automated, it’s broken. 
+
+(7) Think of MLOps as the process of automating machine learning using DevOps methodologies.
+
+What is DevOps? It combines best practices, including microservices, continuous integration, and continuous
+delivery, removing the barriers between Operations and Development and Teamwork.
+
+(8) With MLOps, not only do the software engineering processes need full automation, but so do the data and modeling.
+The model training and deployment is a new wrinkle added to the traditional DevOps lifecycle. Finally, additional
+monitoring and instrumentation must account for new things that can break, like data drift—the delta between changes
+in the data from the last time the model training occurred.
+
+(9) DevOps and MLOps:
+
+DevOps is a set of technical and management practices that aim to increase an organization’s velocity in releasing
+high-quality software. Some of the benefits of DevOps include speed, reliability, scale, and security. These benefits
+occur through adherence to the following best practices:
+
+Continuous integration (CI):
+
+CI is the process of continuously testing a software project and improving the quality based on these tests’ results.
+It is automated testing using open source and SaaS build servers such as GitHub Actions, Jenkins, Gitlab, CircleCI,
+or cloud native build systems like AWS Code Build
+
+Continuous delivery (CD):
+
+This method delivers code to a new environment without human intervention. CD is the process of deploying code
+automatically, often through the use of IaC.
+
+
+Microservices:
+
+A microservice is a software service with a distinct function that had little to no dependencies. One of the most
+popular Python-based microservice frameworks is Flask. For example, a machine learning prediction endpoint is
+an excellent fit for a microservice. These microservices can use a wide variety of technologies, including FaaS
+(function as a service). A perfect example of a cloud function is AWS Lambda. A microservice could be containerready and use CaaS (container as a service) to deploy a Flask application with a Dockerfile to a service like AWS
+Fargate, Google Cloud Run, or Azure App Services.
+
+Infrastructure as Code:
+
+Infrastructure as Code (IaC) is the process of checking the infrastructure into a source code repository and
+“deploying” it to push changes to that repository. IaC allows for idempotent behavior and ensures the
+infrastructure doesn’t require humans to build it out. A cloud environment defined purely in code and checked into
+a source control repository is a good example use case. Popular technologies include cloud-specific IaC like AWS
+Cloud Formation or AWS SAM (Serverless Application Model). Multicloud options include Pulumi and
+Terraform.
+
+(10)
+
+Continuous integration and continuous delivery are two of the most critical pillars of DevOps. Continuous integration
+involves merging code into a source control repository that automatically checks the code’s quality through testing.
+
+Continuous delivery is when code changes are automatically tested and deployed, either to a staging environment or
+production. Both of these techniques are a form of automation in the spirit of Kaizen or continuous improvement.
+
+(11)
+
+An ML system is also a software system, but it contains a unique component: a machine learning model. The same
+benefits of DevOps can and do apply to ML systems. The embrace of automation is why new approaches like Data
+Versioning and AutoML hold many promises in capturing the DevOps mindset.
+
+(12)
+
+An ML system is a software system, and software systems work
+efficiently and reliably when DevOps and data engineering best practices are in place.
+
+(13) Implementing DevOps:
+
+The foundation of DevOps is continuous integration. Without automated testing, there is no way to move forward with
+DevOps. Continuous integration is relatively painless for a Python project with the modern tools available. The first
+step is to build a “scaffolding” for a Python project.
+
+GitHub Repo Checkout:
+
+A. MakeFile
+B. Requirements
+C. hello.py
+D. test_hello.py
+E. Virtualenv
+
+The runtime for a Python machine learning project is almost guaranteed to be on a Linux operating system. As a
+result, the following Python project structure is straightforward to implement for ML projects.
+
+The components are as follows:
+
+A. Makefile
+
+A Makefile runs “recipes” via the make system, which comes with Unix-based operating systems.Therefore, a
+Makefile is an ideal choice to simplify the steps involved in continuous integration, such as the following. Note
+that a Makefile is a good starting point for a project and will often evolve as new pieces need automation.
+
+If your project uses a Python virtual environment, you source it before you work with a Makefile, since all a
+Makefile does is run commands.
+
+Make install:
+
+This step installs software via the make install command
+
+Make lint:
+
+This step checks for syntax errors via the make lint command
+
+Make test:
+
+This step runs tests via the make test command:
+
+install:
+pip install --upgrade pip &&\
+pip install -r requirements.txt
+lint:
+pylint --disable=R,C hello.py
+test:
+python -m pytest -vv --cov=hello test_hello.py
+
+(14)
+
+A great example is a lint step with the pylint tool. With a Makefile, you only need to run make lint,
+and the same command can run inside a continuous integration server. The alternative approach is to type out
+the complete directive each time you need it, such as the following:
+
+pylint --disable=R,C *.py
+
+This sequence is very prone to errors and quite tedious to repeatedly type over your project’s life. Instead, it is
+much simpler to type the following:
+
+make lint
+
+(15)
+
+requirements.txt
+
+A requirements.txt file is a convention used by the pip installation tool, the default installation tool for Python. A
+project can contain one or more of these files if different packages need installation for different environments.
+
+(16)
+
+Source code and tests:
+
+The Python scaffolding’s final portion is to add a source code file and a test file, as shown here. This script exists
+in a file called hello.py:
+
+def add(x, y):
+ """This is an add function"""
+ return x + y
+print(add(1, 1))
+
+Next, the test file is very trivial to create by using the pytest framework. This script would be in a file
+test_hello.py contained in the same folder as hello.py so that the from hello import add works:
+
+from hello import add
+def test_add():
+ assert 2 == add(1, 1)
+
+(17)
+
+These four files: Makefile, requirements.txt, hello.py, and test_hello.py are all that is needed to start the continuous
+integration journey except for creating a local Python virtual environment. To do that, first, create it:
+
+python3 -m venv ~/.your-repo-name
+
+Next, you source it to “activate” it:
+
+source ~/.your-repo-name/bin/activate
+
+A Python virtual environment isolates third-party packages to a specific
+directory.
+
+(18)
+
+Once you have this scaffolding set up, you can do the following local continuous integration steps:
+
+1. Use make install to install the libraries for your project.
+
+$ make install
+pip install --upgrade pip &&\
+ pip install -r requirements.txt
+Collecting pip
+ Using cached pip-20.2.4-py2.py3-none-any.whl (1.5 MB)
+[.....more output suppressed here......]
+
+
+2. Run make lint to lint your project:
+
+$ make lint
+pylint --disable=R,C hello.py
+------------------------------------
+Your code has been rated at 10.00/10
+
+3. Run make test to test your project:
+
+$ make test
+python -m pytest -vv --cov=hello test_hello.py
+===== test session starts ====
+platform linux -- Python 3.8.3, pytest-6.1.2,\
+/home/codespace/.venv/bin/python
+cachedir: .pytest_cache
+rootdir: /home/codespace/workspace/github-actions-demo
+plugins: cov-2.10.1
+collected 1 item
+test_hello.py::test_add
+PASSED
+[100%]
+----------- coverage: platform linux, python 3.8.3-final-0 -----------
+Name Stmts Miss Cover
+------------------------------
+hello.py 3 0 100%
+
+Once this is working locally, it is straightforward to integrate this same process with a remote SaaS build server.
+Options include GitHub Actions, a Cloud native build server like AWS Code Build, GCP CloudBuild, Azure DevOps
+Pipelines, or an open source, self-hosted build server like Jenkins.
+
+(18) Configuring Continuous Integration with GitHub Actions:
+
+One of the most straightforward ways to implement continuous integration for this Python scaffolding project is with
+GitHub Actions. To do this, you can either select “Actions” in the GitHub UI and create a new one or create a file
+inside of these directories you make as shown here:
+
+.github/workflows/<yourfilename>.yml
+
+The GitHub Actions file itself is straightforward to create, and the following is an example of one. Note that the exact
+version of Python sets to whatever interpretation the project requires. In this example, I want to check a specific
+version of Python that runs on Azure. The continuous integration steps are trivial to implement due to the hard work
+earlier in creating a Makefile:
+
+name: Azure Python 3.5
+on: [push]
+jobs:
+ build:
+ runs-on: ubuntu-latest
+ steps:
+ - uses: actions/checkout@v2
+ - name: Set up Python 3.5.10
+ uses: actions/setup-python@v1
+ with:
+ python-version: 3.5.10
+Evaluation Only. Created with Aspose.PDF. Copyright 2002-2024 Aspose Pty Ltd.
+ - name: Install dependencies
+ run: |
+ make install
+ - name: Lint
+ run: |
+ make lint
+ - name: Test
+ run: |
+ make test
+
+
+
+(19) This step completes the final portion of setting up continuous integration. A continuous deployment—i.e.,
+automatically pushing the machine learning project into production—would be the next logical step. This step would
+involve deploying the code to a specific location using a continuous delivery process and IaC (Infrastructure as Code).
+
+(20) DataOps and Data Engineering:
+
+Many commercial tools are evolving to do DataOps. One example includes Apache Airflow, designed by Airbnb, then
+later open sourced, to schedule and monitor its data processing jobs. AWS tools include AWS Data Pipeline and AWS
+Glue. AWS Glue is a serverless ETL (Extract, Load, Transform) tool that detects a data source’s schema and then
+stores the data source’s metadata. Other tools like AWS Athena and AWS QuickSight can query and visualize the data.
+
+Many organizations use a centralized data lake as the hub of all activity around data engineering. The reason a
+data lake is helpful to build automation around, including machine learning, is the “near infinite” scale it provides in
+terms of I/O coupled with its high durability and availability.
+
+A data lake is often synonymous with a cloud-based object storage system such as Amazon S3. A data lake allows
+data processing “in place” without needing to move it around. A data lake accomplishes this through near-infinite
+capacity and computing characteristics.
+
+(21)
+
+Dedicated job titles, like data engineer, can spend all of their time building systems that handle these diverse use
+cases:
+• Periodic collection of data and running of jobs
+• Processing streaming data
+• Serverless and event-driven data
+• Big data jobs
+• Data and model versioning for ML engineering tasks
+
+(22) Platform Automation:
+
+Once there is an automated flow of data, the next item on the list to evaluate is how an organization can use high-level
+platforms to build machine learning solutions. For example, if an organization is already collecting data into a cloud
+platform’s data lake, such as Amazon S3, it is natural to tie machine learning workflows into Amazon Sagemaker.
+Likewise, if an organization uses Google, it could use Google AI Platform or Azure to use Azure Machine Learning
+Studio. Similarly, Kubeflow would be appropriate for an organization using Kubernetes versus a public cloud.
+
+(23) Assuming all of these other layers are complete (DevOps, Data Automation, and Platform Automation) MLOps is
+possible. Remember from earlier that the process of automating machine learning using DevOps methodologies is
+MLOps. The method of building machine learning is machine learning engineering.
+
+As a result, MLOps is a behavior, just as DevOps is a behavior. While some people work as DevOps engineers, a
+software engineer will more frequently perform tasks using DevOps best practices. Similarly, a machine learning
+engineer should use MLOps best practices to create machine learning systems
+
+--------------------------------------------------------------------------------------------------------------------------
+
+## Chapter 2. MLOps Foundations
+
+
+(24)
+
+Most machine learning happens in the cloud, and most cloud platforms assume you will interact with it to some degree
+with the terminal. As such, it is critical to know the basics of the Linux command line to do MLOps.
+
+A better way to think about the terminal is the “advanced settings” of the environment you are
+working on: the cloud, machine learning, or programming.
+
+Most servers now run Linux; many new deployment options are using containers that also run Linux.
+
+
+(25) Cloud Shell Development Environments:
+
+it is worth shifting gears from a personal
+workstation to a web-based cloud shell development environment.
+
+Many problems are intractable using a local machine since you may not transfer
+extensive data back and forth from the cloud.
+
+ If you are new to these
+environments, I would recommend starting with the AWS Cloud platform. There are two options to get started on
+AWS. The first option is the AWS CloudShell
+
+The AWS CloudShell is a Bash shell with unique AWS command completion built in the shell. If you regularly use the
+AWS CloudShell, it is a good idea to edit the ~/.bashrc to customize your experience. To do that, you can use the
+built-in vim editor.
+
+A second option on AWS is the AWS Cloud9 development environment. A critical difference between AWS
+CloudShell and the AWS Cloud9 environment is that it is a more comprehensive way to develop software solutions.
+For example, you can see a shell and a GUI editor in Figure 2-2 to do syntax highlighting for multiple languages,
+including Python, Go, and Node.
+
+(26)
+
+In particular, when developing machine learning microservices, the Cloud9 environment is ideal since it allows you to
+make web requests from the console to deployed services and has deep integration with AWS Lambda. On the other
+hand, suppose you are on another platform, like Microsoft Azure or Google Cloud. In that case, the same concepts
+apply in that the cloud-based development environments are the ideal location to build machine learning services.
+
+Bash Essentials: https://www.youtube.com/watch?v=5_Oqp7ksChU&t=6s&ab_channel=PragmaticAILabs
+
+(27) Bash Shell and Commands:
+
+The shell is an interactive environment that contains a prompt and the ability to run commands. Most shells today run
+either Bash or ZSH.
+
+What is “the shell”? Ultimately it is a user interface that controls a computer.
+
+A. List Files:
+
+With the shell, you can list files through the ls command. The flag -l adds additional listing information:
+
+B. An excellent way to figure out the location of shell executables is to use which. Here is an example:
+
+bash-3.2$ which ls
+/bin/ls
+
+
+C. Notice that the ls command is in the /bin directory. This “hint” shows that I can find other executables in this
+directory. Here is a count of the executables in /bin/ (the pipe operator | will be explained in just a bit, but, in short, it
+accepts the input from another command):
+
+bash-3.2$ ls -l /bin/ | wc -l
+37
+
+D. pwd shows the full path to where you are:
+
+bash-3.2$ pwd
+/Users/noahgift
+
+E. cd changes into a new directory:
+
+bash-3.2$ cd /tmp
+
+F. Here is an example that shows a workflow with both a redirect and a pipe. Notice that first, the words “foo bar baz”
+direct to a file called out.txt. Next, the contents of this file print out via cat, and then they pipe into the command wc,
+which can count either the number of words via -w or characters via -c:
+
+
+bash-3.2$ cd /tmp
+bash-3.2$ echo "foo bar baz" > out.txt
+bash-3.2$ cat out.txt | wc -c
+ 12
+bash-3.2$ cat out.txt | wc -w
+ 3
+
+(28) Configuration:
+
+The ZSH and Bash shell configuration files store settings that invoke each new time a terminal opens.
+
+customizing your Bash environment is recommended in a cloud-based development environment. for Bash, it is .bashrc.
+
+The first item is an alias that allows me to type the command flask-azureml, cd into a directory, and source a Python virtual environment in one fell swoop. The second section is where I
+export the AWS command line tool variables so I can make API calls:
+
+## Flask ML Azure
+alias flask-azure-ml="/Users/noahgift/src/flask-ml-azure-serverless &&\
+source ~/.flask-ml-azure/bin/activate"
+
+## AWS CLI
+export AWS_SECRET_ACCESS_KEY="<key>"
+export AWS_ACCESS_KEY_ID="<key>"
+export AWS_DEFAULT_REGION="us-east-1"
+
+(29) Writing a Script:
+
+The best way to write a shell script is to put a
+command into a file, then run it. Here is an excellent example of a “hello world” script.
+
+#!/usr/bin/env bash
+echo "hello world"
+
+The first line is called the “shebang” line and tells the script to use Bash. The second line is a Bash command, echo.
+The nice thing about a Bash script is that you can paste any commands you want in it. This fact makes the automation
+of small tasks straightforward even with little to no knowledge of programming.
+
+Next, you use the chmod command to set the executable flag to make this script executable. Finally, you run it by
+appending ./:
+
+bash-3.2$ chmod +x hello.sh
+bash-3.2$ ./hello.sh
+Hello World
+
+(30) Cloud Computing Foundations and Building Blocks:
+
+It is safe to say that almost all forms of machine learning require cloud computing in some form. A key concept in
+cloud computing is the idea of near-infinite resources. Without the cloud, it simply isn’t feasible to do many machine learning models.
+
+the cloud provides near-infinite compute and storage and works on
+the data without moving it.
+
+It turns out that the ability to harness computing power on data without moving it, using near-infinite resources via
+machine learning platforms like AWS SageMaker or Azure ML Studio, is the killer feature of the cloud not replicable
+without cloud computing.
+
+the automation of machine learning via AutoML is a nontrivial advancement that enables the creation of
+models more quickly, with higher accuracy and better explainability. As a result, jobs in the data science industry will
+change, just like editors and data center operator jobs changed.
+
+(31)
+
+AutoML is the automation of the modeling aspect of machine learning. A crude and straightforward example of
+AutoML is an Excel spreadsheet that performs linear regression. You tell Excel which column is the target to predict
+and then which column is the feature.
+
+More sophisticated AutoML systems work similarly. You select what value you want to predict—for example, image
+classification, a numerical trend, categorical text classification, or perhaps clustering. Then the AutoML software
+system performs many of the same techniques that a data scientist would perform, including hyperparameter tuning,
+algorithm selection, and model explainability.
+
+All major cloud platforms have AutoML tools embedded into MLOps platforms.
+
+(32) Getting Started with Cloud Computing:
+
+Each of the three clouds—AWS, Azure, and GCP—has cloud-based development environments via a cloud shell.
+
+A CI/CD (continuous integration/continuous delivery) process via GitHub Actions ensures the Python code is working and of high quality.
+
+(33)
+
+Languages like C or C++ have excellent performance because they are “lower-level,” meaning the developer must
+work much harder in solving a problem. For example, a C programmer must allocate memory, declare types, and
+compile a program. On the other hand, a Python programmer can put in some commands and run them, and there is
+often significantly less code in Python.
+
+Python’s performance is much slower than C, C#, Java, and Go.
+
+With cloud computing, though, language performance does not
+bind to many problems. So it would be fair to say that Python’s performance got accidentally lucky because of two
+things: cloud computing and containers.
+
+With Cloud computing, the design is fully distributed, building on top of it
+using technologies like AWS Lambda and AWS SQS.
+
+ Similarly, containerized technology
+like Kubernetes does the heavy lifting of building distributed systems, so Python threads become suddenly irrelevant.
+
+(34)
+
+AWS Lambda is a function as a service (FaaS) technology that runs on the AWS platform. It has the name FaaS
+because an AWS Lambda function can be just a few lines of code—literally a function. These functions can then
+attach to events like a cloud queuing system, Amazon SQS, or an image uploaded to Amazon S3 object storage.
+
+One way to think about a cloud is that it is an operating system.
+
+instead of spawning threads on a single machine, you could spawn AWS Lambda functions in
+the cloud, which behaves like an operating system with infinitely scalable resources.
+
+(35)
+
+Let’s assemble our knowledge and build a Python script. At the beginning of a Python script, there is a shebang line,
+just like in Bash. Next, the choices library is imported. This module is later used in a “loop” to send random
+numbers to the add function:
+
+#!/usr/bin/env python
+from random import choices
+def add(x,y):
+ print(f"inside a function and adding {x}, {y}")
+ return x+y
+#Send random numbers from 1-10, ten times to the add function
+numbers = range(1,10)
+for num in numbers:
+ xx = choices(numbers)[0]
+ yy = choices(numbers)[0]
+ print(add(xx,yy))
+
+The script needs to be made executable by running chmod +x add.py, just like a Bash script:
+
+bash-3.2$ ./add.py
+inside a function and adding 7, 5
+12
+inside a function and adding 9, 5
+14
+inside a function and adding 3, 1
+4
+inside a function and adding 7, 2
+9
+inside a function and adding 5, 8
+13
+inside a function and adding 6, 1
+7
+inside a function and adding 5, 5
+10
+inside a function and adding 8, 6
+14
+inside a function and adding 3, 3
+6
+
+(36)
+
+In Pandas, you get these descriptive statistics through the use of df.describe().. One way to consider descriptive
+statistics is to view them as a way of “seeing” numerically what the eye sees visually.
+
+For MLOps, convergence, i.e., creating a model that finds a solution that won’t be improved by adding more
+data, is an essential operational issue. For example, would a GPU-based training cluster allow faster
+convergence? Would a CPU-based training cluster offer lower costs? Operating costs could break a company or a
+project in the real world, and it is essential to both have an intuition for how optimization works and test it out in
+practice.
+
+(37) Build an MLOps Pipeline from Zero:
+
+ let’s dive into Deploy Flask Machine Learning Application on Azure
+App Services.
+
+ GitHub events trigger a build from the Azure Pipelines build process, which
+then deploys the changes to a serverless platform. The names are different on other cloud platforms, but
+conceptionally things are very similar in both AWS and GCP.
+
+(38) To run it locally, follow these steps:
+
+1. Create virtual environment and source:
+python3 -m venv ~/.flask-ml-azure
+source ~/.flask-ml-azure/bin/activate
+2. Run make install.
+3. Run python app.py.
+4. In a separate shell, run ./make_prediction.sh.
+
+(39) To run it in Azure Pipelines:
+
+1. Launch Azure Shell
+2. Create a GitHub repo with Azure Pipelines enabled (which could be a fork of this repo)
+3. Clone the repo into Azure Cloud Shell.
+
+( how to setup SSH keys: https://www.youtube.com/watch?v=3vtBAfPjQus&ab_channel=PragmaticAILabs)
+
+4. Create virtual environment and source:
+python3 -m venv ~/.flask-ml-azure
+source ~/.flask-ml-azure/bin/activate
+
+5. Run make install
+
+6. Create an app service and initially deploy your app in Cloud Shell,
+
+az webapp up -n <your-appservice>
+
+7. Verify the deployed application works by browsing to the deployed url: https://<yourappservice>.azurewebsites.net/.
+
+8. Verify machine learning predictions work.
+
+Change the line in make_predict_azure_app.sh to match the deployed prediction -X POST
+https://<yourappname>.azurewebsites.net:$PORT/predict.
+
+9. Create an Azure DevOps project and connect to Azure.
+
+10. Connect to Azure Resource Manager
+
+11. Configure the connection to the previously deployed resource group
+
+12. Create a new Python pipeline with GitHub integration
+
+Finally, set up the GitHub integration
+
+This process will create a YAML file that looks roughly like the YAML output shown in the following code
+
+# Python to Linux Web App on Azure
+# Build your Python project and deploy it to Azure as a Linux Web App.
+# Change python version to one thats appropriate for your application.
+# https://docs.microsoft.com/azure/devops/pipelines/languages/python
+trigger:
+- master
+variables:
+ # Azure Resource Manager connection created during pipeline creation
+ azureServiceConnectionId: 'df9170e4-12ed-498f-93e9-79c1e9b9bd59'
+ # Web app name
+ webAppName: 'flask-ml-service'
+ # Agent VM image name
+ vmImageName: 'ubuntu-latest'
+Evaluation Only. Created with Aspose.PDF. Copyright 2002-2024 Aspose Pty Ltd.
+ # Environment name
+ environmentName: 'flask-ml-service'
+ # Project root folder. Point to the folder containing manage.py file.
+ projectRoot: $(System.DefaultWorkingDirectory)
+ # Python version: 3.7
+ pythonVersion: '3.7'
+stages:
+- stage: Build
+ displayName: Build stage
+ jobs:
+ - job: BuildJob
+ pool:
+ vmImage: $(vmImageName)
+ steps:
+ - task: UsePythonVersion@0
+ inputs:
+ versionSpec: '$(pythonVersion)'
+ displayName: 'Use Python $(pythonVersion)'
+ - script: |
+ python -m venv antenv
+ source antenv/bin/activate
+ python -m pip install --upgrade pip
+ pip install setup
+ pip install -r requirements.txt
+ workingDirectory: $(projectRoot)
+
+13. Verify continuous delivery of Azure Pipelines by changing app.py.
+
+(https://www.youtube.com/watch?v=3KF9DltYvZU&ab_channel=PragmaticAILabs)
+
+14. Add a lint step (this gates your code against syntax failure):
+ - script: |
+ python -m venv antenv
+ source antenv/bin/activate
+ make install
+ make lint
+ workingDirectory: $(projectRoot)
+ displayName: 'Run lint tests'
+
+15. Complete Code Walkthrough: https://www.youtube.com/watch?v=TItOatTfAOc&ab_channel=PragmaticAILabs
+
+---------------------------------------------------------------------------------------------------------------
+
+## Chapter 3. MLOps for Containers and Edge Devices
+
+
+(40)
+
+virtual machines still have an important place in cloud offerings. Google Cloud calls them Compute
+Engine, for example, and other providers have a similar reference. A lot of these virtual machines offer enhanced
+GPUs to provide better performance targeted at machine learning operations.
+
+two types of technologies for model
+deployments: containers and edge devices.
+
+ It is unreasonable to think that a virtual machine would be well suited to
+run on an edge device (like a cellphone)
+
+(41) Containers:
+
+Linux has had LXC (or Linux containers), which provided a lot of the functionality we take for granted with
+containers today. But the tooling for LXC is dismal, and Docker brought one key factor to successfully become a
+leader: easy collaboration and sharing through a registry.
+
+Registries allow any developer to push their changes to a central location where others can then pull those changes and
+run them locally.
+
+Traditionally, engineers often use virtual machines
+like an all-in-one service where the database, the web server, and any other system service are installed, configured,
+and run. These types of applications are monolithic, with tied interdependencies in an all-in-one machine.
+
+A microservice, on the other hand, is an application that is fully decoupled from system requirements like databases
+and can run independently. Although you can use virtual machines as microservices, it is more common to find
+containers fitting better in that concept
+
+(42) Creating a Container:
+
+The Dockerfile is at the heart of creating containers. Anytime you are creating a container, you must have the
+Dockerfile present in the current directory. This special file can have several sections and commands that allow
+creating a container image. Open a new file and name it Dockerfile and add the following contents to it:
+
+FROM centos:8
+RUN dnf install -y python38
+
+The file has two sections; a unique keyword delimits each one. These keywords are known as instructions. The
+beginning of the file uses the FROM instruction, which determines what the base for the container is. The base (also
+referred to as base image) is the CentOS distribution at version 8. The version, in this case, is a tag. Tags in containers
+define a point in time. When there are no tags defined, the default is the latest tag. It is common to see versions used
+as tags, as is the case in this example.
+
+(43)
+
+One of the many useful aspects of containers is that they can be composed of many layers, and these layers can be
+used or reused in other containers.
+
+Next, the RUN instruction runs a system command. This system command installs Python 3, which isn’t included in
+the base CentOS 8 image. Note how the dnf command uses the -y flag, which prevents a prompt for confirmation by
+the installer, triggered when building the container.
+
+(44)
+
+Now build the container from the same directory where the Dockerfile is:
+
+$ docker build .
+[+] Building 11.2s (6/6) FINISHED
+ => => transferring context: 2B
+ => => transferring dockerfile: 83B
+ => CACHED [1/2] FROM docker.io/library/centos:8
+ => [2/2] RUN dnf install -y python38
+ => exporting to image
+ => => exporting layers
+ => => writing
+image sha256:3ca470de8dbd5cb865da679ff805a3bf17de9b34ac6a7236dbf0c367e1fb4610
+
+The output reports that I already have the initial layer for CentOS 8, so there is no need to pull it again. Then, it
+installs Python 3.8 to complete image creation.
+
+(45) This way of building images is not very robust and has a few problems. First, it is challenging to identify this image
+later. All we have is the sha256 digest to reference it and nothing else. To see some information about the image just
+built, rerun docker:
+
+$ docker images
+docker images
+REPOSITORY TAG IMAGE ID CREATED SIZE
+<none> <none> 3ca470de8dbd 15 minutes ago 294MB
+
+
+(46)  There is no repository or tag associated with it. The image ID is the digest, which gets reduced to only 12 characters.
+This image is going to be challenging to deal with if it doesn’t have additional metadata. It is a good practice to tag it
+when building the image. This is how you create the same image and tag it:
+
+$ docker build -t localbuild:removeme .
+[+] Building 0.3s (6/6) FINISHED
+[...]
+ => => writing
+image
+sha256:4c5d79f448647e0ff234923d8f542eea6938e0199440dfc75b8d7d0d10d5ca9a
+0.0s
+ => => naming to docker.io/library/localbuild:removeme
+
+(47)
+
+The critical difference is that now localbuild has a tag of removeme and it will show up when listing the images:
+$ docker images localbuild
+REPOSITORY TAG IMAGE ID CREATED SIZE
+localbuild removeme 3ca470de8dbd 22 minutes ago 294MB
+
+Since the image didn’t change at all, the build process was speedy, and internally, the build system tagged the already
+built image. The naming and tagging of images helps when pushing the image to a registry. I would need to own the
+localbuild repository to push to it. Since I don’t, the push will get denied:
+
+$ docker push localbuild:removeme
+The push refers to repository [docker.io/library/localbuild]
+denied: requested access to the resource is denied
+
+(48)
+
+However, if I re-tag the container to my repository in the registry, pushing will work. To re-tag, I first need to
+reference the original tag (localbuild:removeme) and then use my registry account and destination
+(alfredodeza/removeme):
+
+$ docker tag localbuild:removeme alfredodeza/removeme
+$ docker push alfredodeza/removeme
+The push refers to repository [docker.io/alfredodeza/removeme]
+958488a3c11e: Pushed
+291f6e44771a: Pushed
+latest: digest: sha256:a022eea71ca955cafb4d38b12c28b9de59dbb3d9fcb54b size: 741
+
+(49)
+
+Since my account is open and the registry is not restricting access, anyone can “pull” the container image by running:
+docker pull alfredodeza/removeme
+
+(50) Running a Container:
+
+Now that the container builds with the Dockerfile, we can run it. When running virtual machines, it was common
+practice to enable the SSH (also known as the Secure Shell) daemon and expose a port for remote access, and perhaps
+even add default SSH keys to prevent getting password prompts. People who aren’t used to running a container will
+probably ask for SSH access to a running container instance. SSH access is not needed; even though you can enable it
+and make it work, it is not how to access a running container.
+
+Make sure that a container is running. In this example, I run CentOS 8:
+
+$ docker run -ti -d --name centos-test --rm centos:8 /bin/bash
+1bb9cc3112ed661511663517249898bfc9524fc02dedc3ce40b5c4cb982d7bcd
+
+There are several new flags in this command. It uses -ti to allocate a TTY (emulates a terminal) and attaches stdin
+to it to interact with it in the terminal later. Next, the -d flag makes the container run in the background to prevent
+taking control of the current terminal. I assign a name (centos-test) and then use --rm so that Docker removes
+this container after stopping it. After issuing the command, a digest returns, indicating that the container has started.
+Now, verify it is running:
+
+$ docker ps
+CONTAINER ID IMAGE COMMAND NAMES
+1bb9cc3112ed centos:8 "/bin/bash" centos-test
+
+Some containers get created with an ENTRYPOINT (and optionally a CMD) instruction. These instructions are meant
+to get the container up and running for a specific task. In the example container we just built for CentOS, the
+/bin/bash executable had to be specified because otherwise the container would not stay running. These
+instructions mean that if you want a long-running container, you should create it with at least an ENTRYPOINT that
+executes a program. Update the Dockerfile so that it looks like this:
+
+FROM centos:8
+RUN dnf install -y python38
+ENTRYPOINT ["/bin/bash"]
+
+(51) Now it is possible to run the container in the background without the need to specify the /bin/bash command:
+
+$ docker build -t localbuild:removeme .
+$ docker run --rm -it -d localbuild:removeme
+023c8e67d91f3bb3998e7ac1b9b335fe20ca13f140b6728644fd45fb6ccb9132
+$ docker ps
+CONTAINER ID IMAGE COMMAND NAMES
+023c8e67d91f removeme "/bin/bash" romantic_khayyam
+
+This is how you can get access to a running container using the container ID and the exec subcommand:
+
+$ docker exec -it 023c8e67d91f bash
+
+[root@023c8e67d91f /]# whoami
+
+root
+
+(52) $ docker exec 023c8e67d91f tail /var/log/dnf.log
+ python38-setuptools-wheel-41.6.0-4.module_el8.2.0+317+61fa6e7d.noarch
+2020-12-02T13:00:04Z INFO Complete!
+2020-12-02T13:00:04Z DDEBUG Cleaning up.
+
+One common aspect of container development is to keep its size as small as possible. That is why a CentOS container
+will have a lot fewer packages than that of a newly installed CentOS virtual machine
+
+(53) Best Practices:
+
+There are a few linters for creating
+containers with a Dockerfile. One of these linters is hadolint. It is conveniently packaged as a container. Modify
+the last Dockerfile example, so it looks like this:
+
+FROM centos:8
+RUN dnf install -y python38
+RUN pip install pytest
+ENTRYPOINT ["/bin/bash"]
+
+Now run the linter to see if there are any good suggestions:
+
+$ docker run --rm -i hadolint/hadolint < Dockerfile
+DL3013 Pin versions in pip.
+ Instead of `pip install <package>` use `pip install <package>==<version>`
+
+Every time there is a RUN instruction, a new layer gets created with that execution.
+
+Containers consist of individual layers, so the fewer the number of layers, the smaller the container’s size. This means
+that it is preferable to use a single line to install many dependencies instead of one:
+
+RUN apk add --no-cache python3 && python3 -m ensurepip && pip3 install pytest
+
+The use of && at the end of each command chains everything together, creating a single layer. If the previous example
+had a separate RUN instruction for each install command, the container would end up being larger. Perhaps for this
+particular example, the size wouldn’t make that much of a difference; however, it would be significant in containers
+that require lots of dependencies.
+
+(54) $ curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s
+
+Using curl in this way allows deploying grype into most any continuous integration system to scan for
+vulnerabilities. The curl installation method will place the executable in the current working path under a bin/
+directory. After installation is complete, run it against a container:
+
+$ grype python:3.8
+✔ Vulnerability DB [no update available]
+⠴ Loading image ━━━━━━━━━━━━━━━━━━━━━ [requesting image from docker]
+✔ Loaded image
+✔ Parsed image
+✔ Cataloged image [433 packages]
+✔ Scanned image [1540 vulnerabilities]
+
+Over a thousand vulnerabilities look somewhat surprising. The output is too long to capture here, so filter the result to
+check for vulnerabilities with a severity of High:
+
+$ grype python:3.8 | grep High
+[...]
+python2.7 2.7.16-2+deb10u1 CVE-2020-8492 High
+
+-- Common Vulnerabilities and Exposures (CVEs) 
+
+The CVE is worrisome because it can
+potentially allow the system to crash if an attacker exploits the vulnerability.
+
+Since I know the application uses Python
+3.8, then this container is not vulnerable because Python 2.7 is unused.
+
+(55) Serving a Trained Model Over HTTP:
+
+let’s create a container that will serve a trained
+model over an HTTP API using the Flask web framework. As you already know, everything starts with the Dockerfile,
+so create one, assuming for now that a requirements.txt file is present in the current working directory:
+
+FROM python:3.7
+ARG VERSION
+LABEL org.label-schema.version=$VERSION
+COPY ./requirements.txt /webapp/requirements.txt
+WORKDIR /webapp
+RUN pip install -r requirements.txt
+COPY webapp/* /webapp
+ENTRYPOINT [ "python" ]
+CMD [ "app.py" ]
+
+(56) There are a few new things in this file that I have not covered before. First, we define an argument called VERSION
+that gets used as a variable for a LABEL. I’m using a label schema convention that is useful to normalize how these
+labels are named. Using a version is a helpful way of adding informational metadata about the container itself. I will
+use this label later when I want to identify the version of the trained model. Imagine a situation where a container is
+not producing expected accuracy from a model; adding a label helps identify the problematic model’s version.
+Although this file uses one label, you can imagine that the more labels with descriptive data, the better.
+
+Next, a requirements.txt file gets copied into the container. Create the requirements file with the following
+dependencies:
+
+Flask==1.1.2
+pandas==0.24.2
+scikit-learn==0.20.3
+
+
+
+(57) Now, create a new directory called webapp so that the web files are contained in one place, and add the app.py file so
+that it looks like this:  
+
+from flask import Flask, request, jsonify
+import pandas as pd
+from sklearn.externals import joblib
+from sklearn.preprocessing import StandardScaler
+app = Flask(__name__)
+
+def scale(payload):
+ scaler = StandardScaler().fit(payload)
+ return scaler.transform(payload)
+@app.route("/")
+def home():
+ return "<h3>Sklearn Prediction Container</h3>"
+@app.route("/predict", methods=['POST'])
+def predict():
+ """
+ Input sample:
+ {
+ "CHAS": { "0": 0 }, "RM": { "0": 6.575 },
+ "TAX": { "0": 296 }, "PTRATIO": { "0": 15.3 },
+ "B": { "0": 396.9 }, "LSTAT": { "0": 4.98 }
+ }
+ Output sample:
+ { "prediction": [ 20.35373177134412 ] }
+ """
+ clf = joblib.load("boston_housing_prediction.joblib")
+ inference_payload = pd.DataFrame(request.json)
+ scaled_payload = scale(inference_payload)
+ prediction = list(clf.predict(scaled_payload))
+ return jsonify({'prediction': prediction})
+if __name__ == "__main__":
+ app.run(host='0.0.0.0', port=5000, debug=True)
+
+(58)
+
+The last file needed is the trained model. If you are training the Boston Housing prediction dataset, make sure to place
+it within the webapp directory along with the app.py file and name it boston_housing_prediction.joblib.
+
+Now build the container. In the example, I will use the run ID that Azure gave me when I trained the model as the
+version to make it easier to identify where the model came from. Feel free to use a different version (or no version at
+all if you don’t need one):
+
+
+$ docker build --build-arg VERSION=AutoML_287f444c -t flask-predict .
+[+] Building 27.1s (10/10) FINISHED
+ => => transferring dockerfile: 284B
+ => [1/5] FROM docker.io/library/python:3.7
+
+(59)
+
+Double-check that the image is now available after building:
+
+$ docker images flask-predict
+REPOSITORY TAG IMAGE ID CREATED SIZE
+flask-predict latest 5487a63442aa 6 minutes ago 1.15GB
+
+Now run the container in the background, exposing port 5000, and verify it is running:
+
+$ docker run -p 5000:5000 -d --name flask-predict flask-predict
+d95ab6581429ea79495150bea507f009203f7bb117906b25ffd9489319219281
+$docker ps
+CONTAINER ID IMAGE COMMAND STATUS PORTS
+d95ab6581429 flask-predict "python app.py" Up 2 seconds 0.0.0.0:5000->5000/tcp
+
+(60) On your browser, open http://localhost:5000 and the HTML from the home() function should welcome you to the
+Sklearn Prediction application. Another way to verify this is wired up correctly is using curl:
+
+$ curl 192.168.0.200:5000
+<h3>Sklearn Prediction Container</h3>
+
+(61) You can use any tool that can send information over HTTP and process a response back. This example uses a few lines
+of Python with the requests library (make sure you install it before running it) to send a POST request with the
+
+sample JSON data:
+import requests
+import json
+url = "http://localhost:5000/predict"
+data = {
+ "CHAS": {"0": 0},
+ "RM": {"0": 6.575},
+ "TAX": {"0": 296.0},
+ "PTRATIO": {"0": 15.3},
+ "B": {"0": 396.9},
+ "LSTAT": {"0": 4.98},
+}
+# Convert to JSON string
+input_data = json.dumps(data)
+# Set the content type
+headers = {"Content-Type": "application/json"}
+# Make the request and display the response
+resp = requests.post(url, input_data, headers=headers)
+print(resp.text)
+
+
+Write the Python code to a file and call it predict.py. Execute the script to get some predictions back on the terminal:
+
+$ python predict.py
+{
+ "prediction": [
+ 20.35373177134412
+ ]
+}
+
+(62) Edge Devices:
+
+Not only have costs gone
+down, but more powerful chips are getting produced. Some of these chips are explicitly tailored for ML tasks.
+When “deploying to the edge” is mentioned in technology, it refers to compute devices that are not
+within a data center along with thousands of other servers. Mobile phones, Raspberry PI, and smart home devices are
+some examples that fit the description of an “edge device.” 
+
+In the last few years, large telecommunication companies
+have been pushing toward edge computing. Most of these edge deployments want to get faster feedback to users
+instead of routing expensive compute requests to a remote data center.
+
+(63)
+
+The general idea is that the closer the computational resources are to the user, the faster the user experience will be.
+There is a fine line that divides what may land at the edge versus what should go all the way to the data center and
+back. But, as I’ve mentioned, specialized chips are getting smaller, faster, and more effective; it makes sense to predict
+that the future means more ML at the edge. And the edge, in this case, will mean more and more devices that we
+previously didn’t think could handle ML tasks.
+
+At the heart of advanced next-generation MLOps workflows are managed ML systems like AWS SageMaker, Azure
+ML Studio, and Google’s Vertex AI.All of these systems build on top of containers. Containers are a secret ingredient
+for MLOps. Without containerization, it is much more challenging to develop and use technologies like AWS
+SageMaker. EC2 Container Registry is the location where the inference code image and
+the training code live.
+
+----------------------------------------------------------------------------------------------------------------------
+
+## Chapter 4. Continuous Delivery for Machine Learning Models
+
+(64)
+
+Constant evaluation, making changes and adapting to the feedback, and applying new strategies to achieve success is
+exactly what continuous integration (CI) and continuous delivery (CD) are about.
+
+(65) Packaging for ML Models:
+
+This all means getting a model into a container to take advantage of containerized processes
+to help sharing, distributing, and easy deployment.
+
+For this section, I will use an ONNX model and package it within a container that serves a Flask app that performs the
+prediction. I will use the RoBERTa-SequenceClassification ONNX model, which is very well documented. After
+creating a new Git repository, the first step is to figure out the dependencies needed. After creating the Git repository,
+start by adding the following requirements.txt file:
+
+simpletransformers==0.4.0
+tensorboardX==1.9
+transformers==2.1.0
+flask==1.1.2
+torch==1.7.1
+onnxruntime==1.6.0
+
+Next, create a Dockerfile that installs everything in the container:
+
+FROM python:3.8
+COPY ./requirements.txt /webapp/requirements.txt
+WORKDIR /webapp
+RUN pip install -r requirements.txt
+COPY webapp/* /webapp
+ENTRYPOINT [ "python" ]
+CMD [ "app.py" ]
+
+The Dockerfile copies the requirements file, creates a webapp directory, and copies the application code into a single
+app.py file. Create the webapp/app.py file to perform the sentiment analysis. Start by adding the imports and
+everything needed to create an ONNX runtime session:
+
+from flask import Flask, request, jsonify
+import torch
+import numpy as np
+from transformers import RobertaTokenizer
+import onnxruntime
+
+app = Flask(__name__)
+tokenizer = RobertaTokenizer.from_pretrained("roberta-base")
+session = onnxruntime.InferenceSession(
+ "roberta-sequence-classification-9.onnx")
+
+This first part of the file creates the Flask application, defines the tokenizer to use with the model, and finally, it
+initializes an ONNX runtime session that requires passing a path to the model.
+
+@app.route("/predict", methods=["POST"])
+def predict():
+ input_ids = torch.tensor(
+ tokenizer.encode(request.json[0], add_special_tokens=True)
+ ).unsqueeze(0)
+ if input_ids.requires_grad:
+  numpy_func = input_ids.detach().cpu().numpy()
+ else:
+  numpy_func = input_ids.cpu().numpy()
+ inputs = {session.get_inputs()[0].name: numpy_func(input_ids)}
+ out = session.run(None, inputs)
+ result = np.argmax(out)
+ return jsonify({"positive": bool(result)})
+if __name__ == "__main__":
+ app.run(host="0.0.0.0", port=5000, debug=True)
+
+The predict() function is a Flask route that enables the /predict URL when the application is running. The
+function only allows POST HTTP methods. There is no description of the sample inputs and outputs yet because one
+critical part of the application is missing: the ONNX model does not exist yet. Download the RoBERTaSequenceClassification ONNX model locally, and place it at the root of the project
+
+One last thing missing before building the container is that there is no instruction to copy the model into the container.
+The app.py file requires the model roberta-sequence-classification-9.onnx to exist in the /webapp directory. Update
+the Dockerfile to reflect that:
+
+COPY roberta-sequence-classification-9.onnx /webapp
+$ mv roberta-sequence-classification-9.onnx webapp/
+
+Now the project has everything needed so you can build the container and run the application.
+
+(66)
+
+Now run the application locally by invoking the app.py file with Python:
+
+$ cd webapp
+$ python app.py
+* Serving Flask app "app" (lazy loading)
+ * Environment: production
+ WARNING: This is a development server.
+ Use a production WSGI server instead.
+ * Debug mode: on
+ * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+
+(67)
+
+Next, the application is ready to consume HTTP requests. So far, I’ve not shown what the expected inputs are. These
+are going to be JSON-formatted requests with JSON responses. Use the curl program to send a sample payload to
+detect sentiment:
+$ curl -X POST -H "Content-Type: application/JSON" \
+ --data '["Containers are more or less interesting"]' \
+ http://0.0.0.0:5000/predict
+{
+ "positive": false
+}
+$ curl -X POST -H "Content-Type: application/json" \
+ --data '["MLOps is critical for robustness"]' \
+ http://0.0.0.0:5000/predict
+{
+ "positive": true
+}
+
+The JSON request is an array with a single string, and the response is a JSON object with a “positive” key that
+indicates the sentiment of the sentence. Now that you’ve verified that the application runs and that the live prediction
+is functioning properly, it is time to create the container locally to verify all works there. Create the container, and tag
+it with something meaningful:
+
+$ docker build -t alfredodeza/roberta .
+[+] Building 185.3s (11/11) FINISHED
+ => [internal] load metadata for docker.io/library/python:3.8
+ => CACHED [1/6] FROM docker.io/library/python:3.8
+Evaluation Only. Created with Aspose.PDF. Copyright 2002-2024 Aspose Pty Ltd.
+ => [2/6] COPY ./requirements.txt /webapp/requirements.txt
+ => [3/6] WORKDIR /webapp
+ => [4/6] RUN pip install -r requirements.txt
+ => [5/6] COPY webapp/* /webapp
+ => [6/6] COPY roberta-sequence-classification-9.onnx /webapp
+ => exporting to image
+ => => naming to docker.io/alfredodeza/roberta
+
+Now run the container locally to interact with it in the same way as when running the application directly with Python.
+Remember to map the ports of the container to the localhost:
+
+$ docker run -it -p 5000:5000 --rm alfredodeza/roberta
+ * Serving Flask app "app" (lazy loading)
+ * Environment: production
+ WARNING: This is a development server.
+ Use a production WSGI server instead.
+ * Debug mode: on
+ * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+
+Send an HTTP request in the same way as before. You can use the curl program again:
+$ curl -X POST -H "Content-Type: application/json" \
+ --data '["espresso is too strong"]' \
+ http://0.0.0.0:5000/predict
+{
+ "positive": false
+}
+
+In the next section, I’ll automate all of this using continuous delivery and publishing this container to a
+container registry that anyone can consume.
+
+
+(68) Infrastructure as Code for Continuous Delivery of ML Models:
+
+Having images hosted in a container registry (like Docker Hub) is already a great step in the right
+direction for repeatable builds and reliable tests.
+
+I encountered a problem with one of the libraries used in a container
+that needed an update, so I searched for the files used to create these test containers. They were nowhere to be found.
+At some point, an engineer built these locally and uploaded the images to the registry. This presented a big problem
+because I couldn’t make a simple change to the image since the files needed to build the image were lost.
+
+A step forward in this problematic situation is to create automation that can automatically build these
+containers from known source files, including the Dockerfile. Rebuilding or solving the problem to update the
+container and re-upload to the registry is like finding candles and flashlights in a blackout, instead of having a
+generator that starts automatically as soon as the power goes away.
+
+(69)
+
+In the current problem scenario, the model is available on the Azure ML platform and previously registered. I didn’t
+have one already, so I quickly registered RoBERTa-SequenceClassification using Azure ML Studio. Click the Models
+section and then “Register model”
+
+In my case, I downloaded the model locally and need
+to upload it using the “Upload file” field.
+
+Now that the pretrained model is in Azure let’s reuse the same project from “Packaging for ML Models”. All the
+heavy lifting to perform the (local) live inferencing is done, so create a new GitHub repository and add the project
+contents except for the ONNX model. Remember, there is a size limit for files in GitHub, so it isn’t possible to add the
+ONNX model into the GitHub repo. Create a .gitigore file to ignore the model and prevent adding it by mistake:
+
+(70)
+
+After pushing the contents of the Git repository without the ONNX model, we are ready to start automating the model
+creation and delivery. To do this, we will use GitHub Actions, which allows us to create a continuous delivery
+workflow in a YAML file that gets triggered when configurable conditions are met. The idea is that whenever the
+repository has a change in the main branch, the platform will pull the registered model from Azure, create the
+container, and lastly, it will push it to a container registry. Start by creating a .github/workflows/ directory at the root of
+your project, and then add a main.yml that looks like this:
+
+
+name: Build and package RoBERTa-sequencing to Dockerhub
+on:
+ # Triggers the workflow on push or pull request events for the main branch
+ push:
+ branches: [ main ]
+ # Allows you to run this workflow manually from the Actions tab
+ workflow_dispatch:
+
+(81)
+
+The configuration so far doesn’t do anything other than defining the action. You can define any number of jobs, and in
+this case, we define a build job that will put everything together. Append the following to the main.yml file you
+previously created:
+
+jobs:
+ build:
+ runs-on: ubuntu-latest
+ steps:
+ - uses: actions/checkout@v2
+ - name: Authenticate with Azure
+ uses: azure/login@v1
+ with:
+ creds: ${{secrets.AZURE_CREDENTIALS}}
+ - name: set auto-install of extensions
+ run: az config set extension.use_dynamic_install=yes_without_prompt
+ - name: attach workspace
+ run: az ml folder attach -w "ml-ws" -g "practical-mlops"
+ - name: retrieve the model
+ run: az ml model download -t "." --model-id "roberta-sequence:1"
+ - name: build flask-app container
+ uses: docker/build-push-action@v2
+
+with:
+ context: ./
+ file: ./Dockerfile
+ push: false
+ tags: alfredodeza/flask-roberta:latest
+
+
+The first step is to
+check out the repository when the action triggers. Next, since the ONNX model doesn’t exist locally, we need to
+retrieve it from Azure, so we must authenticate using the Azure action. After authentication, the az tool is made
+available, and you must attach the folder for your workspace and group. Finally, the job can retrieve the model by its
+ID.
+
+(82)
+
+The workflow file is using AZURE_CREDENTIALS. These are used with a special syntax that allows the workflow to
+retrieve secrets configured for the repository. These credentials are the service principal information. If you aren’t
+familiar with a service principal, this is covered in the “Authentication”. You will need the service principal’s
+configuration that has access to the resources in the workspace and group where the model lives.
+
+Commit and push your changes to your repository and then head to the Actions tab. A new run is immediately
+scheduled and should start running in a few seconds.
+
+(83)
+
+These are the steps we have for packaging the RoBERTa-Sequence model:
+1. Check out the current branch of the repository.
+2. Authenticate to Azure Cloud.
+3. Configure auto-install of Azure CLI extensions.
+4. Attach the folder to interact with the workspace.
+5. Download the ONNX model.
+6. Build the container for the current repo.
+
+(84) Using Cloud Pipelines:
+
+A pipeline is
+nothing more than a set of steps (or instructions) that can achieve a specific objective like publishing a model into a
+production environment when run. For example, a pipeline with three steps to train a model can be as simple
+
+
+

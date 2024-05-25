@@ -1,0 +1,1050 @@
+worked in Analytics and Strategic Initiatives (RIL)-- oil and gas domain.
+
+[Worked on Predictive Modelling,Time Series Forecasting, Natural Language Processing, Deep learning, web scraping and MLOps (CI/CD pipeline for model deployment in
+ AML Studio(Azure Machine Learning Studio))]
+
+(1) Project: IRM Data Labelling Analysis
+
+* Business Value: 
+
+Reduce manual tagging efforts on data fields before migration by automatically predict IRM data tags
+
+* Approach:
+
+Raw Data had 6027 IRM Column records
+
+(A) Data Cleaning: Data transpose, Data Integration, Duplicate Removal, Stopwords removal, Removal of SPDI tags
+
+(B) Feature Creation: No specific feature creation was done for BSFD tags as most of the variables were numeric
+
+(C) Document Term Matrix: (i) Document Term Matrix creation (1812 columns) (ii) TFIDF Scoring (iii) Sparse matrix treatment
+
+[There is a coluom called "tag description" which is used as a feature vector for tfidf]
+
+(D) Sampling: (i) Random Sampling- divide data into train and test (ii) Maintaining Target variable representation
+
+(E) Prediction Modelling Stage: Algorithms Used: Random Forest (AUC: 0.75),XGBoost (AUC: 0.886 ),Linear SVC (AUC: 0.69),Naïve bayes (AUC: 0.6)
+
+(F) Best Model: XGBoost (AUC: 0.886 ): Used for Final prediction
+
+* Solution:
+
+Evaluated the confustion matrix for the model evaluation: Tags were: BSFD tags and Non-BSFD tags: get the precision and recall score.
+
+* Data Issues:
+
+(A) Lack of sufficient number of data points for model training (typically model training for text analytics happens on minimum tens of thousands of data)
+
+(B) The proportion of BSFD tags in the overall data is only around 6% which is very less for it to capture enough signals. (unbalanced data)
+
+(C) Hardly any SPDI tags available in the data for any kind of pattern mining (less no. of features so we have got irreducible error)  
+ 
+ 
+** Steps to connect to DataLake - Hive
+
+Hive is a data warehouse system which is used to analyze structured data. It is built on the top of Hadoop. It was developed by Facebook.
+Hive provides the functionality of reading, writing, and managing large datasets residing in distributed storage.   
+ 
+(A) In the jupyter terminal window, type the below command to initiate the Kerberos ticket
+kinit <AD-username>@IN.RIL.COM  
+
+(B) Python Code for connecting hive:
+
+from pyhive import hive
+import pandas as pd
+#####
+host_name = "sjdcpphdmn05.ril.com"
+port = 10500
+#####
+user = "hive"
+password = ""
+database="Sandbox_preprod_rp2"
+conn = hive.Connection(host=host_name, port=port, username=user,database=database, auth='KERBEROS',kerberos_service_name='hive')
+def hiveconnection_read(host_name, port, user,password, database, sql):
+    conn = hive.Connection(host=host_name, port=port, username=user,database=database, auth='KERBEROS',kerberos_service_name='hive')
+    cur = conn.cursor()
+    cur.execute(sql)
+    result = cur.fetchall()
+    return result
+
+database = 'Sandbox_preprod_rp2'
+sql ='show tables'
+read_output = hiveconnection_read(host_name, port, user,password, database, sql)
+df=pd.DataFrame(read_output)	
+
+
+########################################################################################################################################################
+
+(2) Project: MRN News Analytics(Sentiment Analyzer for Reuters News Articels)
+
+* Business Value: to remove the redudant data and extraction of useful information and find the polarity score/sentiment score
+
+* Steps:
+
+(A) Fetches the news story (news headline) from the story ID and returns the text from soup object through beautifulsoup library (create a BeautifulSoup object from our HTML news article)
+
+(B) Removes the head and tail part containing the News Source and reporter details like "Reporting by" or "Editing by" or "Copyright" or "CAUTIONARY NOTE" (searching using regex compile method)
+
+(C) Find out the sentiment for the given article using SentimentIntensityAnalyzer().polarity_scores(sentence) using vaderSentiment library
+
+(D) Fetch the news story and append polarity scores in the dataframe
+
+(E) As data preprocessing, using nltk and spacy, parts of speech tagging, noun phrase extractiona and named-entity recognision (like person name,location name, organistation name etc) are also done for news headlines data using nlp() function
+
+(F) we used a pre-trained sentiment analyzer VADER here since our data is unsupervised. We are choosing VADER here because  it works very well especially with social media text.
+    VADER gives a compound score for each paragraph. Score = -1 signifies negative news and score = 1 signifies positive news. Positive news should raise the index prices and vice versa.
+
+import nltk
+nltk.downloader.download('vader_lexicon')
+
+(G) After labeling the response variable using the sentiment score, fata has been supervised and now, we have used the random forest classifier for the 
+    classification of unseen data.
+	
+randomclassifier=RandomForestClassifier(n_estimators=200,criterion='entropy')
+randomclassifier.fit(traindataset,train['Label'])	
+	
+(H) Accuracy score=87.5% and also evaluated the confustion matrix
+
+Database used: postgresql
+
+
+###########################################################################################################################################################	
+
+
+(3) Project: Spot Freight Rate Forecasting
+
+* Business Problem: We had given an input dataset which is having many features/predictors to forecast the flat rates of different routes of crude vessels.
+
+* ML algorithms: ARIMA, ARIMAX, svr and tunned svr,decision trees,random forest,knn, lasso, linear model(lm)
+
+* Used difference features values also (till lag=4)
+
+* We have found the useful features and their respective coefficient values and whey they are significant or not by using p-values.
+
+* evaluated AICc,BIC,RSE, adjusted r squared, mape for each mentioned ml algorithms
+
+
+###########################################################################################################################################################
+
+(4) Project: GSPL Natural Gas Digitisation
+
+This is an automation project where a web crawler (bot) autmatically login to a GSPL website and based on the different values from the dropdown menus, it pulls
+the data within a given day interval and pushed that data into the MySQL database.
+
+
+
+* Selenium is used for the web scraping and sqlalchemy is used for the database connectivity.
+
+* chrome driver was used for this scraping work. driver.get() is used to access the web url and we have to inspect element from the webpages  to put ids in sendkeys() for
+usernames, passwords,  
+
+Code:
+
+(A) element_to_be_clickable(By.Xpath).click()
+(B) driver.find_elements(By.XPATH,xpath)
+(C) wait.until(EC.presence_of_element_located((By.XPATH, xpath)))  
+(D) driver.switch_to.window(handle) 
+
+* Some postprocessing was done to remove the junk data that is scraped from the website
+
+
+* PIL api was also used to pull the data with the use to request and json modules.
+
+* A logger is maintained to detect the bugs.
+
+* A windows application was created with the python code
+
+
+
+############################################################################################################################################################
+
+(5) Project: Freight Forward Analysis (FFA)
+
+[Freight means goods that are carried from one place to another by ship]
+[Forward curve is a function graph in finance that defines the price at which a contract for future delivery or payment can be concluded today]
+
+
+* We get a forward curve from an email from business which have different WS, $/MT and flat rate values for different routes.
+
+* dollar/mt=ws value*flat-rate/100
+
+* Based on the formulas from the formula sheet, we evaluate WS(world scale), LS(Lumsum) and $/MT values for various derived routes from the base routes 
+
+* Two Output excel sheets are generated for WS and dollar/mt and send to the business through mail(tried mailx and smtp in python).
+
+
+############################################################################################################################################################
+
+
+(6) Project: Vessel Tracker
+
+* There are lots of crudes and vessels are coming daily, so we have to track them like what would be the estimate time of arrival and what would be
+the temperature of a particular chemical which is shaping at that time and what would be the capacity. All these things come in an summarised report which
+we have to send out to business via en email.
+   
+  
+* Daily business receives many mails relatd to currently dispatched cargos and each mail contains an excel template which contains info about each cargo.
+
+* Since there are many reports coming in from each cargo daily or twice a day, a system was needed which send out a summarised form of all the important
+info required from all the vessels in one mail.
+
+* All the mails received from different cargos are read by the program. The excel template from each mail is extracted and necessary info is read and stored
+in SQL database.
+
+* RUNDECK is used for scheduling for running the program.  
+
+#############################################################################################################################################################
+
+(7) Project: Crude Indifference Usecase(MOPS data analytics)
+
+By using Marginal Value analysis and Absolute Value Analysis, we need to evaluate top 5,10,15 and bottom 5,10,15 constraints. It has included 4 phases:
+
+Marginal Value Analysis
+Absolute Value Analysis
+Outlier Detection
+Forced-in Forced out 
+
+for purchases, capacities and process-limits
+
+
+############################################################################################################################################################
+############################################################################################################################################################
+############################################################################################################################################################
+############################################################################################################################################################
+
+Technologies/Libraries: Julia,PySpark,SqlAlchemy,TensorFlow,PyTorch,openai,Langchain,Streamlit,PostgreSQL, MongoDB, Prolog
+
+Tools: VSCode, Jupyter,Spyder,RStudio
+
+Other Projects:
+
+###################################################################################################################################################
+
+1. Pneumonia detection using Deep Learning(VGG16 pretrained Model with weights as imagenet)
+
+* Classification problem
+* Divided the dataset into train and test x-ray images
+* Added Flatten layer (Dense layer can also be added with relu activation function)
+* Final output layer is dense layer with softmax activation function for prediction.
+* Model() function is used for creating model object
+* to find loss,optimization algo and accuracy: model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accuracy'])
+* to fit the model: model.fit_generator()
+
+
+###################################################################################################################################################
+
+2. Movie Recommender Systems
+
+* Recommender systems are of two types:
+  A. Content Based Filtering (depends on content) : Ex. Netflix
+  B. Collaborative Filtering: Ex. Amazon website
+Here, we show recommended movie for a particular movie based on rating from a dataset
+Here, we use the concept of correlation
+
+*  Now let's create a matrix that has the user ids on one access and the movie title on another axis.
+ Each cell will then consist of the rating the user gave to that movie. Note there will be a lot of NaN values,
+ because most people have not seen most of the movie
+ 
+* Find the average rationg and count for each movie title 
+
+* Suppose there are 2 movies A and B and A has 5 user ratings with 3,4,5,1,2 and B has 5 user ratings with 2,1,5,1,2 and now we find the correlation coefficient between these 2 vectors
+
+
+* We find the correlation between high rated movie titles (criteria:each movie should have atleast 100 ratings by the user)
+
+
+
+###################################################################################################################################################
+
+3. Artificial Neural Network(ANN) for Customer's Exit Prediction from Bank
+
+* Here we will predict whether customers of a bank will leave a bank in future or not based on the information
+  credit score or number of products taken by the bank
+  we will use a classification algorithm to know whether a customer leave a bank or not in future or not
+  
+* convert categorical feature "gender" and "Geography" into dummy variables using get_dummies() 
+* do the feature scaling using standardscaler()
+* Make ANN and Adding the input layer and the first hidden layer
+
+from keras.models import Sequential
+from keras.layers import Dense
+
+# Initialising the ANN
+classifier = Sequential()  
+
+
+###################################################################################################################################################
+
+4. DBScan Clustering
+
+* Using the elbow method to find the optimal number of clusters
+
+from sklearn.cluster import DBSCAN
+dbscan=DBSCAN(eps=3,min_samples=4)
+
+* Fitting the model
+
+model=dbscan.fit(X)
+
+labels=model.labels_
+
+
+###################################################################################################################################################
+
+5. Predicting Heart Disease using Machine Learning
+
+* I will be using Machine Learning to predict whether any person is suffering from heart disease
+
+* Used KNN, Decision Tree and Random Forest Classifier
+
+* Check Balancd and Unbalanced dataset. It's always a good practice to work with a dataset where the target classes are of approximately equal size. 
+  Thus, let's check for the same.
+
+
+###################################################################################################################################################
+
+5.Credit Card Fraud Detection using Machine Learning from Kaggle
+
+* To detect fraud by using credit card so that customers should not be extra charged
+
+* It is important that credit card companies are able to recognize fraudulent credit card transactions
+ so that customers are not charged for items that they did not purchase.
+ 
+* the given dataset was highly unbalanced 
+
+* Feature "Class" is a response variable. When it is 1, it means fraud otherwise not fraud.
+
+* Given the class imbalance ratio, we recommend measuring the accuracy using the Area Under the Precision-Recall Curve (AUPRC).
+ Confusion matrix accuracy is not meaningful for unbalanced classification. 
+  
+* ML Algorithm: 
+
+
+(i) Isolation Forest Algorithm
+
+One of the newest techniques to detect anomalies is called Isolation Forests.
+The algorithm is based on the fact that anomalies are data points that are few and different.
+As a result of these properties, anomalies are susceptible to a mechanism called isolation.  
+
+This method is an algorithm with a low linear time complexity and a small memory requirement.
+It builds a good performing model with a small number of trees using small sub-samples of fixed size, regardless of the size of a data set.
+
+Typical machine learning methods tend to work better when the patterns they try to learn are balanced, meaning the same amount of good and bad behaviors are present in the dataset.
+
+How Isolation Forests Work The Isolation Forest algorithm isolates observations by randomly selecting a feature and
+ then randomly selecting a split value between the maximum and minimum values of the selected feature. The logic argument goes:
+ isolating anomaly observations is easier because only a few conditions are needed to separate those cases from the normal observations.
+ On the other hand, isolating normal observations require more conditions.
+Therefore, an anomaly score can be calculated as the number of conditions required to separate a given observation. 
+
+The way that the algorithm constructs the separation is by first creating isolation trees, or random decision trees.
+Then, the score is calculated as the path length to isolate the observation.
+
+(ii) Local Outlier Factor(LOF) Algorithm
+
+The LOF algorithm is an unsupervised outlier detection method which computes the local density deviation of a given data point with respect to its neighbors.
+It considers as outlier samples that have a substantially lower density than their neighbors.
+
+The number of neighbors considered, (parameter n_neighbors) is typically chosen
+
+1) greater than the minimum number of objects a cluster has to contain, so that other objects can be local outliers relative to this cluster, and
+2) smaller than the maximum number of close by objects that can potentially be local outliers.
+In practice, such informations are generally not available, and taking n_neighbors=20 appears to work well in general
+
+* Isolation Forest has a 99.74% more accurate than LOF of 99.65% and SVM of 70.09
+
+###################################################################################################################################################
+
+6. Chat Competion API using openai python library
+
+response=openai.Completion.create(model='text-curie-001',prompt='Act as an Assistant and Explain Machine Learning to a 5 years old ?',
+                                  max_tokens=25,
+                                  temperature=0.6,
+                                  n=5)
+response
+
+print(response['choices'][0]['text'])
+
+#####################################################################################################################################################
+
+7. Langchain
+
+from langchain.llms import OpenAI
+from langchain import PromptTemplate
+import streamlit as st
+from langchain.chains import LLMChain,SimpleSequentialChain,SequentialChain
+from langchain.memory import ConversationBufferMemory
+
+st.title('Celebrity Search Results')
+input_text=st.text_input("Search the topic u want")
+
+## Prompt Templates
+
+first_input_prompt=PromptTemplate(
+    input_variables=['name'],
+    template="Tell me about celebrity {name}"
+)
+
+# Memory
+
+person_memory = ConversationBufferMemory(input_key='name', memory_key='chat_history')
+dob_memory = ConversationBufferMemory(input_key='person', memory_key='chat_history')
+descr_memory = ConversationBufferMemory(input_key='dob', memory_key='description_history')
+
+
+## OPENAI LLMS
+llm=OpenAI(temperature=0.8)
+chain=LLMChain(llm= llm,prompt=first_input_prompt,verbose=True,output_key='person',memory=person_memory)
+
+
+parent_chain=SequentialChain(chains=[chain],input_variables=['name'],output_variables=['person','dob','description'],verbose=True)
+
+if input_text:
+    st.write(parent_chain({'name':input_text}))
+    with st.expander('Person Name'): 
+        st.info(person_memory.buffer)
+
+    with st.expander('Major Events'): 
+        st.info(descr_memory.buffer)
+		
+############################################################################################################################################
+
+7. Prompt Engineering
+
+from langchain.llms import OpenAI
+from langchain.chains import LLMChain
+
+llm=OpenAI(temperature=0.7)
+
+## Language Translation
+
+from langchain import PromptTemplate
+
+template='''In an easy way translate the following sentence '{sentence}' into {target_language}'''
+language_prompt = PromptTemplate(
+    input_variables=["sentence",'target_language'],
+    template=template,
+)
+language_prompt.format(sentence="Does Soumya still loves me ?",target_language='hindi')
+
+chain2=LLMChain(llm=llm,prompt=language_prompt)
+
+chain2({'sentence':"Does Soumya still loves me ?",'target_language':'hindi'})
+
+{'sentence': 'Does Soumya still loves me ?',
+ 'target_language': 'hindi',
+ 'text': '\n\nक्या सौम्या अभी भी मुझे प्यार करती है?'}	
+
+############################################################################################################################################
+
+8. Julia Fundamentals
+
+* using Pkg
+* typeof("ankit") -- String
+* typeof('ankit') -- error: syntax: character literal contains multiple characters
+* print("ankit") -- ankit
+* print("Ankit")
+  println("ankit")
+
+-- Ankitankit
+
+* println("ankit")
+  print("Ankit")
+
+-- ankit
+   Ankit
+
+* 10**2 -- syntax: use "x^y" instead of "x**y" for exponentiation, and "x..." instead of "**x" for splatting.
+
+* string(2) -- "2"
+
+* firstname="ankit"
+  lastname="gupta"
+  dob=1994
+  print("My first name is $firstname and last name is $lastname and my age is $(2023-dob)")  
+
+-- My first name is ankit and last name is gupta and my age is 29
+
+* Int('N') -- 78
+
+* Char(78) -- 'N'
+
+* 'K'+1 -- 'L'
+
+* # string slicing
+  str="Ankit"
+  str[begin]
+
+-- 'A': ASCII/Unicode U+0041 (category Lu: Letter, uppercase)
+
+* str[end] -- 't': ASCII/Unicode U+0074 (category Ll: Letter, lowercase)
+
+* str[0] -- BoundsError: attempt to access 5-codeunit String at index [0]
+
+* str[1] -- 'A'
+
+* length(str) -- 5
+
+* str[1:3] -- "Ank"
+
+* firstindex(str) -- 1
+
+* lastindex(str) -- 5
+
+* str[end÷2] -- 'n'
+
+* str[end-2] -- 'k'
+
+* SubString(str,1,3) -- "Ank"
+
+#################################################################################################################################################
+
+9. PySpark Tutorial
+
+* import pyspark
+  # creation of pyspark session
+  from pyspark.sql import SparkSession  
+  spark=SparkSession.builder.appName('Practice').getOrCreate()
+  
+* df_pyspark=spark.read.csv('airline_passengers.csv')
+
+* df_pyspark=spark.read.option('header','true').csv('airline_passengers.csv')
+
+* df_pyspark.show() # show the dataframe
+
+* type(df_pyspark) -- pyspark.sql.dataframe.DataFrame
+
+* df_pyspark.head(3)
+
+[Row(Month='1949-01', Thousands of Passengers='112'),
+ Row(Month='1949-02', Thousands of Passengers='118'),
+ Row(Month='1949-03', Thousands of Passengers='132')]
+
+* df_pyspark.printSchema()
+
+root
+ |-- Month: string (nullable = true)
+ |-- Thousands of Passengers: string (nullable = true)
+
+* df_pyspark=spark.read.option('header','true').csv('test.csv',inferSchema=True)
+  df_pyspark.printSchema()
+  
+root
+ |-- Name: string (nullable = true)
+ |-- age: integer (nullable = true)
+ |-- Experience: integer (nullable = true)
+
+* df_pyspark.columns
+
+['Name', 'age', 'Experience']
+
+*  df_pyspark.head(2)
+
+[Row(Name='Ankit', age=29, Experience=1),
+ Row(Name='Akshat', age=28, Experience=2)]
+ 
+* Name=df_pyspark.select('Name')
+  Name.show()
+  
++------+
+|  Name|
++------+
+| Ankit|
+|Akshat|
+| Arpit|
++------+
+
+* Name_Exp=df_pyspark.select(['Name','Experience'])
+  Name_Exp.show()
+
++------+----------+
+|  Name|Experience|
++------+----------+
+| Ankit|         1|
+|Akshat|         2|
+| Arpit|         3|
++------+----------+
+
+* df_pyspark.dtypes[1]
+
+('age', 'int')
+
+* df_pyspark.describe().show()
+
++-------+------+----+----------+
+|summary|  Name| age|Experience|
++-------+------+----+----------+
+|  count|     3|   3|         3|
+|   mean|  null|28.0|       2.0|
+| stddev|  null| 1.0|       1.0|
+|    min|Akshat|  27|         1|
+|    max| Arpit|  29|         3|
++-------+------+----+----------+
+
+* from pyspark.sql.functions import col, lit
+  df_pyspark=df_pyspark.withColumn('Location',lit('Kanpur'))
+  df_pyspark.show()
+  
++------+---+----------+--------+
+|  Name|age|Experience|Location|
++------+---+----------+--------+
+| Ankit| 29|         1|  Kanpur|
+|Akshat| 28|         2|  Kanpur|
+| Arpit| 27|         3|  Kanpur|
++------+---+----------+--------+
+
+* df_pyspark=df_pyspark.drop('Experience')
+  df_pyspark.show()
+  
++------+---+--------+
+|  Name|age|Location|
++------+---+--------+
+| Ankit| 29|  Kanpur|
+|Akshat| 28|  Kanpur|
+| Arpit| 27|  Kanpur|
++------+---+--------+
+
+* df_pyspark=df_pyspark.withColumnRenamed('Name','New Name')
+  df_pyspark.show()
+  
++--------+---+--------+
+|New Name|age|Location|
++--------+---+--------+
+|   Ankit| 29|  Kanpur|
+|  Akshat| 28|  Kanpur|
+|   Arpit| 27|  Kanpur|
++--------+---+--------+
+
+* df_pyspark.na.drop().show()
+
+* ### any==how
+  df_pyspark.na.drop(how="any").show() 
+  df_pyspark.na.drop(how="all").show()
+
+* ##threshold
+  df_pyspark.na.drop(how="any",thresh=2).show()
+  ## it says for rows with null values, at least two non null values values should be present in that row
+  ## and other rows with null values will be deleted  
+  
+* ## Subset
+  df_pyspark.na.drop(how="any",subset=['Experience']).show()
+  # if exprience column has null values, it removes those rows  
+  
+* ## Filling Missing values
+  df_pyspark.na.fill('Missing Values','Experience').show()
+  # Experience column is not of integer type, so "missing values" will not be replaced for null values 
+  # we need to make inderschema=false then it would work  
+  
+* df_pyspark=spark.read.csv('test2.csv',header=True,inferSchema=False)
+  df_pyspark.na.fill('Missing Values','Experience').show()  
+  
+* df_pyspark=spark.read.csv('test2.csv',header=True,inferSchema=True)
+  imputer = Imputer(
+    inputCols=['age', 'Experience', 'Salary'], 
+    outputCols=["{}_imputed".format(c) for c in ['age', 'Experience', 'Salary']]
+    ).setStrategy("median")
+
+* # Add imputation cols to df
+  imputer.fit(df_pyspark).transform(df_pyspark).show()	
+ 
+* ### Filter Operations
+
+  ### Salary of people less than or equal to 20000
+  df_pyspark.filter("Salary <= 20000").show() 
+  
+* df_pyspark.filter("Salary <= 20000").select(['Name','age']).show()
+
+* df_pyspark.filter((df_pyspark['Salary']<=20000)&(df_pyspark['Salary']>=15000)).show()
+
+* df_pyspark.filter(~(df_pyspark['Salary']<=20000)).show()
+
+* ## Groupby
+
+  df_pyspark.groupBy('Name').sum().show()  
+  
+* df_pyspark.agg({'Salary':'sum'}).show()
+
++-----------+
+|sum(Salary)|
++-----------+
+|      73000|
++-----------+
+
+* from pyspark.ml.feature import VectorAssembler
+  featureassembler=VectorAssembler(inputCols=["age","Experience"],outputCol="Independent Features") 
+  output=featureassembler.transform(training)
+  output.show()
+  
++---------+---+----------+------+--------------------+
+|     Name|age|Experience|Salary|Independent Features|
++---------+---+----------+------+--------------------+
+|    Krish| 31|        10| 30000|         [31.0,10.0]|
+|Sudhanshu| 30|         8| 25000|          [30.0,8.0]|
+|    Sunny| 29|         4| 20000|          [29.0,4.0]|
+|     Paul| 24|         3| 20000|          [24.0,3.0]|
+|   Harsha| 21|         1| 15000|          [21.0,1.0]|
+|  Shubham| 23|         2| 18000|          [23.0,2.0]|
++---------+---+----------+------+--------------------+
+
+* finalized_data=output.select("Independent Features","Salary")
+
+* from pyspark.ml.regression import LinearRegression
+  ## train test split
+  train_data,test_data=finalized_data.randomSplit([0.75,0.25])
+  regressor=LinearRegression(featuresCol='Independent Features',labelCol='Salary')
+  regressor=regressor.fit(train_data)
+
+* ## Coefficients
+  regressor.coefficients
+
+* ## Intercepts
+  regressor.intercept  
+  
+* ## Prediction
+  pred_results=regressor.evaluate(test_data)
+
+* pred_results.predictions.show()
+
++--------------------+------+-----------------+
+|Independent Features|Salary|       prediction|
++--------------------+------+-----------------+
+|          [30.0,8.0]| 25000|26903.59520639148|
++--------------------+------+-----------------+
+
+* pred_results.meanAbsoluteError,pred_results.meanSquaredError
+
+(1903.595206391481, 3623674.709796625)
+
+#################################################################################################################################################
+
+10. MongoDB Tutorial (in Python)
+
+* import pymongo
+  client=pymongo.MongoClient("mongodb://127.0.0.1:27017/")
+  mydb=client['New_Employee']
+  information=mydb.NewEmployeeInformation
+  record={
+    "FirstName":"Sudeshna",
+    "LastName":"Chaudhuri",
+    "Department":"Texas Instruments"
+}
+  information.insert_one(record)
+  record1=[
+    {
+    "FirstName":"Akshat",
+    "LastName":"Uniyal",
+    "Location":"Dehradoon"
+  },
+  {
+    "FirstName":"Sumiran",
+    "LastName":"Agarwal",
+    "Company":"ECIL"
+  },
+  ]
+
+  information.insert_many(record1)
+
+* empinfo=mydb.NewEmployeeInformation
+  record={
+        'firstname':'Soumya',
+        'lastname':'Jain',
+        'department':'Analytics',
+        'qualification':'BE',
+        'age':27
+        }
+  empinfo.insert_one(record)
+  records=[{
+        'firstname':'John',
+        'lastname':'Doe',
+        'department':'Analytics',
+        'qualification':'statistics',
+        'age':35
+        
+        },
+         {
+        'firstname':'John ',
+        'lastname':'Smith',
+        'department':'Analytics',
+        'qualification':'masters',
+        'age':30
+        
+        },
+        {
+        'firstname':'Manish',
+        'lastname':'Sen',
+        'department':'Analytics',
+        'qualification':'phd',
+        'age':34
+        
+        },
+        {
+        'firstname':'Ram',
+        'lastname':'Singh',
+        'department':'Analytics',
+        'qualification':'master',
+        'age':32
+        
+        }]
+  empinfo.insert_many(records)
+  empinfo.find_one()
+  empinfo.find()
+  for record in empinfo.find():
+    print(record)
+  
+--
+
+{'_id': ObjectId('64f1746be1817de64ada182f'), 'FirstName': 'Sudeshna', 'LastName': 'Chaudhuri', 'Department': 'Texas Instruments'}
+{'_id': ObjectId('64f17537e1817de64ada1830'), 'FirstName': 'Akshat', 'LastName': 'Uniyal', 'Location': 'Dehradoon'}
+{'_id': ObjectId('64f17537e1817de64ada1831'), 'FirstName': 'Sumiran', 'LastName': 'Agarwal', 'Company': 'ECIL'}
+{'_id': ObjectId('64f1b0e0199b72a52e28280c'), 'firstname': 'Soumya', 'lastname': 'Jain', 'department': 'Analytics', 'qualification': 'BE', 'age': 27}
+{'_id': ObjectId('64f1b173199b72a52e28280d'), 'firstname': 'John', 'lastname': 'Doe', 'department': 'Analytics', 'qualification': 'statistics', 'age': 35}
+{'_id': ObjectId('64f1b173199b72a52e28280e'), 'firstname': 'John ', 'lastname': 'Smith', 'department': 'Analytics', 'qualification': 'masters', 'age': 30}
+{'_id': ObjectId('64f1b173199b72a52e28280f'), 'firstname': 'Manish', 'lastname': 'Sen', 'department': 'Analytics', 'qualification': 'phd', 'age': 34}
+{'_id': ObjectId('64f1b173199b72a52e282810'), 'firstname': 'Ram', 'lastname': 'Singh', 'department': 'Analytics', 'qualification': 'master', 'age': 32}
+
+* ## Query the json document based on equality condition
+  for record in empinfo.find({'firstname':'Soumya'}):
+      print(record)  
+--
+
+{'_id': ObjectId('64f1b0e0199b72a52e28280c'), 'firstname': 'Soumya', 'lastname': 'Jain', 'department': 'Analytics', 'qualification': 'BE', 'age': 27}
+
+* ## Query documents using query operators($in,$lt,$gt)
+  for record in empinfo.find({'qualification':{'$in':['master','phd']}}):
+      print(record)  
+  
+--
+
+{'_id': ObjectId('64f1b173199b72a52e28280f'), 'firstname': 'Manish', 'lastname': 'Sen', 'department': 'Analytics', 'qualification': 'phd', 'age': 34}
+{'_id': ObjectId('64f1b173199b72a52e282810'), 'firstname': 'Ram', 'lastname': 'Singh', 'department': 'Analytics', 'qualification': 'master', 'age': 32}
+
+* # And and query operators
+  for record in empinfo.find({'qualification':'master','age':{'$lt':35}}):
+      print(record['firstname'])  
+
+-- Ram
+
+
+	  
+* # OR operator
+  for record in empinfo.find({'$or':[{'firstname':'Soumya'},{'FirstName':'Sudeshna'}]}):
+      print(record)	  
+	
+--
+
+{'_id': ObjectId('64f1746be1817de64ada182f'), 'FirstName': 'Sudeshna', 'LastName': 'Chaudhuri', 'Department': 'Texas Instruments'}
+{'_id': ObjectId('64f1b0e0199b72a52e28280c'), 'firstname': 'Soumya', 'lastname': 'Jain', 'department': 'Analytics', 'qualification': 'BE', 'age': 27} 	
+	
+* # AND operator
+  for record in empinfo.find({'$and':[{'FirstName':'Sudeshna'},{'LastName':'Chaudhuri'}]}):
+      print(record)	  
+	  
+--
+
+{'_id': ObjectId('64f1746be1817de64ada182f'), 'FirstName': 'Sudeshna', 'LastName': 'Chaudhuri', 'Department': 'Texas Instruments'}
+
+* inventory=mydb.inventory
+  ## nested json documents
+inventory.insert_many( [
+   { 'item': "journal", 'qty': 25, 'size': { 'h': 14, 'w': 21,'uom': "cm" }, 'status': "A" },
+   { 'item': "notebook", 'qty': 50,'size': { 'h': 8.5, 'w': 11,'uom': "in" },'status': "A" },
+   { 'item': "paper", 'qty': 100, 'size': { 'h': 8.5, 'w': 11,'uom': "in" },'status': "D" },
+   { 'item': "planner", 'qty': 75, 'size': { 'h': 22.85,'w': 30,'uom': "cm" },'status': "D" },
+   { 'item': "postcard", 'qty': 45, 'size': { 'h': 10, 'w': 15.25,'uom': "cm" },'status': "A" }
+]);
+
+* for records in inventory.find({'size': { 'h': 14, 'w': 21,'uom': "cm" }}):
+    print(records)
+
+--
+
+{'_id': ObjectId('64f1cdb1199b72a52e282811'), 'item': 'journal', 'qty': 25, 'size': {'h': 14, 'w': 21, 'uom': 'cm'}, 'status': 'A'}
+
+* ## Update
+
+inventory.update_one(
+{"item":"sketch pad"},
+{"$set":{"size.uom":"m","status":"P"},
+"$currentDate":{"lastModified":True}}
+)
+
+inventory.update_many(
+    {"qty": {"$lt": 50}},
+    {"$set": {"size.uom": "in", "status": "P"},
+     "$currentDate": {"lastModified": True}})
+
+inventory.replace_one(
+    {"item": "paper"},
+    {"item": "paper",
+     "instock": [
+         {"warehouse": "A", "qty": 60},
+         {"warehouse": "B", "qty": 40}]})
+
+* 
+# Access database  
+mydatabase = client['Students']  
+    
+# Access collection of the database  
+collection=mydatabase['studentscores']  
+data = [ 
+    {"user":"Krish", "subject":"Database", "score":80}, 
+    {"user":"Amit",  "subject":"JavaScript", "score":90}, 
+    {"user":"Amit",  "title":"Database", "score":85}, 
+    {"user":"Krish",  "title":"JavaScript", "score":75}, 
+    {"user":"Amit",  "title":"Data Science", "score":60},
+    {"user":"Krish",  "title":"Data Science", "score":95}] 
+  
+collection.insert_many(data)		 
+
+*
+
+### Find Amit And Krish Total Subjects
+agg_result= collection.aggregate( 
+    [{ 
+    "$group" :  
+        {"_id" : "$user",  
+         "Total Records" : {"$sum" : 1} 
+         }} 
+    ]) 
+	
+* for i in agg_result: 
+     print(i)	
+	 
+--
+  
+{'_id': 'Krish', 'Total Records': 3}
+{'_id': 'Amit', 'Total Records': 3}
+
+* ### Calculating the total score based on user
+agg_result= collection.aggregate( 
+    [{ 
+    "$group" :  
+        {"_id" : "$user",  
+         "Total Marks" : {"$sum" :"$score"} 
+         }} 
+    ]) 
+for i in agg_result: 
+    print(i)
+
+--
+
+{'_id': 'Amit', 'Total Marks': 235}
+{'_id': 'Krish', 'Total Marks': 250}
+
+*  	### Calculating the average score based on user
+agg_result=collection.aggregate([
+   {
+      "$group": {
+         "_id": '$user',
+         "StudentScoreAverage": {
+            "$avg": "$score"
+         }
+      }
+   }
+])
+for i in agg_result: 
+    print(i)
+	
+--
+
+{'_id': 'Krish', 'StudentScoreAverage': 83.33333333333333}
+{'_id': 'Amit', 'StudentScoreAverage': 78.33333333333333}
+
+######################################################################################################################################
+  
+  
+11. Postgresql Tutorial
+
+* 
+
+select version();
+select 5-3;
+select * from movies;
+drop table students;
+insert into movies (movie_id,movie_name,movie_genre,imdb_ratings)
+values(101,'vertigo','Mystery Romance',8.3),
+(102,'The Shashank Redemption','Crime fiction',9.3)
+
+update movies
+set movie_genre='Crime fiction,Drama'
+where movie_id=102
+
+delete from movies
+where movie_id=101
+
+create table employess (emp_id int not null primary key,
+					   emp_name varchar(40),email varchar(40),gender varchar(10),
+					   department varchar(40),address varchar(40),salary real)
+					   
+select * from employess   
+
+alter table employess
+rename column address to country
+
+select * from employess  order by salary desc limit 1
+select * from employess  order by salary desc limit 1 offset 1
+select * from employess  order by salary desc fetch first 1 row only
+select * from employess  order by salary desc offset 1 row fetch first 1 row only
+select emp_name,email from employess where emp_name like 'S%'
+select emp_name,email from employess where emp_name like '%my%'
+select emp_name,email from employess where emp_name like '_o%'
+
+* 
+
+-- case expression in postgresql
+
+select department,country,salary,
+case
+when salary>1 and salary<15
+then 'Low Salary'
+when salary>15
+then 'high Salary'
+end as salary_range
+from employess
+order by salary desc
+
+* /* sql 
+functions */
+
+select abs(-100)
+select greatest(1,1.4,2,6) 
+select least(1,1.4,2,6) 
+select mod(12222,2)
+select power(2,3)
+select sqrt(100)
+select sin(90)
+select floor(90.3)
+select ceil(90.3)
+
+select char_length('Soumya is my love')
+
+select concat('soumya ','is ','my love')
+
+select left('Soumya Jain',6)
+select right('Soumya Jain',5)
+select repeat('Soumi',5)
+select reverse('soumi')
+
+* 
+
+-- User defined functions
+
+create or replace function
+count_emails()
+returns integer as $total_emails$
+declare 
+	total_emails integer;
+begin
+	select count(email) into total_emails
+	from employess;
+	return total_emails;
+end;
+$total_emails$ language plpgsql;
+
+select count_emails()
+
+
+################################################################################################################################################
+
+12. OpenCV Tutorial
+  

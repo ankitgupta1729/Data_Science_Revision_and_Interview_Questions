@@ -1,0 +1,974 @@
+(1) The Python interpreter runs a program by executing one statement at a time
+
+(2) To exit the Python interpreter and return to the command prompt, you can either type exit() or press Ctrl-D.
+
+(3) IPython is an enhanced Python interpreter.
+
+Jupyter notebooks is a web-based code notebooks originally created within the IPython project.
+
+(4) When you use the %run command, IPython executes the code in the specified file in the same process, 
+
+enabling you to explore the results interactively when it’s done:
+
+%run helloWorld.py
+
+If a Python script expects command-line arguments (to be found in sys.argv), these can be passed after the file path as though run on the command line.
+
+(5) The default IPython prompt adopts the numbered In [2]: style compared with the standard >>> prompt.
+
+(6) gaussian random number generation:
+
+{i:np.random.randn()  for i in range(15)}
+
+(7) One of the major components of the Jupyter project is the notebook.
+
+The Jupyter notebook interacts with kernels, which are implementations of the Jupyter interactive computing protocol 
+in any number of programming languages. Python’s Jupyter kernel uses the IPython system for its underlying behavior. 
+To start up Jupyter, run the command jupyter notebook in a terminal.
+
+(8) On many platforms, Jupyter will automatically open up in your default web browser 
+(unless you start it with --no-browser)
+
+(9) Many people use Jupyter as a local computing environment, but it can also be deployed on servers and accessed remotely.
+
+(10) press tab to auto-complete. Using a question mark (?) before or 
+     after a variable will display some general information about the object (object introspection): eg: ?print (or) print?
+
+(11) def fun(a,b):
+       return a+b
+
+fun?? will show the source code
+
+(12) Searching in IPython Namespace:
+
+import numpy as np
+np.*load*?
+
+will show np.__loader__ , np.load,  np.loadtxt
+
+(13) Command-line arguments:
+
+diff.py:
+
+import sys
+def diff():
+    print("name of the file is %s and total arguments are: %d" %(sys.argv[0],len(sys.argv)))
+    return int(sys.argv[1])-int(sys.argv[2])
+r=diff()
+print(r)
+
+%run diff.py 5 3
+
+-- name of the file is diff.py and total arguments are: 3
+   2
+
+(14)
+
+Should you wish to give a script access to variables already defined in the interactive IPython namespace, use %run -i instead of plain %run.
+
+In the Jupyter notebook, you may also use the related %load magic function, which imports a script into a code cell:
+# %load ipython_script_test.py
+
+(15)
+
+# copy some code and open the cmd and type ipython and then type the below command
+# %paste 
+
+With the %cpaste block, you have the freedom to paste as much code as you like before executing it.
+
+(16)
+
+IPython’s special commands (which are not built into Python itself) are known as “magic” commands.
+
+A magic command is any command prefixed by the percent symbol %. For example, you can check the 
+execution time of any Python statement, such as a matrix multiplication, using the %timeit magic function.
+
+a= np.random.randn(2,2)
+a.shape
+%timeit np.dot(a,a)
+
+-- 1.3 µs ± 16.1 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
+
+It means on average it takes 1.3 micro seconds and it has taken best 7 runs out of 1000000 runs.
+
+
+(17)
+  
+
+Magic functions can be used by default without the percent sign, as long as no variable is defined with the same name as the magic function in question. 
+This feature is called automagic and can be enabled or disabled with %automagic.
+
+So, %pwd and pwd are same unless pwd is not defined as a variable.
+
+
+foo = %pwd
+foo
+
+type %quickref and %magic for documentation
+
+type ipython in anaconda prompt, ipython shell will be open and will look like jupyter notebook
+
+(18) Matplotlib Integration:
+
+The %matplotlib magic function configures its integration with the IPython shell or Jupyter notebook. This is important, as otherwise 
+plots you create will either not appear (notebook) or take control of the session until closed (shell).
+
+
+(19) In the IPython shell, running %matplotlib sets up the integration 
+
+%matplotlib
+import matplotlib.pyplot as plt
+plt.plot(np.random.randn(50).cumsum())
+
+In Jupyter, the command is a little different
+
+%matplotlib inline
+import matplotlib.pyplot as plt
+plt.plot(np.random.randn(50).cumsum())
+
+(20) plt.plot([1,4,3],[1,2,3])
+
+will make plot for x=1,y=1 and x=4,y=2 and x=3,y=3
+
+(21) plt.plot([1,2,3])
+
+will make plot for x=0,y=1 and x=1,y=2 and x=2,y=3
+
+(22)
+      
+Every number, string, data structure, function, class, module, and so on exists in the Python interpreter in its own “box,” which is referred to as a Python object. 
+Each object has an associated type (e.g., string or function) and internal data. 
+
+When assigning a variable (or name) in Python, you are creating a reference to the object on the righthand side of the equals sign.
+
+Assignment is also referred to as binding, as we are binding a name to an object. 
+Variable names that have been assigned may occasionally be referred to as bound variables.
+
+(23)
+
+In contrast with many compiled languages, such as Java and C++, object references in Python have no type associated with them.
+Variables are names for objects within a particular namespace; the type information is stored in the object itself.
+
+a = 5
+type(a)
+
+(24)
+
+Python is considered a strongly typed language, which means that every object has a specific type (or class), 
+and implicit conversions will occur only in certain obvious circumstances, such as the following:
+
+a = 4.5
+b = 2
+isinstance(a, (int, float)) -- True
+a/b
+
+(25)
+
+
+Objects in Python typically have both attributes (other Python objects stored “inside” the object) and methods 
+(functions associated with an object that can have access to the object’s internal data). 
+Both of them are accessed via the syntax obj.attribute_name:
+
+getattr(a, 'split')
+-- <function str.split>
+
+(26)
+
+if iter('ankit'):
+    print('True')
+
+-- True
+
+(27)
+
+Floating-point numbers are represented with the Python float type. Under the hood each one is a double-precision (64-bit) value.
+
+fval2 = 6.78e-5
+
+(28)
+
+a='''
+I like
+kiio
+soumi
+'''
+
+a.count('\n')
+--4
+
+a.replace('like','love')
+a
+
+-- '\nI like\nkiio\nsoumi\n'
+
+Strings are a sequence of Unicode characters(ASCII and non-ASCII text) and therefore can be treated like other sequences, such as lists and tuples.
+
+(29)
+
+If you have a string with a lot of backslashes and no special characters, you might find this a bit annoying. 
+Fortunately you can preface the leading quote of the string with r (raw text), which means that the characters should be interpreted as is:
+
+s = r'this\has\no\special\characters'
+s
+
+-- 'this\\has\\no\\special\\characters'
+
+(30)
+
+s='ankit'
+k='kiio'
+su='summi'
+
+'{0} likes {2} and {1}'.format(s,k,su)
+
+-- 'ankit likes summi and kiio'
+
+(31)
+
+We can convert this Unicode string to its UTF-8 bytes representation using the encode method:
+
+'español'.encode('utf-8')
+
+-- b'espa\xc3\xb1ol'
+
+-- type is byte
+
+'español'.encode('utf-8').decode('utf-8')
+
+-- 'español'
+
+a=b'byte object'
+a.decode()
+
+-- 'byte object'
+
+(32)
+
+from datetime import datetime,date,time
+print(datetime.today())
+print(datetime.today().day)
+print(datetime.today().month)
+print(datetime.today().year)
+print(datetime.today().time())
+print(datetime.today().hour)
+print(datetime.today().minute)
+print(datetime.today().second)
+print(datetime.today().astimezone())
+
+-- 2024-05-08 21:30:09.144240
+8
+5
+2024
+21:30:09.145243
+21
+30
+9
+2024-05-08 21:30:09.146245+05:30
+
+(33)
+
+datetime.today().strftime('%d-%m-%Y')
+
+-- '08-05-2024'
+
+datetime.strptime('08-05-2024','%d-%m-%Y')
+
+-- datetime.datetime(2024, 5, 8, 0, 0)
+
+(f= format and p = parsed)
+
+datetime.strptime('08-05-2024','%d-%m-%Y').replace(minute=0,second=0)
+
+-- datetime.datetime(2024, 5, 8, 0, 0)
+
+(34)
+
+The difference of two datetime objects produces a datetime.timedelta type:
+
+datetime.strptime('08-05-2024','%d-%m-%Y').replace(minute=0,second=0) - datetime.today()
+
+-- datetime.timedelta(days=-1, seconds=8362, microseconds=967908)
+
+
+(35) The range function returns an iterator that yields a sequence of evenly spaced integers:
+
+range(10)
+
+-- range(0, 10)
+
+list(range(10))
+
+-- [5, 4, 3, 2, 1]
+
+TO CHECK whether something is iterable or not, take list on it and check whether it is list or not.
+
+(36) Ternary expressions
+
+x = 5
+'Non-negative' if x >= 0 else 'Negative'
+
+-- 'Non-negative'
+
+---------------------------------------------------------------------------------------------------------------
+
+(37) A tuple is a fixed-length, immutable sequence of Python objects. The easiest way to create one is with a comma-separated sequence of values.
+
+tup = 4, 5, 6
+
+Elements can be accessed with square brackets [] as with most other sequence types.
+
+tup[0]
+
+(38) If an object inside a tuple is mutable, such as a list, you can modify it in-place:
+
+tup=({1,2},{'ankit':'kiio','summi':'ankit'},(1,2,3),[None,'ankit'])
+tup[0][1]='ankit'
+
+-- TypeError: 'set' object does not support item assignment
+
+tup[1]['summi']=':('
+tup
+
+-- ({1, 2}, {'ankit': 'kiio', 'summi': ':('}, (1, 2, 3), [None, 'ankit'])
+
+tup[2][0]=5
+
+-- TypeError: 'tuple' object does not support item assignment
+
+tup[3][0]=5
+tup
+
+-- ({1, 2},
+ {'ankit': 'summi', 'summi': ':(', 'kiio': 'ankit'},
+ (1, 2, 3),
+ [5, 'ankit'])
+
+tup[3].append('hi')
+tup
+
+-- ({1, 2},
+ {'ankit': 'summi', 'summi': ':(', 'kiio': 'ankit'},
+ (1, 2, 3),
+ [5, 'ankit', 'hi'])
+
+(39) You can concatenate tuples using the + operator to produce longer tuples:
+
+(4, None, 'foo') + (6, 0) + ('bar',)
+
+-- (4, None, 'foo', 6, 0, 'bar')
+
+Multiplying a tuple by an integer, as with lists, has the effect of concatenating together that many copies of the tuple:
+
+('ankit','loves','kiio')*3
+
+-- ('ankit', 'loves', 'kiio', 'ankit', 'loves', 'kiio', 'ankit', 'loves', 'kiio')
+
+Note that the objects themselves are not copied, only the references to them.
+
+(40) Unpacking Tuples
+
+a,b,c='ankit','kiio','summi'
+c,b=b,c
+a,b,c
+
+-- ('ankit', 'summi', 'kiio')
+
+(41) The Python language recently acquired some more advanced tuple unpacking to help with situations where you may want to “pluck” a few elements from the 
+beginning of a tuple. This uses the special syntax *rest, which is also used in function signatures to capture an arbitrarily long list of positional arguments.
+
+a,b,*rest='ankit','kiio','summi','soumi'
+print(a,b,rest)
+
+-- ankit kiio ['summi', 'soumi']
+
+(or)
+
+a,b,*_='ankit','kiio','summi','soumi'
+print(a,b,_)
+
+-- ankit kiio ['summi', 'soumi']
+
+(42)
+
+a = (1, 2, 2, 2, 3, 4, 2)
+a.count(2)
+
+-- 4
+
+(43) In contrast with tuples, lists are variable-length and their contents can be modified in-place. 
+You can define them using square brackets [] or using the list type function.
+
+The list function is frequently used in data processing as a way to materialize an iterator or generator expression.
+
+gen = range(10)
+list(gen)
+
+-- [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+(44) Using insert you can insert an element at a specific location in the list:
+
+lst=[1,2,4,5]
+lst.insert(2,3)
+lst
+
+-- [1, 2, 3, 4, 5]
+
+(45) insert is computationally expensive compared with append, because references to subsequent elements have to be shifted internally to make room for the new element. 
+If you need to insert elements at both the beginning and end of a sequence, you may wish to explore collections.deque, a double-ended queue, for this purpose
+ 
+The inverse operation to insert is pop, which removes and returns an element at a particular index:
+
+lst=['ankit','kiio','summi','soumi']
+print(lst.pop(1))
+print(lst.pop())
+print(lst)
+
+-- kiio
+soumi
+['ankit', 'summi']
+
+(46) Checking whether a list contains a value is a lot slower than doing so with dicts and sets.
+
+x1=[1,2,None]+['hi','bye']
+x1.extend([{'a':'1','b':(1,2,)},('summi','ankit'),[1,1],None])
+print(x1)
+
+Note that list concatenation by addition is a comparatively expensive operation since a new list must be created and the objects copied over. 
+Using extend to append elements to an existing list, especially if you are building up a large list, is usually preferable.
+
+--
+
+[1, 2, None, 'hi', 'bye', {'a': '1', 'b': (1, 2)}, ('summi', 'ankit'), [1, 1], None]
+
+(47) You can sort a list in-place (without creating a new object) by calling its sort function:
+
+a = [7, 2, 5, 1, 3]
+a.sort()
+a
+
+-- [1, 2, 3, 5, 7]
+
+sort has a few options that will occasionally come in handy. One is the ability to pass a secondary sort key—that is, a 
+function that produces a value to use to sort the objects. For example, we could sort a collection of strings by their lengths:
+
+b = ['saw', 'small', 'He', 'foxes', 'six']
+b.sort(key=len)
+b
+
+-- ['He', 'saw', 'six', 'small', 'foxes']
+
+*(48) The built-in bisect module implements binary search and insertion into a sorted list. bisect.bisect finds the location where an element should be inserted to keep it sorted, 
+while bisect.insort actually inserts the element into that location:
+
+The bisect module functions do not check whether the list is sorted, as doing so would be computationally expensive. 
+Thus, using them with an unsorted list will succeed without error but may lead to incorrect results.
+
+import bisect
+lst=[2,2,3,1,1,2,3,4,4,5,4,5,1,3,5,5,5]
+bisect.bisect(lst,4)
+
+-- 14
+
+lst=[2,2,3,1,1,2,3,4,4,5,4,5,1,3,5,5,5]
+lst.sort()
+lst
+
+-- [1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 5, 5]
+
+(49)
+
+seq=[1,2,3,4,5]
+seq[1:3]=seq[3:5]
+seq
+
+-- [1, 4, 5, 4, 5]
+
+(50)
+
+seq=[1,2,3,4,5,6,7]
+print(seq[::2])
+print(seq[len(seq)-4:])
+print(seq[::-1])
+
+-- 
+
+[1, 3, 5, 7]
+[4, 5, 6, 7]
+[7, 6, 5, 4, 3, 2, 1]
+
+(51)
+
+lst=[1,2,3,4,5]
+d={}
+for i,ele in enumerate(lst):
+    d[i]=ele
+d    
+
+(52)
+
+The sorted function returns a new sorted list from the elements of any sequence:
+
+sorted([7, 1, 2, 6, 0, 3, 2])
+
+-- [0, 1, 2, 2, 3, 6, 7]
+
+sorted('horse race')
+
+-- [' ', 'a', 'c', 'e', 'e', 'h', 'o', 'r', 'r', 's']
+
+
+(53)
+
+zip “pairs” up the elements of a number of lists, tuples, or other sequences to create a list of tuples:
+
+for i,h in zip([0,1,2,3],[1,2,3,4]):
+    print(i,h)
+
+-- 
+
+0 1
+1 2
+2 3
+3 4
+
+list(zip(['ankit','kiio'],['summi','soumi']))
+
+-- [('ankit', 'summi'), ('kiio', 'soumi')]
+
+(54)
+
+mylike,mylove=zip(*(['ankit','kiio'],['summi','soumi']))
+print(mylike,mylove)
+
+-- ('ankit', 'summi') ('kiio', 'soumi')
+
+(55)
+
+reversed iterates over the elements of a sequence in reverse order:
+
+list(reversed(range(10)))
+
+-- [9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+
+Keep in mind that reversed is a generator (to be discussed in some more detail later), 
+so it does not create the reversed sequence until materialized (e.g., with list or a for loop). 
+
+(56) dictionary
+
+A more common name for it is hash map or associative array. It is a flexibly sized collection of key-value pairs, 
+where key and value are Python objects. One approach for creating one is to use curly braces {} and colons to separate keys and values
+
+d1=dict()
+d2={}
+print(d1,d2)
+
+-- {} {}
+
+(57)
+
+d3={'k':'kiio','ankit':['kiio','soumi']}
+print(d3)
+
+-- {'k': 'kiio', 'ankit': ['kiio', 'soumi']}
+
+(58)
+
+d3['my love']='summi'
+print(d3['my love'])
+
+-- summi
+
+(59) 
+
+'k' in d3
+
+-- True
+
+print(d3.pop('k'))
+
+-- kiio
+
+(60)
+
+The keys and values method give you iterators of the dict’s keys and values, respectively. 
+While the key-value pairs are not in any particular order, these functions output the keys and values in the same order:
+
+print(d3.keys(),d3.values())
+print(list(d3.keys()),list(d3.values()))
+
+-- 
+
+dict_keys(['ankit', 'my love']) dict_values([['kiio', 'soumi'], 'summi'])
+['ankit', 'my love'] [['kiio', 'soumi'], 'summi']
+
+(61)
+
+You can merge one dict into another using the update method:
+
+d3.update(d2)
+print(d3)
+
+-- {'ankit': ['kiio', 'soumi'], 'my love': 'summi'}
+
+The update method changes dicts in-place, so any existing keys in the data passed to update will have their old values discarded
+
+(62)
+
+Since a dict is essentially a collection of 2-tuples, the dict function accepts a list of 2-tuples:
+
+mapping = dict(zip(range(5), reversed(range(5))))
+mapping
+
+-- {0: 4, 1: 3, 2: 2, 3: 1, 4: 0}
+
+(63)
+
+get by default will return None if the key is not present, while pop will raise an exception.
+
+The setdefault dict method is for precisely this purpose.
+
+words = ['apple', 'bat', 'bar', 'atom', 'book']
+by_letter = {}
+for word in words:
+    letter = word[0]
+    by_letter.setdefault(letter, []).append(word)
+by_letter
+
+-- {'a': ['apple', 'atom'], 'b': ['bat', 'bar', 'book']}
+
+(60)
+
+The built-in collections module has a useful class, defaultdict, which makes this even easier. 
+To create one, you pass a type or function for generating the default value for each slot in the dict:
+
+from collections import defaultdict
+by_letter = defaultdict(list)
+for word in words:
+    by_letter[word[0]].append(word)
+by_letter
+
+-- defaultdict(list, {'a': ['apple', 'atom'], 'b': ['bat', 'bar', 'book']})
+
+(61)
+
+While the values of a dict can be any Python object, the keys generally have to be immutable objects like scalar types (int, float, string) or tuples 
+(all the objects in the tuple need to be immutable, too). 
+The technical term here is hashability. You can check whether an object is hashable (can be used as a key in a dict) with the hash function.
+
+print(hash(231.1),hash(231),hash("ankit"),hash('k'),hash((1,2)))
+
+-- 230584300921356519 231 -6935991554790665773 -6264068230344274998 -3550055125485641917
+
+#can't be hashed:
+print(hash([1,2]))
+print(hash({1,2}))
+print(hash({1:'ankit',2:'arpit'}))
+print(hash((1, 2, [2, 3]))) 
+
+(62) Set
+
+A set is an unordered collection of unique elements. You can think of them like dicts, but keys only, no values. 
+A set can be created in two ways: via the set function or via a set literal with curly braces:
+
+(63)
+
+Sets support mathematical set operations like union, intersection, difference, and symmetric difference
+
+print({1,2}.union({3,4}),{1,2} | {3,4})
+print({1,2}.intersection({1,3,4}),{1,2} & {1,3,4})
+print({1,2,3}.difference({1,2}),{1,2,3} - {1,2})
+print({1,2,3}.symmetric_difference({2,3,4}),{1,2,3} ^ {2,3,4})
+
+-- 
+
+{1, 2, 3, 4} {1, 2, 3, 4}
+{1} {1}
+{3} {3}
+{1, 4} {1, 4}
+
+(64)
+
+# a.issubset(b) --> N/A --> True if the elements of a are all contained in b
+# a.issuperset(b) --> N/A --> True if the elements of b are all contained in a
+# a.isdisjoint(b) --> N/A --> True if a and b have no elements in common
+
+
+All of the logical set operations have in-place counterparts, which enable you to replace the contents 
+of the set on the left side of the operation with the result. For very large sets, this may be more efficient:
+
+a={1,2}
+b={3,4} 
+a |= b # union update
+print(a) 
+
+same for intersection, symmetric diff etc.
+
+(65)
+
+Like dicts, set elements generally must be immutable. To have list-like elements, you must convert it to a tuple
+
+{1, 2, 3} == {3, 2, 1}
+
+-- True
+
+(66) List, Set, and Dict Comprehensions
+
+It allows you to concisely form a new list by filtering the elements of a collection, transforming the elements passing the filter in one concise expression. 
+They take the basic form:
+
+[expr for val in collection if condition]
+
+strings = ['a', 'as', 'bat', 'car', 'dove', 'python']
+[x.upper() for x in strings if len(x) > 2]
+
+-- ['BAT', 'CAR', 'DOVE', 'PYTHON']
+
+{key: value for key,value in zip([1,2,3],['a','b','c']) if value != 'b'}
+
+-- {1: 'a', 3: 'c'}
+
+{value for value in {1,2,3} if value != 2}
+
+-- {1, 3}
+
+(67)
+
+We could also express this more functionally using the map function.
+
+list(map(print,[1,2]))
+
+-- 
+
+1
+2
+[None, None]
+
+list(map(lambda x: sorted(x),[[3,1,2],[2,3,1]]))
+
+-- [[1, 2, 3], [1, 2, 3]]
+
+(68)
+
+nested list comprehension:
+
+nested_list=[[1,2,3],['a','b','c'],[(1,2,3),{1,2,3},{'a':1}]]
+flattened=[x for ind in nested_list for x in ind]
+print(flattened)
+
+-- [1, 2, 3, 'a', 'b', 'c', (1, 2, 3), {1, 2, 3}, {'a': 1}]
+
+(69)
+
+def my_fun(x,y,z=1.1):
+    if z!=1.1:
+        return x+y
+    else:
+        return x+z
+# x,y are positional arguments and z is keyword argument
+print(my_fun(1,2))
+print(my_fun(1,2,1.2))
+
+-- 
+
+2.1
+3
+
+The main restriction on function arguments is that the keyword arguments must follow the positional arguments (if any). 
+You can specify keyword arguments in any order; this frees 
+you from having to remember which order the function arguments were specified in and only what their names are.
+
+(70)
+
+Namespaces, Scope, and Local Functions:
+
+An alternative and more descriptive name describing a variable scope in Python is a namespace.
+
+Any variables that are assigned within a function by default are assigned to the local namespace. The local namespace is created when the 
+function is called and immediately  populated by the function’s arguments. After the function is finished, the local namespace is destroyed
+
+when we need to change global variable in a function scope then we have to use global variable.
+
+a=2
+def my_fun():
+    a=a+3
+my_fun()
+
+-- UnboundLocalError: local variable 'a' referenced before assignment
+
+a=2
+def my_fun():
+    global a
+    a=a+3
+my_fun()
+
+-- a=5
+
+I generally discourage use of the global keyword. Typically global variables are used to store some kind of state in a system. 
+If you find yourself using a lot of them, it may indicate a need for objectoriented programming (using classes). 
+
+(71)
+
+def f():
+ a = 5
+ b = 6
+ c = 7
+ return a, b, c
+a, b, c = f()
+print(a,b,c)
+
+-- 5,6,7
+
+(72)
+
+import re
+print('   ankit'.split())
+print(re.sub('[#@$!]','','an@l@!'))
+print(re.sub('[#@$!]','','$#ee@@@!'))
+
+-- 
+
+['ankit']
+anl
+ee
+
+(73)
+
+Python has support for so-called anonymous or lambda functions, which are a way of writing functions consisting of a single statement, 
+the result of which is the return value. They are defined with the lambda keyword, which has no meaning other than “we are declaring an anonymous function”:
+
+equiv_anon = lambda x: x * 2
+equiv_anon(3)
+
+-- 6
+
+strings = ['foo', 'card', 'bar', 'aaaa', 'abab']
+strings.sort(key=lambda x: len(set(list(x))))
+
+-- ['aaaa', 'foo', 'abab', 'bar', 'card']
+
+One reason lambda functions are called anonymous functions is that , unlike functions declared with the def keyword, the function object itself is never 
+given an explicit  __name__ attribute
+
+(74)
+
+Generators:
+
+iterating over a dict yields the dict keys:
+
+some_dict = {'a': 1, 'b': 2, 'c': 3}
+for key in some_dict:
+    print(key)
+
+-- 
+
+a
+b
+c
+
+(75)
+
+An iterator is any object that will yield objects to the Python interpreter when used in a context like a for loop. Most methods expecting a list or 
+list-like object will also accept any iterable object. 
+This includes built-in methods such as min, max, and sum, and type constructors like list and tuple:
+
+some_dict = {'a': 1, 'b': 2, 'c': 3}
+print(list(iter(some_dict)))
+
+(76)
+
+A generator is a concise way to construct a new iterable object. Whereas normal functions execute and return a single result at a time, 
+generators return a sequence of multiple results lazily, 
+pausing after each one until the next one is requested. To create a generator, use the yield keyword instead of return in a function:
+
+def squares(n=10):
+ print('Generating squares from 1 to {0}'.format(n ** 2))
+ for i in range(1, n + 1):
+     yield i ** 2
+
+gen = squares()
+
+for x in gen:
+    print(x, end=' ')
+
+--
+
+Generating squares from 1 to 100
+1 4 9 16 25 36 49 64 81 100 
+
+(77)
+
+Another even more concise way to make a generator is by using a generator expression. This is a generator analogue to list, dict, and set comprehensions; 
+to create one,  enclose what would otherwise be a list comprehension within parentheses instead of brackets
+
+gen = (x ** 2 for x in range(100))
+gen
+
+sum(x ** 2 for x in range(100))
+
+dict((i, i **2) for i in range(5))
+
+(78)
+
+Errors and Exception Handling:
+
+def attempt_float(x):
+ try:
+     return float(x)
+ except (TypeError, ValueError):
+     return x
+
+(79)
+
+you can have code that executes only if the try: block succeeds using else:
+
+def type_check(x):
+    try:
+        print(float(x))
+    except (TypeError,ValueError):
+        print(x)
+    else:
+        print("hi")
+    finally:
+        print("bye")
+print(type_check(3))        
+print(type_check("an"))
+
+--
+
+3.0
+hi
+bye
+None
+an
+bye
+None
+
+(80)
+
+By default, the file is opened in read-only mode 'r'. We can then treat the file handle f like a list and iterate over the lines like so
+
+There is also the 'x' file mode, which creates a writable file but fails if the file path already exists.
+
+f.read(10) # reads 10 characters from the file
+
+# Mode --> Description
+# r --> Read-only mode
+# w --> Write-only mode; creates a new file (erasing the data for any file with the same name)
+# x --> Write-only mode; creates a new file, but fails if the file path already exists
+# a --> Append to existing file (create the file if it does not already exist)
+# r+ --> Read and write b Add to mode for binary files (i.e., 'rb' or 'wb')
+# t -->Text mode for files (automatically decoding bytes to Unicode). This is the default if not specified. Add t to other
+# modes to use this (i.e., 'rt' or 'xt')
+
+(81)
+
+To write text to a file, you can use the file’s write or writelines methods
+
+# with open('tmp.txt', 'w') as handle:
+#     handle.writelines(x for x in open(path) if len(x) > 1)
+# with open('tmp.txt') as f:
+#     lines = f.readlines()
+# lines
+
+(82)
+
