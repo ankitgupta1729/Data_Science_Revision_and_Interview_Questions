@@ -1,0 +1,15 @@
+## Building Data Pipeline using Apache Airflow
+
+(1) Apache Airflow is a platform to programmatically author, schedule and monitor workflows
+
+(2) It uses python program for orchestration of the data pipelines
+
+(3) Airflow visually shows the data pipeline. This tool helps to schedule, monitor and troubleshoot the pipeline. It also helps to automate and schedule the ETL task
+    otherwise we have to do with cronejobs.
+
+(4) Airflow is also having many robust integrators i.e. many built-in plug and play operators that are ready to execute your task on GCP,Azure,AWS  
+
+(5) It is open source. It can process historic data using the "backfill" property. It does not have any centralized scheduler between different cron machines. Gives 
+    success and failure status.
+
+

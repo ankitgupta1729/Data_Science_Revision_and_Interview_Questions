@@ -1,0 +1,288 @@
+################################################## Part 1:Introduction to ETL, Data Pipelines, and Design Principles #########################################
+
+
+-- A Primer on Python and the Development Environment
+
+(1) We will walk you through a step-by-step tutorial on how to
+install and establish a basic Git-tracked development environment that will prevent future confounding modular
+incompatibilities from impacting the successful deployment of your data pipelines in production.
+
+(2) We can also write functions inside a class. A function inside a class is known as a method.
+
+(3) The first step of any programming project is to instantiate a version control repository unique to your environment. This
+keeps the project’s development and production environments in separate buckets.
+
+We will be using GitHub to track and store our data pipelines throughout this book.
+
+(4) It’s best practice to get into the habit of always committing and pushing your changes frequently so that your work is
+backed up with Git; this way, you won’t lose all of your hard-earned code if you ever do something silly such as spill
+coffee all over your laptop.
+
+(5) Git version control enables collaboration without the fear of
+losing or overwriting changes since multiple developers can work on different branches, and changes can be reviewed
+and merged through pull requests.
+
+(6) pip freeze >> requirements.txt
+
+(7) The concept of circular dependency is not always talked about when first learning Python, but it’s a concept where one
+or more modules depend on each other. Ex: Class A depends on Class B and Class B depends on Class A.
+
+(8) To create an
+internally consistent environment, versions of the dependencies must be flexibly adjusted to account for the circular
+interdependencies of imports. This magic of MMS begins!
+
+(9) Utilizing module management systems (MMSs):
+
+MMSs are like special folders that only work in certain environments. They do this by changing sys.prefix and
+sys.exec_prefix so that they point to the base directory of the virtual environment. This is helpful because it lets
+developers create “clean” applications and also makes sure that all the different parts of the project work well together.
+
+There are many different module management systems to choose from, but Anaconda is the most popular. However, it
+doesn’t always have the most up-to-date packages for data engineers, and pip, the regular package manager for Python,
+doesn’t work well with Anaconda. That’s why we’re using pipenv in this book. It’s a virtual environment and package
+management system that uses Pipfile and Pipfile.lock, similar to a requirements.txt file.
+
+(10) Configuring a Pipenv environment in PyCharm:
+
+In Python development, managing project environments is crucial to keep your project’s dependencies organized and
+controlled. One way to achieve this is by using pipenv. Let’s start the process by installing Pipenv. Open your Terminal
+and execute the following command:
+
+(base) usr@project % pip install --user pipenv
+
+This command instructs pip (a Python package manager) to install Pipenv in your user space. The --user option
+ensures that Pipenv is installed in the user install directory for your platform.
+
+Once installed, remember to activate the pipenv environment before you begin to work on your new project. This way,
+the entirety of your project is developed within the isolated virtual environment.
+
+(11) activate virtual environment:
+
+pipenv shell
+
+(12) Installing Packages:
+
+pip- packages can be added or removed from the environment via simple $ pipenv install or $ pipenv uninstall
+commands since activating the pipenv environment is designed to replace the need for the pip- tag in the command
+line.
+
+(13) Pipfile and Pipfile.lock:
+
+When a pipenv environment is initiated, an empty Pipfile is automatically created. As mentioned previously, Pipfile
+is synonymous with the requirements.txt file.
+
+Pipfile.lock is created to specify which version of the dependencies referenced in Pipfile should be used to avoid
+automatic upgrades of packages that depend on each other. You can run the $ pipenv lock command to update the
+Pipfile.lock file with the currently used versions of all the dependencies within your virtual environment. However,
+pipenv takes care of updating the Pipfile and Pipfile.lock files with each package installation.
+
+Example:
+
+pipenv install numba
+
+(check output)
+
+(14)
+
+A data pipeline is a series of tasks, such as transformations, filters, aggregations, and merging multiple sources, before
+outputting the processed data into some target. In layman’s terms, a data pipeline gets data from the “source” to the
+“target,”.
+
+Ex. A mail can be filtered as spam and non-spam and send to the target.
+
+(15)
+
+packets of raw data are ingested into the entry of the pipeline and, through a series of steps and processes, 
+the raw material is formatted and packaged into an output location, which is most commonly used for storage.
+
+(16)
+
+The following are the attributes of a robust data pipeline:
+
+• Clearly defined expectations
+• Scalable architecture
+• Reproducible and clear
+
+(17) A robust data pipeline should have clearly defined expectations in terms of the data it is processing and the results it is
+expected to produce. This includes specifying the types and sources of data, as well as the desired output format and any
+required transformations or aggregations. Having clearly defined expectations helps ensure that the pipeline is
+consistently producing accurate and reliable results.
+
+(18)
+
+A robust data pipeline should have a scalable architecture that can handle
+increasing volumes of data without degradation in performance. This may involve using distributed systems or
+implementing efficient algorithms to process the data promptly.
+
+(19)
+
+Reproducibility and clarity are also important attributes of a robust data pipeline. The pipeline should be able to produce
+the same results each time it is run, and the steps involved in processing the data should be documented and easy to
+understand. This helps ensure that the pipeline can easily be maintained and modified as needed.
+
+(20)
+
+it is important to have a clear understanding of both the input and output data structures when designing a
+data pipeline. This includes knowing the data structures, any potential issues with the data (such as corruption), and the
+frequency of new data creation for the input data. For the output data, it is important to understand the structural
+requirements to ensure that the pipeline consistently produces the desired result.
+
+
+(21)
+
+Before writing a line of code, take some time to sketch out a flowchart of the transformations that need to be performed
+on the input data to produce the output data. Go a little deeper into how Python packages can be used to accomplish
+these transformations. This is how you create the foundation for operational stability in your code, where you apply
+Don’t Repeat Yourself (DRY) practices to create non-redundant code that is thoroughly tested and easy to logically
+follow.
+
+DRY practices are a programming principle that aims to reduce redundancy in code. This means avoiding writing the
+same code multiple times, and instead using functions, variables, and other code structures to reuse code whenever
+possible.
+
+
+(22)
+
+Creating project diagrams is fundamental to a project that is not only clear, reproducible, and fully
+strategized, but also makes it highly shareable and transparent.
+
+(23) ETL data pipeline:
+
+ETL stands for Extract, Transform, and Load. In an ELT process, data is first extracted from a source, then
+transformed and formatted in a specific way, and finally loaded into a final storage location.
+
+(24)
+
+ELT stands for Extract, Load, and Transform, and is similar to ETL, but the data is first loaded into the target system
+and then transformed within the target system.
+
+(25)
+
+Here are a few factors that you might consider when deciding between ETL and ELT:
+
+• Data volume: If the volume of data is very large, ELT might be more efficient because the transformation step can
+be done in parallel within the target system.
+
+• Data transformation requirements: If the data needs to undergo complex transformations, it might be easier to
+perform the transformations in the target system using ELT
+
+• Source system capabilities: If the source system is not able to perform the necessary transformations, ETL might be
+the only option
+
+• Target system capabilities: If the target system is not able to efficiently handle the load phase of the ETL process,
+ELT might be a better option
+
+• Data latency: If real-time data movement is required, ELT might be a better choice because it allows the data to be
+loaded and transformed more quickly
+
+(26)
+
+In general, ETL is more commonly used when the source and target systems are different and the data needs to be
+transformed in a specific way before it is loaded into the target system. ELT is more commonly used when the target
+system is more powerful and can handle the transformation step itself.
+
+(27)
+
+There are three main types of ETL pipelines:
+
+• Batch processing
+
+• Streaming
+
+• Cloud-native
+
+(28) Batch processing:
+
+Batch processing is a method of data processing that involves dividing a large volume of data into smaller pieces, or
+batches, and processing each batch separately. This is often done when a project requires a large amount of data to be
+handled (mostly in TB or above), but the downstream use of the data only requires it to be available asynchronously.
+Batch processing is a popular choice for handling large amounts of data because it allows engineers to design a process
+that can run one batch of data through the pipeline at a time, rather than trying to process all of the data at once.
+
+One example of a batch processing system is a company that processes customer orders for an online store. The company
+receives a large volume of orders each day and needs to process this data to update inventory levels, generate invoices,
+and fulfill orders. To do this, they use a batch processing system to break the data into smaller chunks and run each
+chunk through their data pipeline. This allows them to process the data efficiently, without overwhelming their systems
+or causing delays in order processing
+
+(29) Streaming method:
+
+Real-time data solutions are necessary when a project needs to immediately process fresh data. Streaming methods are
+often used in these situations as they allow data to flow continuously, which may be variable and subject to sudden
+changes in structure. To handle these challenges, a combination of data pipelines is typically utilized. There are several
+advanced tools, such as Apache Storm and Apache Samza, that can efficiently process real-time data.
+
+An example of this is an e-commerce website that needs to process real-time user data as shopping is in progress. The
+use of real-time data processing, combined with AI/ML, can result in an enhanced user shopping experience.
+
+(30) Cloud-native:
+
+Most of the famous public cloud platforms, such as Amazon Web Services (AWS), Google Cloud Platform (GCP), and 
+Microsoft Azure, provide inbuilt data processing capabilities that come with various integrated tools and technologies 
+that can be used to build a robust and resilient ETL pipeline.
+
+(31) Automating ETL pipelines:
+
+To streamline and optimize the ETL process in a production environment, there are several tools and technologies
+available to automate the pipeline.
+
+There are several key benefits to automating ETL pipelines:
+
+• Data democratization: Automating the ETL process can make it easier for a wider range of users to access and use
+data since the process of extracting, transforming, and loading data is streamlined and made more efficient
+
+• Robust data availability and access: By automating the ETL process, data is made more consistently available and
+accessible to users since the pipelines are designed to run regularly and can be easily configured to handle any
+changes or updates to the source data
+
+• Team focus: Automating ETL pipelines can free up team members to focus on more important tasks such as data
+analytics, developing machine learning models, and other higher-value activities, rather than spending time on
+manual data preparation tasks
+
+• Onboarding process: Automated ETL pipelines can make it easier and faster to onboard new team members since
+the process of extracting and preparing data is already streamlined and automated, reducing the need for new hires to
+learn complex manual processes
+
+• Schema management: Automating ETL pipelines can also help with schema management since the pipelines can be
+configured to handle changes to the source data schema automatically, ensuring that the data is always properly
+transformed and loaded into the target system
+
+(32) By utilizing tools such as AWS Lambda and EC2 alongside Step Functions, it is simple to orchestrate or automate ETL
+pipelines on a cloud platform. For instance, we can implement these resources to automate our pipelines effectively.
+
+Orchestrating ETL pipelines can also be done using open source tools such as Apache Airflow, Luigi, and others (more
+on this in Parts 2 and 3).
+
+(33) Benefits of ETL pipelines:
+
+• Allow developers and engineers to focus on useful tasks rather than worrying about data
+
+• Free up time for developers, engineers, and scientists to focus on actual work
+
+• Help organizations move data from one place to another and transform it into a desired format efficiently
+and systematically
+
+(34) Applications of ETL pipelines:
+
+• Migrating data from a legacy platform to the cloud and vice versa
+
+• Centralizing data sources to have a consolidated view of data
+
+• Providing stable data sources for data-driven applications and data analytic tools
+
+• Acting as a blueprint for organizational data, serving as a single source of truth
+
+(35) Example of an ETL pipeline in action:
+
+• Netflix has a very robust ETL pipeline that manages petabytes of data, allowing them to employ a small
+team of engineers to handle admin tasks related to data
+
+(36) Overall benefits of ETL pipelines:
+
+• Saves money in the long run
+
+• Helps with business expansion
+
+-----------------------------------------------------------------------------------------------------------------------
+
+(37) Design Principles for Creating Scalable and Resilient Pipelines
