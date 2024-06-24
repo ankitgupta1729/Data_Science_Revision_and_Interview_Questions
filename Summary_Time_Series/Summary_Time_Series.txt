@@ -53,6 +53,16 @@ write, for example, ̂𝑦𝑡|𝑡−1 to mean the forecast of 𝑦𝑡
 taking account of all previous observations (𝑦1, ..., 𝑦𝑡−1).
 Similarly, ̂𝑦𝑇 +ℎ|𝑇 means the forecast of 𝑦𝑇 +ℎ taking account of 𝑦1, ..., 𝑦𝑇(i.e., an h-step forecast taking
 account of all observations up to time 𝑇 )
+
+We write 𝑦𝑡|𝐼 meaning “the random variable 𝑦𝑡 given what we know in information 𝐼”. The set of values that this random variable could take,
+along with their relative probabilities, is known as the “probability distribution” of 𝑦𝑡|𝐼. In forecasting, we
+call this the forecast distribution.
+
+When we talk about the “forecast”, we usually mean the average value of the forecast distribution, and we
+put a “hat” over 𝑦 to show this. Thus, we write the forecast of 𝑦𝑡 as ̂𝑦𝑡, meaning the average of the possible
+values that 𝑦𝑡 could take given everything we know.
+
+
 ----------------------------------------------------------------------------------------------------------------
 EDA:
 

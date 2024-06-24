@@ -26,7 +26,7 @@ can be defined as win or lose at the end of the game:
 (ii) Learning (decide the learning algorithm):
 
 (A) Model Selection
-(B) Cross-Validation (tarining=training set+validation set)
+(B) Cross-Validation (training=training set+validation set)
 (C) Performance Metrics
 (D) Hyperparameter Optimization
 
@@ -96,7 +96,7 @@ plt.ylabel('petal length [cm]')
 plt.legend(loc='upper left')
 plt.show()
 
-(15) dot product of two vectors: np.dot(X,self.w_[1:])+self.w_[0]
+(15) dot product of two vectors: np.dot(X,self.w_[1:])+self.w_[0])
 
 (16) another type of single-layer neural network: Adaptive Linear Neurone(Adaline)
 
@@ -310,7 +310,7 @@ samples that are closest to this hyperplane, which are the so-called support vec
 (49) Training of SVM model using scikit-learn:
 
 from sklearn.svm import SVC
-#from sklearn.svm import SVR
+from sklearn.svm import SVR
 svm= SVC(kernel='linear',C=1.0,random_state=1)
 svm.fit(X_train_Std,y_train)
 

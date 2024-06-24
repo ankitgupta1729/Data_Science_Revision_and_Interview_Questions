@@ -4,21 +4,34 @@
 
 (3) Three kinds of errors can occur in a program: syntax errors, runtime errors, and semantic errors.
 
-(4) Syntax refers to the structure of a program and the rules about that structure. For example, parentheses have to come in matching pairs, so (1 + 2) is legal, but 8) is a syntax error.
+(4) Syntax refers to the structure of a program and the rules about that structure. For example, parentheses have to come in matching pairs, so (1 + 2) is legal, 
+but 8) is a syntax error.
 
-(5) The second type of error is a runtime error, so called because the error does not appear until after the program has started running. These errors are also called exceptions because they usually indicate that something exceptional (and bad) has happened. Runtime errors are rare in the simple programs.
+(5) The second type of error is a runtime error, so called because the error does not appear until after the program has started running. 
+These errors are also called exceptions because they usually indicate that something exceptional (and bad) has happened. 
+Runtime errors are rare in the simple programs.
 
-(6) The third type of error is the semantic error. If there is a semantic error in your program, it will run successfully in the sense that the computer will not generate any error messages, but it will not do the right thing. It will do something else.The problem is that the program you wrote is not the program you wanted to write. The meaning of the program (its semantics) is wrong. Identifying semantic errors can be tricky because it requires you to work backward by looking at the output of the program and trying to figure out what it is doing.
+(6) The third type of error is the semantic error. If there is a semantic error in your program, it will run successfully in the sense that the 
+computer will not generate any error messages, but it will not do the right thing. It will do something else.
+The problem is that the program you wrote is not the program you wanted to write. The meaning of the program (its semantics) is wrong. 
+Identifying semantic errors can be tricky because it requires you to work backward by looking at the output of the program and trying to figure out what it is doing.
 
-(7) Natural languages are the languages people speak, such as English, Spanish, and French. They were not designed by people (although people try to impose some order on them); they evolved naturally.
+(7) Natural languages are the languages people speak, such as English, Spanish, and French. 
+They were not designed by people (although people try to impose some order on them); they evolved naturally.
 
-(8) Formal languages are languages that are designed by people for specific applications. For example, the notation that mathematicians use is a formal language that is particularly good at denoting relationships among numbers and symbols. Chemists use a formal language to represent the chemical structure of molecules. And most importantly: Programming languages are formal languages that have been designed to express computations. Formal languages tend to have strict rules about syntax.
+(8) Formal languages are languages that are designed by people for specific applications. 
+For example, the notation that mathematicians use is a formal language that is particularly good at denoting relationships among numbers and symbols. 
+Chemists use a formal language to represent the chemical structure of molecules. 
+And most importantly: Programming languages are formal languages that have been designed to express computations. 
+Formal languages tend to have strict rules about syntax.
 
-(9) When you read a sentence in English or a statement in a formal language, you have to figure out what the structure of the sentence is (although in a natural language you do this subconsciously). This process is called parsing.
+(9) When you read a sentence in English or a statement in a formal language, you have to figure out what the structure of the sentence is 
+(although in a natural language you do this subconsciously). This process is called parsing.
 
 (10) For example, when you hear the sentence, “The penny dropped,” you understand that “the penny” is the subject and “dropped” is the predicate. 
 
-(11)  Natural languages are full of ambiguity, which people deal with by using contextual clues and other information. Formal languages are designed to be nearly or completely unambiguous. Formal languages are less redundant and more concise.
+(11)  Natural languages are full of ambiguity, which people deal with by using contextual clues and other information. 
+Formal languages are designed to be nearly or completely unambiguous. Formal languages are less redundant and more concise.
 
 (12) A variable is a name that refers to a value.
 
@@ -26,11 +39,14 @@
 
 (14) import math -- This statement creates a module object named math. If you display the module object, you get some information about it.
 
-(15) The module object contains the functions and variables defined in the module. To access one of the functions, you have to specify the name of the module and the name of the function, separated by a dot (also known as a period). This format is called dot notation.
+(15) The module object contains the functions and variables defined in the module. To access one of the functions, you have to specify the name of the module 
+and the name of the function, separated by a dot (also known as a period). This format is called dot notation.
 
-(16) The rules for function names are the same as for variable names: letters, numbers and underscore are legal, but the first character can’t be a number. You can’t use a keyword as the name of a function, and you should avoid having a variable and a function with the same name.
+(16) The rules for function names are the same as for variable names: letters, numbers and underscore are legal, but the first character can’t be a number. 
+You can’t use a keyword as the name of a function, and you should avoid having a variable and a function with the same name.
 
-(17) The first line of the function definition is called the header; the rest is called the body. The header has to end with a colon and the body has to be indented. By convention, indentation is always four spaces. The body can contain any number of statements.
+(17) The first line of the function definition is called the header; the rest is called the body. The header has to end with a colon and the body has to be indented. 
+By convention, indentation is always four spaces. The body can contain any number of statements.
 
 (18) Defining a function creates a function object, which has type function.
 
@@ -40,9 +56,11 @@
 
 (21) When you create a variable outside of any function, it belongs to  __main__
 
-(22) This list of functions is called a traceback.  The order of the functions in the traceback is the same as the order of the frames in the stack diagram. The function that is currently running is at the bottom.
+(22) This list of functions is called a traceback.  The order of the functions in the traceback is the same as the order of the frames in the stack diagram. 
+The function that is currently running is at the bottom.
 
-(23) Void functions might display something on the screen or have some other effect, but they don’t have a return value. If you assign the result to a variable, you get a special value called None.
+(23) Void functions might display something on the screen or have some other effect, but they don’t have a return value. 
+If you assign the result to a variable, you get a special value called None.
 
 result=print_twice('Bing') // function Print_twice() does not return a value, it means it has void return type
 print(result) -- output is "None"
@@ -54,7 +72,9 @@ type(None) -- output is "NoneType"
 
 bob.fd(100)
 
-(26) Wrapping a piece of code up in a function is called encapsulation. One of the benefits of encapsulation is that it attaches a name to the code, which serves as a kind of documentation. Another advantage is that if you re-use the code, it is more concise to call a function twice than to copy and paste the body.
+(26) Wrapping a piece of code up in a function is called encapsulation. 
+One of the benefits of encapsulation is that it attaches a name to the code, which serves as a kind of documentation. 
+Another advantage is that if you re-use the code, it is more concise to call a function twice than to copy and paste the body.
 
 (27) Adding a parameter to a function is called generalization because it makes the function more general.
 
@@ -62,7 +82,8 @@ bob.fd(100)
 
 (29) Rearranging a program to improve interfaces and facilitate code re-use—is called refactoring.
 
-(30) A docstring is a string at the beginning of a function that explains the interface (“doc” is short for “documentation”).By convention, all docstrings are triple-quoted strings, also known as multiline strings because the triple quotes allow the string to span more than one line.
+(30) A docstring is a string at the beginning of a function that explains the interface (“doc” is short for “documentation”).
+By convention, all docstrings are triple-quoted strings, also known as multiline strings because the triple quotes allow the string to span more than one line.
 
 (31) The floor division operator, //, divides two numbers and rounds down to an integer.
 
@@ -77,11 +98,14 @@ bob.fd(100)
 
 Each condition is checked in order. If the first is false, the next is checked, and so on. If one of them is true, the corresponding branch runs and the statement ends. Even if more than one condition is true, only the first true branch runs.
 
-(33) If a recursion never reaches a base case, it goes on making recursive calls forever, and the program never terminates. This is known as infinite recursion, and it is generally not a good idea.
+(33) If a recursion never reaches a base case, it goes on making recursive calls forever, and the program never terminates. 
+This is known as infinite recursion, and it is generally not a good idea.
 
-(34) In most programming environments, a program with infinite recursion does not really run forever. Python reports an error message when the maximum recursion depth is reached.
+(34) In most programming environments, a program with infinite recursion does not really run forever. 
+Python reports an error message when the maximum recursion depth is reached.
 
-(35) The print statements we wrote are useful for debugging, but once you get the function working, you should remove them. Code like that is called scaffolding because it is helpful for building the program but is not part of the final product.
+(35) The print statements we wrote are useful for debugging, but once you get the function working, you should remove them. 
+Code like that is called scaffolding because it is helpful for building the program but is not part of the final product.
 
 (36) In general it is dangerous to test float equality.
 
@@ -89,7 +113,8 @@ Each condition is checked in order. If the first is false, the next is checked, 
 
 (38) we can't change the string object once defined in memory
 
-(39) Strings provide methods that perform a variety of useful operations. A method is similar to a function—it takes arguments and returns a value—but the syntax is different. For example, the method upper takes a string and returns a new string with all uppercase letters. 
+(39) Strings provide methods that perform a variety of useful operations. A method is similar to a function—it takes arguments and returns a value—but 
+the syntax is different. For example, the method upper takes a string and returns a new string with all uppercase letters. 
 
 eg. name="ankit"... name.upper()
 
@@ -252,7 +277,7 @@ printall(1, 2.0, '3')
 -- (1, 2.0, '3')
 
 (70) *args can also work as scatter.
-
+/
 The complement of gather is scatter. If you have a sequence of values and you want to pass it to a function as multiple arguments, you can use the * operator. 
 For example, divmod takes exactly two arguments; it doesn’t work with a tuple:
 
