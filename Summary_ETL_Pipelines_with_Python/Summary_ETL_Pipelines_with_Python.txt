@@ -423,4 +423,972 @@ Feel free to check out more in the Numba documentation: https://pypi.org/project
 
 (53) Part 2: Part 2:Designing ETL Pipelines with Python
 
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Chapter 4: Sourcing Insightful Data and Data Extraction Strategies
+
+
+(54) What is data sourcing?
+
+Data sourcing refers to connecting your pipeline environment to all data input sources relevant to your data pipeline.
+Many applications require the use of structured data, as well as unstructured and semi-structured data, to make effective
+and timely decisions.
+
+
+(55) All this data can be acquired from two types of sources: internal and external, where internal data refers to sources
+related to a company’s business operations and external data refers to any data sourced outside of an organization.
+
+ it’s good to keep in mind that using relative paths to refer to data locations is extremely common.you design a system that takes only the
+needed selected data through the process and gets rid of all unnecessary noise.
+
+With correct identification of data sources, problems such as inconsistent information, difficulty in finding root causes, and issues of data isolation can be
+avoided.
+
+(56) Types of data sources
+
+Currently, data files or databases—whether structured, semi-structured, or
+unstructured—can all be used as both data sources and data sink locations. However, it is important to keep in mind that
+the more flexible the data definitions are for the data used in your pipeline, the more difficult it will be to validate the
+data produced by the pipeline.
+
+• CSV/Excel files
+• Parquet files
+• APIs
+• RDBMS databases
+• HTML
+
+(57)
+
+stored data files are commonly used as an input data source for an extract, transform, load (ETL)
+pipeline.
+
+ Data files can be sourced from anywhere, from locally stored files on your device to cloud storage filesystems.
+Even when primarily working with databases or external APIs, using physical files is a great way to use timestamped
+data with ease, which can come in handy during any temporary connection issues.
+
+(58)
+
+Download the 500 latest records from the Motor Vehicle Collisions - Crashes data from the NYC Open Data website by
+entering the following URL into your browser: https://data.cityofnewyork.us/resource/h9gi-nx95.csv?$limit=500. This
+will download a CSV file, h9gi-nx95.csv. Please save this file in the same directory as your Jupyter notebook.
+
+
+(59)
+
+Parquet data files:
+
+As with CSV and Excel, the Parquet format is a file type that contains data (table type). However, while CSV and Excel
+data is stored as a plain text file, Parquet actually stores data in its binary form. Unlike CSV files, which store data by
+row, Parquet files store data by column, which makes it easier to manipulate at the column level versus at the row level.
+In other words, Parquet vectorizes the data, which is why Parquet is the preferred data format when working with large,
+stored data files since vectorizing the data rapidly decreases computation time.
+
+In order to process Parquet files, we need to import a Python package, pyarrow, that enables Pandas, NumPy, and other
+built-in Python packages to process vectorized data (documentation: https://arrow.apache.org/docs/python/index.xhtml).
+
+Next, download the January 2022 Yellow Taxi Trip Records data from the NYC Open Data website by entering the
+following URL into your browser: https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page. This downloads a
+Parquet file, yellow_tripdata_2022-01.parquet. Save this file in the same directory as your Jupyter notebook and
+CSV file.
+In your notebook, run the third cell in the notebook to read the Parquet data using Pandas’ pd.read_parquet()
+command as a df_parquet DataFrame, then select the first five rows of the DataFrame with df_parquet.head().
+
+(60)
+
+API connections:
+
+API connections are the wonderful plug and play data sources of the world. With an easy API key, either public or
+private, data connections can be made with ease to external data sources. You can get API links for anything from Twitter
+(now, X) social media data to Armed Conflict Location & Event Data (ACLED) data, often for the wonderful price of
+“free.” Data ingestion through APIs is an integral part of modern ETL pipeline development. We will see an example of
+reading data from an API response and loading it to a Pandas DataFrame. As a word of caution: API data sources are
+typically controlled by another company, so not only do you have no control over the quality of the data, but your use of
+the data is also usually tracked. Proceed accordingly.
+
+(61)
+
+
+For this example, we will be using one of the NYC Open Data website’s public HTTP APIs, which publishes data in
+JSON format: https://data.cityofnewyork.us/resource/h9gi-nx95.json?$limit=500. We need to import a Python library,
+certifi, which contains “Root Certificates for validating the trustworthiness of SSL certificates while verifying the
+identity of TLS hosts” (documentation: https://pypi.org/project/certifi/).
+
+(62)
+
+The urllib3 Python library is a user-friendly HTTP client in Python that helps with some of the “under the hood”
+processes of retrying requests and dealing with HTTP redirects.
+
+An API connection status informs you what is happening with the request. Was it
+successful? Was it redirected? If it failed, why did it fail? Here are the most common status codes for HTTP GET
+requests:
+
+Status Code  --> General Meaning
+200  --> Successful connection
+400  --> Error/bad request/incorrect data was sent
+401  --> Authentication error
+403  --> Access forbidden
+404  --> Resource not found in server
+
+(63)
+
+following conditional statement to verify the status code is 200 before moving forward:
+if apt_status == 200:
+
+Once the status code confirms a successful connection, you’ll need to create a pool manager to read the API response.
+The Pool Manager is a request method that handles connection pooling, which means that once a request is made, each
+consecutive time the connection is requested, the Pool Manager reuses the original connection in cached memory. This
+becomes particularly important when making web requests that have a limited number of “allowed” connections per day.
+
+notice the urllib3.PoolManager() function handles the credentials necessary for the web request. To
+import the data in the desired JSON format, the json.loads() function wraps the request call that’s appended with the
+data.decode('utf-8') function. Finally, the JSON file is normalized to clean up the output.
+
+(64)
+
+Databases:
+
+There are two main categories of database systems: relational (RDBMS) and non-relational (non-RDBMS). RDBMSs,
+such as MySQL and Oracle, comprise structured data that is organized into rows and columns, which are structures that
+DataFrames in Pandas seek to represent. Non-RDBMSs, such as MongoDB, are considered unstructured since they lack
+the defined data table of their RDBMS counterparts. This lack of structure is why non-RDBMSs are incredibly useful
+because there are few limitations around what can be stored within their systems; anything from documents to images to
+binary data files and other files can be stored in non-RDBMSs.
+
+(65)
+
+Data from web pages
+
+Lastly, we chose to review data from HTML sources, since engineers often “scrape” or gather data from open source web
+pages to create data to ingest in ETL pipelines. We will use the following Wikipedia URL,
+https://en.wikipedia.org/wiki/List_of_countries_by_GDP_(nominal), to scrape the Gross Domestic Product (GDP)
+economic data for all the countries in the list.
+
+(66) Creating a data extraction pipeline using Python:
+
+Jupyter notebooks allow easy visualization, but can
+be quite clunky to deploy; Python scripts have less visualization access (it can be done, but not as effortlessly as in
+Jupyter) but can easily be used for deployment and various environments.
+
+(67) Data extraction:
+
+Logging:
+
+To start, it’s wise to create a universal logging configuration that can be used in all Python modules without writing the
+boilerplate codes. A log file can be used for many purposes, including—but not limited to—analyzing any failure or
+finding bugs in the code. The code shown next creates a custom config for logging that creates an etl_pipeline.log
+log file under the logs directory.
+
+You may want to visit https://docs.python.org/3/howto/logging.xhtml for more detail on logging.
+
+# define top level module logger
+logger = logging.getLogger(__name__)
+
+with try, use logging.info() and with exception, use logging.exception() and in try, with if-else, use logging.error() with logging.error()
+
+
+will see in chapter 14
+
+(68)
+
+Next, within each data import function, a logger instance is defined to record information related to the new data. For
+this example, we included the number of rows within the data file using the df.shape[0] syntax:
+
+logger.info(f'{file_name} : extracted {df.shape[0]} records fromthefile')
+
+If any issue, or exception, occurred during the data import into a Python DataFrame, a log exception is recorded with a
+reference to the exception error:
+
+logger.exception( f'{file_name} : - exception {e} encountered while extracting the file') 
+
+Just to verify if a log file is created, go to the config/logs folder, and you should see the etl_pipeline.log log file. You may
+want to verify the content of this log file to know how many logging instances there are. (you should have to create logs folder and lofgile manually)
+
+----------------------------------------------------------------------------------------------------------------------------------------------------
+
+## 
+
+(69) Chapter 5: Data Cleansing and Transformation
+
+----------------------------------------------------
+
+(70) Data cleansing, also referred to as data cleaning or scrubbing, is a term used to describe the manipulation of 
+
+source data.
+
+
+(71) It is a fundamental aspect of data engineering since unprocessed data is often quite messy and needs specific
+modifications to create a high-quality data output. The data cleansing process involves identifying and correcting or
+removing errors, inaccuracies, and inconsistencies in datasets to improve their quality and reliability. For instance, in a
+dataset of customer information, you might find duplicate entries, incorrect or missing values, or data in inconsistent
+formats.
+
+The Pandas library is a great place to start since it is a powerful tool for data cleansing.
+
+(72) Common data transformation operations include normalization, aggregation, and generalization.
+
+(73) “data drift,” referring to changes in the meaning of data definitions due to updates to attributes in newly added data
+
+(74)  garbage in,
+garbage out (also known as GIGO), where, if you put flawed data into a pipeline, your output is flawed too
+
+(75) Data Transformations:
+
+A. Standasrds (uppercase, lowercase, acronyms and abbreviations)
+B. Normalizations (such as wenforcing business roles)
+C. Corrections:
+   -- Correct null values
+   -- change data type
+D. Duplicate data resolution
+E. Data integrity enforcement
+
+(76) The extracted data is sent to a temporary storage area called the data staging area prior to the transformation and
+cleansing process. This is done to avoid the need to extract data again.
+
+(77) We will use a profiling library in conjunction with Pandas to understand the data
+
+(78) The info() method is useful for gaining a general overview of the DataFrame’s structure and assessing the quality and
+completeness of the data. It’s a quick view of the number of rows and columns, the data types of each column, and the
+memory usage, as well as the total non-null values in each column, which helps to identify missing data.
+
+, df_crashes.isnull().sum() returns the number of missing data instances (null values) in each field
+
+(79)
+
+# This column has only two values.df_crashes['report_type'].unique()
+# ['ON SCENE', 'NOT ON SCENE (DESK REPORT)']
+# Let's fill the missing value with 'ON SCENE' as below -
+df_crashes = df_crashes.fillna(value={'report_type': 'ON SCENE'})
+
+(80)
+
+The total number of passenger cars involved in the crash can be found using the following code:
+df.groupby('vehicle_type').agg({'crash_record_id': 'count'}).reset_index()
+# renaming
+col_rename={'CRASH_HOUR':'CRASH_HOURS'}
+df_crashes=df_crashes.rename(columns=col_rename)
+print(df_crashes.columns)
+
+
+(81)
+
+When designing the first iterations of data manipulation activity in a pipeline, it’s best to start off with a chunk of sample
+data as opposed to processing the entire data source.
+This way, you can start to develop your workflow using 1,000 rows
+of data instead of 10,000 in order to save on both GPUs and development time.
+
+------------------------------------------------------------------------------------------------------------------------
+
+Chapter 6: Loading Transformed Data
+---------------------------------------------------------
+
+(82)
+
+After data has undergone processing and transformation within an ETL pipeline, the final step involves transferring it to
+its designated final location. The type of output location that’s used is determined by both the data’s specific utility and
+the tools available within your environment.
+
+It is most common to store output data iterations within structured, relational databases. Such databases offer an easily
+accessible format conducive to both analytical exploration and forthcoming modifications.
+
+(83)
+
+The choice of destination greatly impacts data accessibility, storage, querying capabilities, and overall system
+performance. Depending on the nature of your project, you might be loading data into relational databases, cloud-based
+data warehouses, NoSQL stores, or other repositories. Understanding the target system’s requirements and capabilities is
+a foundational step to designing an efficient loading strategy. Consider factors such as data types, indexing, partitioning,
+and data distribution
+
+(84)
+
+Types of load destinations:
+
+A. Relational databases:
+
+Python provides support for
+popular RDBMSs such as MySQL, PostgreSQL, SQLite, and Oracle. Utilizing libraries such as SQLAlchemy and
+database-specific drivers (for example, psycopg2 and pymysql) allows you to efficiently load data into structured tables.
+These databases offer the advantage of data integrity enforcement, transaction management, and support for complex
+querying.
+
+B. Data warehouses
+
+Data warehouses are primarily used for storing large data for long-term storage; they have gained popularity over the
+years as scalable repositories optimized for complex analytical queries and reporting.
+Python has a plethora of libraries, such as Pandas, and specialized connectors to efficiently load data into data warehouses such as Amazon Redshift, Google BigQuery, and
+Snowflake.
+
+C. NoSQL stores
+
+For semi-structured and unstructured data, NoSQL databases such as MongoDB, Cassandra, and Couchbase provide
+flexible and schemaless data storage. Python tools such as pymongo and cassandra-driver enable seamless integration
+with these databases. NoSQL stores are well-suited for scenarios that require high scalability, rapid data ingestion, and
+unstructured data types.
+
+D. Filesystems and object storage
+
+Filesystems and object storage (for example, Amazon S3 and Azure Blob Storage) are also advantageous for archiving,
+making backups, and scenarios where direct database integration is not required. Python’s built-in I/O capabilities and
+third-party libraries simplify the process of writing data to files or cloud-based storage
+
+(85)
+
+Utilizing techniques such as bulk loading, parallel processing, and optimized SQL queries can significantly enhance
+loading performance for large datasets. By adopting scalable strategies, you ensure that your data loading solution
+remains efficient and responsive even as data volume increases.
+
+Automation streamlines the loading process, reducing the risk of human errors and enhancing consistency.
+Implementing automated loading routines using Python scripts or ETL tools facilitates scheduled or event-driven
+data loading.
+
+Proactive monitoring empowers you to identify and rectify issues promptly, contributing to data integrity and system
+reliability. Incorporating robust logging enables you to track loading activities, performance metrics, and potential
+errors
+
+(86)
+
+We will utilize Python’s sqlite3 database to walk through a demo of how full and incremental data loads can be formed
+using Python.
+
+(87)
+
+Full data loads:
+
+In theory, data pipeline design intends to load the output data in one pass. This is desirable because it closes the process
+of the one clean sweep, smoothly transferring data from one location to another, and providing the opportunity for
+review and improvement before the next iteration of the cycle.
+
+However, in many situations, a full data load might not be a viable option. These situations include client requirements
+for continuous access to the full dataset or working with daily updates for incredibly large and complex datasets, such as
+financial data. In these types of situations, taking an incremental approach is advisable.
+
+Incremental data loads:
+
+A word of caution: incremental data loads also require a healthy amount of error-handling procedures, especially when
+you’re trying to maintain sequential data. Incremental processes need to be able to manage incomplete data loads as well
+as handle duplicate data imports. The cadence of data creation as well as incremental data loads need to be in sync before
+you commit an incremental data load approach
+
+Here we don’t need to truncate the table before importing new data
+
+The sqlite3 database that we used earlier in this chapter is rarely used in deployable data pipelines.
+
+------------------------------------------------------------------------------------------------------------------
+
+Chapter 7: Tutorial – Building an End-to-End ETL Pipeline in Python
+---------------------------------------------------------------------
+
+(88) 
+
+In this directory structure, you have three directories – data, etl, and config:
+
+• The data directory contains the three source data CSV files
+
+• The etl directory contains the Python modules for each activity:
+• extract.py
+• transform.py
+• load.py
+• You also have an __init__.py file to indicate that this is a package
+
+• The config directory contains a configuration file called database.ini that stores the database connection
+information
+
+The main.py file acts as the entry point for executing the ETL pipeline and coordinates the workflow by calling the
+respective scripts. Additionally, there’s a README.md file that provides documentation and instructions for using the ETL
+pipeline.
+
+By adopting this organized directory structure, you can ensure a modular and deployable ETL pipeline that promotes
+code reusability, maintainability, and collaboration among team members.
+
+-----------------------------------------------------------------------------------------------------------------------
+
+Chapter 8: Powerful ETL Libraries and Tools in Python
+
+---------------------------------------------------------------
+
+(89)
+
+Up to this point in the book, we have covered the fundamentals of building data pipelines.We’ve introduced some of
+Python’s most common modules that can be utilized to establish rudimentary iterations of data pipelines.
+
+There are several powerful, ETL-specific Python libraries and pipeline management platforms that we can use to our
+advantage to make more durable, scalable, and resilient data pipelines suitable for real-world deployment scenarios
+
+(90)
+
+Part 1 – ETL tools in Python:
+
+• Bonobo
+• Odo
+• mETL
+• Riko
+• pETL
+• Luigi
+
+In the second part of this chapter, we will introduce a pipeline orchestration platform that can be used to establish robust
+data pipelines within a unified, scalable ecosystem:
+
+• Part 2 – pipeline workflow management platforms in Python:
+• Apache Airflow
+
+(91)
+
+We will be using
+variations of the same ETL workflow to refactor each of the Python ETL modules to give you a clear apples-to-apples
+comparison of how each tool can be used to accomplish similar tasks.
+
+(92)
+
+Configuring your local environment:
+
+There are many ways to set up configuration files in your ETL project repositories. We will utilize two different forms, a
+config.ini file and a config.yaml file. Both work equally well, but we will use the config.yaml version more
+frequently. This is more of a “dealer’s choice” situation than anything else.
+
+(93)
+
+Open the config.ini file and replace username and password with the credentials for your local PostgreSQL
+environment:
+
+[postgresql]host = localhost
+port = 5432
+database = chicago_dmv
+user = postgres
+password = password
+
+To import the config.ini file in the chapter_08/ directory to your p0#_<module>_pipeline.py file, we will use the
+following syntax:
+
+# Read the Configuration File
+import configparser
+config = configparser.ConfigParser()
+config.read('config.ini')
+
+config.yaml:
+
+To import the config.yaml file in the chapter_08/ directory to your p0#_<module>_pipeline.py file, use the
+following syntax:
+
+# Import Configuration
+import yaml
+with open('../config.yaml', 'r') as file:
+ config_data = yaml.safe_load(file)
+
+(94) Part 1 – ETL tools in Python:
+
+A. Bonobo:
+
+Bonobo (https://www.bonobo-project.org/) is a Python-based Extract, Transform, Load (ETL) framework that uses a
+simple and rather elegant approach to pipeline construction. Bonobo treats any callable (i.e., function) or iterable object
+in Python as a node, which the module can then organize into graphs and structures to execute each object with
+simplicity. Bonobo makes it incredibly easy to build, test, and deploy pipelines, which allows you to focus on the
+business logic of your pipeline and not the underlying infrastructure.
+
+pip install bonobo
+
+To create a Bonobo pipeline, you must create a graph that will run each activity in a chain sequence:
+
+def get_graph(**options):
+    graph = bonobo.Graph()
+    graph.add_chain(extract, transform, load)
+    return graph
+
+Then, create a parser object to get each aspect of the Bonobo graph in order to run the Bonobo ETL pipeline:
+
+parser = bonobo.get_argument_parser()
+with bonobo.parse_args(parser) as options:
+    bonobo.run(get_graph(**options))
+
+Starting with the extract node (i.e., the contents of the extract.py file), which reads the data from the CSV files and
+returns a tuple of DataFrames, we modify the function to return a tuple value to pass to the transform node (i.e., the
+contents of the transform.py file) to then clean and transforms the data; finally, we pass the transformed data to the
+load_vehicle and load_crash nodes (split from the load.py file) to load the data into the corresponding tables in the
+PostgreSQL database
+
+The get_graph() function instantiates the Bonobo graph structure of the pipeline with Bonobo.graph() and then adds
+each node, the extract, transform, and load functions, to the pipeline using the graph.add_chain() method
+
+Overall, the refactored code in 01_bonobo_pipeline.py follows the same ETL workflow we saw at the beginning of
+the chapter. However, we add the Bonobo get_graph() function to create the nodes and graph pipeline architecture, and
+adjust the main() function to both create and run the new pipeline. We also add the add_chain() method to the extract,
+transform, and load activities (specified by the _input parameter) in order to append each task to the Bonobo graph.
+Finally, we run the Bonobo pipeline using the bonobo.run() function, with the ability to take in custom options
+specified in the options dictionary. Bonobo is an incredible resource when it comes to structuring your ETL data
+pipelines in Python.
+
+B. Odo:
+
+Odo (http://odo.pydata.org/en/latest/index.xhtml) is a Python library built on top of the Blaze and Dask libraries; it
+provides a uniform API for data migration between different formats, storage systems, and DataFrames. It accomplishes
+this by creating nodes of data formats that are connected via directed vectors indicating the transformation of one data
+type to another, and it supports migration between a wide range of formats, including CSV, JSON, Parquet, and SQL.
+The end result is a network of directed conversions, as shown in the complex diagram from Odo’s documentation page.
+Most importantly, Odo handles data type conversion and data validation when converting between data types, making
+the data migration process easy and reliable.
+
+each Odo function is represented by a single, directional, vector from one data type node to
+another. So, unlike Bonobo, we don’t need to create a pipeline with Odo. Rather, the Odo function represents a single
+conversion of an object or string representation of the source data to the object or string representation of the sink data:
+
+The immense flexibility of Odo is also one of its biggest
+drawbacks, as it can be a bit difficult to learn how to use it effectively.
+
+C. Mito ETL:
+
+Mito ETL (mETL) (https://pypi.org/project/mETL/0.1.7.0dev/) is a Python library that provides a simple, flexible, plug
+and play framework to manipulate structured source data to produce the specified structured sink data within the ETL
+workflow. It accomplishes this by providing a default list of 9 source types, 11 target types, and 35 of the most common
+transformation steps within the module. Though this is more restrictive than the previous two modules in this chapter,
+this module is significantly less complex and easier to use right away. Mito is designed to be lightweight and easy to use
+with a reduced learning curve compared to methods such as those discussed previously.
+
+pip install mETL
+
+The DataframeExtractor(), PandasTransformer(), and PostgreSQLLoader() mETL classes are used to construct
+the extract, transform, and load activity groups within an ETL pipeline. Each class in mETL coincides with the default
+list of source types, target types, and the most common ETL steps as mentioned earlier. These classes organize your code
+into beautifully formatted sections that are easy to use and maintain. As we said, this is a plug and play ETL module!
+
+The Pipeline() class takes each mETL pipeline as an ordered list, then runs the pipeline in sequence.
+
+we define the load_data() function as a mETL pipeline using the Pipeline class from the
+mETL library. We use Mito’s DataframeExtractor class to load the CSV files into DataFrames, then perform various
+data cleaning and transformation operations on the DataFrames using Mito’s PandasTransformer class. Lastly, we
+employ the select_columns, merge_dataframes, and groupby operations to transform the data into the required format for the PostgreSQL tables. Lastly, we use the PostgreSQLLoader class to load the DataFrames into the
+PostgreSQL database with the connection parameters and the table schema defined by the dsn and tables parameters,
+respectively, and the primary_key and columns parameters to define the table structure and constraints.
+
+ mETL’s restrictions can
+become quite cumbersome if your data needs shift and change, and it lacks the functionality for streaming data
+integrations. 
+
+D. Riko:
+
+Riko (https://github.com/nerevu/riko) is a Python library specifically catered to dealing with streaming data. As we
+mentioned earlier in the book, creating a pipeline to handle real-time streaming source data requires a specific process
+for cleaning and homogenizing the data into one cohesive data output. In most modern cases, a streaming data system
+requires cloud infrastructure and account for terabytes of data. However, if you’re dealing with smaller amounts of data,
+comparable to the capacity of your local environment, using a module such as Riko can do the trick. Riko contains
+synchronous and asynchronous APIs, as well as supporting parallel processing, and states that it is well suited for
+processing Rich Site Summary (RSS) feeds related to the XML language used to create websites.
+
+pip install riko
+
+As you can see from the riko class structure, the core attributes are sources, sinks, and modules. Similar to the
+premise of mETL, the creator of riko (https://github.com/nerevu/riko) built the module to handle 40 built-in modules,
+known as pipes, such as csv, select, merge, and fetch, to perform most pipeline tasks within the data streaming
+context
+
+E. pETL:
+
+pETL (https://petl.readthedocs.io/en/stable/) is a convenient Python library for building ETLs with various data source
+types (and data source quality). Using a marginal amount of your local system’s memory, pETL focuses on scalability
+rather than processing speed. Thus, pETL is commonly used with smaller dataset sizes, so its greatest weakness is its
+lack of scalability to big data. pETL is particularly useful when you need to process and transform data from various
+sources before loading it into a target destination, such as a database or a data warehouse.
+
+What makes pETL special is that it employs a lazy evaluation approach, meaning that operations are not executed
+immediately when they are called. Instead, they are stored as a sequence of operations that get executed when needed.
+This can help optimize memory usage and improve performance, especially for large datasets.
+
+F. Luigi:
+
+Luigi (https://luigi.readthedocs.io/en/stable/index.xhtml) is an open source Python package for building complex data
+pipelines of batch jobs. It was developed at Spotify to manage the organization’s data workflows and has since become a
+popular tool for data engineering and data science teams
+
+With Luigi, you can define tasks as Python classes and specify their dependencies, inputs, outputs, and execution
+requirements. Luigi will then manage the task scheduling and execution, handling dependencies and ensuring that tasks
+are run in the correct order.
+
+(95)
+
+Part 2 – pipeline workflow management platforms in Python:
+
+All the Python modules we’ve introduced up to this point in the chapter are valuable tools to improve the efficacy and
+speed of Python data pipelines, but these modules won’t solve everything. They do not provide a one-size-fits-all
+solution. As your data requirements expand, you will inevitably encounter the challenge of accommodating increasing
+capacity.
+
+Pipeline workflow management platforms streamline and automate data pipeline deployments, and are particularly
+useful in scenarios where multiple tasks need to be executed in a specific order or in parallel, and where data needs to be
+transformed and passed between asynchronous stages of a given pipeline. There are a number of pipeline workflow
+management platforms available for Python. Here are some of the most popular ones:
+
+• Apache Airflow: A platform to programmatically author, schedule, and monitor workflows
+• Apache Nifi: An easy-to-use, powerful, and reliable system to process and distribute data
+• Prefect: A platform for building, deploying, and managing workflows in Python
+
+These platforms provide a range of features and functionality including task scheduling, dependency management, and
+data handling. They can help simplify the development and management of complex data pipelines, and are used by data
+engineers, data scientists, and developers in various industries.
+
+In this book, we will limit our focus to Apache Airflow. However, we encourage you to read up on Apache Nifi
+(https://nifi.apache.org/) and Prefect (https://www.prefect.io/) on your own. 
+
+(96) Airflow:
+
+Apache Airflow (https://airflow.apache.org/) is an open source platform that allows users to programmatically author,
+schedule, and monitor workflows. It was originally developed at Airbnb to help manage the company’s complex 
+data processing pipelines.
+
+Airflow enables users to define workflows as code, allowing for version control, testing, and collaborative development.
+Workflows are built using a Directed Acyclic Graph (DAG) structure, which makes it easy to visualize the flow of data
+through the pipeline.
+
+(97)  Airflow supports a wide range of data sources and destinations, including databases, cloud storage, and messaging
+systems. It also provides operators for common data processing tasks such as file manipulation, data transformation, and
+machine learning.
+
+(98) One of the key features of Airflow is its extensibility. Users can easily write custom operators or hooks to integrate with
+new systems or perform custom tasks. Airflow also has a rich ecosystem of plugins that provide additional functionality,
+such as integrations with cloud providers or third-party tools.
+
+(99) Airflow has a web interface that allows users to monitor the status of their workflows, view task logs, and manually
+trigger tasks if needed. It also supports email notifications and Slack integrations for alerting users to workflow failures.
+
+(100) Let’s now see how we can convert an existing ETL code to Airflow.
+
+One contingency of Airflow is that it’s a traditional Python package. While present within the pipenv
+https://pypi.org/project/mETL/), it’s not well maintained. In order to correctly install Airflow in your internal
+environment, you will have to install this package directly into your local environment with pip:
+
+pip install apache-airflow
+
+(101) Unlike the pure Python modules in the first portion of this book, to run the Airflow DAG, you need to connect to a web
+server or import your scripts directly into an Airflow workspace. For now, you can follow these steps to run your Airflow
+pipeline:
+
+A. Start the Airflow web server by running the following command:
+
+airflow webserver
+
+B. Start the Airflow scheduler by running the following command:
+
+airflow scheduler
+
+C. Access the Airflow web interface at http://localhost:8080 in your web browser.
+
+D. Create a new DAG in the Airflow web interface by clicking on the Create button in the top menu and selecting
+DAG.
+
+E. Define the DAG parameters:
+
+default_args = { 'owner': 'first_airflow_pipeline', 'depends_on_past':
+False, 'retries': 3, 'retry_delay': timedelta(minutes=5), 'start_date':
+datetime(2023, 8, 13), 'catchup': False, }
+
+F.Define the tasks in the DAG by adding operators, such as PythonOperator, BashOperator, and
+PostgresOperator.
+
+task_extract_crashes = PythonOperator( task_id='extract_crashes', python_callable
+= extract_data(config_data['crash_filepath']), dag=dag)
+
+G. Define the task dependencies by using the >> operator to indicate which tasks should be executed after others:
+
+task_extract_crashes >> task_transform_crashes
+
+H. Save the DAG and start it by toggling the DAG switch to On.
+
+I. Monitor the DAG status and the task logs in the Airflow web interface.
+
+J. Test the DAG by running it manually or using triggers, such as sensors or external events.
+
+(102)
+
+You’ll notice that the load_data() function is the contents of the chicago_dmv Airflow DAG, which consists of several
+PythonOperator tasks.
+
+We use the PythonOperator class to define the tasks, passing the function name and its arguments as parameters:
+
+task_transform_crashes = PythonOperator( task_id='transform_crashes',
+ python_callable=transform_crash_data,
+ op_kwargs={'crash_df': "{{
+ task_instance.xcom_pull(
+ task_ids='extract_crashes') }}"},
+ dag=dag
+)
+
+(103)
+
+To feed the results of one task into another, we use the following syntax:
+'df': "{{task_instance.xcom_pull(task_ids='transform_crash') }}"
+
+
+This syntax is used in the op_kwargs list of the PythonOperator template:
+task_load_crash = PythonOperator( task_id='load_crash',
+ python_callable=load_data,
+ op_kwargs={'df': "{{task_instance.xcom_pull(task_ids='transform_crash') }}",
+ 'create_PSQL':
+ config_data['crash_create_PSQL'],
+ 'insert_PSQL':
+ config_data['crash_insert_PSQL']},
+ dag=dag
+)
+
+(104)
+
+Once the chicago_dmv Airflow DAG contents are fully defined in load_data() function, we use the >> operator to
+define the task dependencies, indicating which task should be executed after another:
+
+# Define the task dependenciestask_extract_crashes >> task_transform_crashes
+task_extract_vehicles >> task_transform_vehicles
+task_extract_people >> task_transform_people
+task_transform_crashes >> task_load_crash
+task_transform_vehicles >> task_load_vehicle
+task_transform_people >> task_load_people
+
+(105)
+
+In summary, we use the extract_ functions to read the CSV files and return Pandas DataFrames as the task results. We
+use the transform_ functions to perform data cleaning and transformation operations on the DataFrames, using the
+XCom system to pass the results between tasks. We use the load_ functions to load the DataFrames into the PostgreSQL
+database.
+
+Overall, Airflow provides a powerful and flexible platform for building ETL pipelines in Python, allowing users to
+define, schedule, and monitor complex workflows with ease. It can help to streamline and automate the data integration
+process, making it more efficient, reliable, and scalable.
+
+https://stackoverflow.com/questions/67090596/airflow-pythonoperator-required-termios-module-on-window-10
+
+--------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------
+
+Part 3:Creating ETL Pipelines in AWS
+
+
+In the third part of this book, we will introduce Amazon’s cloud computing service, AWS, and various strategies you can
+use to select the best tools and design patterns. We will learn how to create a development environment for AWS and
+how to use some automation techniques, such as CI/CD pipelines, to streamline production deployment.
+
+--------------------------------------------------------------------------------------------------------------------------
+
+
+Chapter 9: A Primer on AWS Tools for ETL Processes
+
+(106) Amazon Web Services (AWS) is one of the most widely used platforms for company data integration systems. Its
+flexible pay scale and wide range of applications and resources enable this platform to be equally useful for both 
+largescale corporations and small-scale side projects at home.
+
+(107) Common data storage tools in AWS:
+
+AWS provides a range of highly regarded data storage services, including Amazon Relational Database Service (RDS),
+Amazon Redshift, Amazon Simple Storage Service (S3), and Amazon Elastic Compute Cloud (EC2). These services
+are widely recognized and widely used in the industry for their reliability, scalability, and security.
+
+Here is a list of tools that we are going to employ in this chapter:
+
+AWS Tool --> Use-Case Description
+AWS Lambda --> Run code without provisioning or managing servers. Great for event-driven data processing.
+Amazon EC2 --> Provides scalable computing capacity in the cloud. Useful for running applications.
+Amazon RDS --> Managed relational database service. Suitable for structured data storage and retrieval.
+Amazon S3 --> Object storage service. Ideal for storing and retrieving large amounts of data.
+AWS Glue --> Fully managed ETL service. Suitable for data cataloging and ETL jobs.
+AWS Step Functions --> Coordinate multiple AWS services into serverless workflows. Suitable for complex ETL tasks.
+Amazon Kinesis --> Collect, process, and analyze real-time data streams. Suitable for real-time analytics.
+Amazon Redshift --> Data warehouse service. Ideal for large-scale data analytics.
+AWS Data Pipeline --> Orchestrate and automate data movement and transformation. Suitable for complex ETL
+workflows.
+
+(108)
+
+Amazon RDS:
+
+Amazon RDS (https://aws.amazon.com/free/database/) is a fully managed relational database service that provides a
+flexible way to run and manage relational databases in the cloud. RDS supports various popular database engines such as
+MySQL, PostgreSQL, Oracle, SQL Server, and MariaDB. RDS provides features such as automatic backups, point-intime restore, read replicas, multi-availability zone deployment, and integration with other AWS services such as S3,
+Glue, and Lambda. RDS provides a scalable and reliable platform for running various types of database workloads, such
+as online transaction processing (OLTP), online analytical processing (OLAP), or transaction processing.
+
+(109)
+
+Amazon Redshift:
+
+AWS Redshift (https://aws.amazon.com/pm/redshift/) is a fully managed data warehouse service that allows you to store
+and analyze large amounts of data in a scalable and cost-effective way. Redshift can be used as a target for ETL
+workflows that require aggregation, reporting, or data warehousing. It provides a SQL-based interface, automatic
+compression, distribution, backup, and integration with various business intelligence (BI) tools such as Tableau and
+Power BI.
+
+(110)
+
+Amazon S3:
+
+AWS S3 (https://aws.amazon.com/pm/serv-s3/) is a really awesome object storage service that provides an incredibly
+efficient way to store and retrieve data from anywhere in the world. So, given the right credentials, a user can store and
+retrieve any amount of data, at any time, from anywhere on the web, using a simple web service interface. Per its
+documentation, S3 is designed for 99.999999999% durability and 99.99% availability (that’s a lot of 9s!) and provides
+unlimited storage capacity, with no minimum or maximum object size limits. S3 supports various data types and formats,
+including text, images, audio, video, and binary data, and provides features such as versioning, lifecycle policies,
+encryption, and access control. Due to this extreme level of flexibility and scalability, S3 is often used as a data lake or
+data hub, where data can be ingested, processed, and distributed to various applications and services.
+
+(111)
+
+Amazon EC2:
+
+AWS EC2 (https://aws.amazon.com/pm/ec2/) is a cloud service that provides virtual computing resources, such as CPU,
+memory, storage, and networking, on demand. EC2 allows users to quickly and easily launch and manage virtual servers
+(called instances) in the cloud, using a variety of operating systems, such as Linux, Windows, and macOS. EC2 provides
+a range of instance types, from general-purpose to high-performance, and offers various pricing options, including ondemand, reserved, and spot instances. Lastly, EC2 provides a scalable and reliable platform for running various types of
+applications, such as web servers, databases, and machine learning (ML) models.
+
+By leveraging these AWS resources, organizations can easily manage their data storage needs, whether it be for relational
+databases with Amazon RDS, data warehousing with Amazon Redshift, object storage with Amazon S3, or scalable
+computing with Amazon EC2. AWS’s comprehensive suite of data storage services empowers engineers to efficiently
+store, process, and analyze their data in a secure and scalable environment from any physical location.
+
+(112)
+
+Leveraging S3 and EC2:
+
+Together, S3 and EC2 can be used in tandem to create a powerful and flexible platform for instantiating an application
+that is easily and reliably scalable in the cloud. S3 can be used as a storage backend for EC2 instances, where data can be
+stored and retrieved using S3 APIs, HTTP, or a CLI. By using S3 as the data source or target for ETL workflows, data
+can be ingested, processed, and stored in intermittent locations within different S3 buckets (such as staging and archive
+buckets). EC2 instances can then access the transformed output data from the S3 data directly over your network,
+without the need to copy or move data across credential walls.
+
+In the final use case for created data, such as dashboard
+visualizations for the business team, EC2 instances can be launched and managed using various tools and APIs, such as
+the AWS Management Console, the AWS Command Line Interface (AWS CLI), or SDKs, and can be integrated with
+other AWS services, such as Elastic Load Balancing, AWS Auto Scaling, or Amazon RDS.
+
+Next are some examples of how S3 and EC2 instances can be utilized to create data pipelines.
+
+(113)
+
+Data ingestion:
+
+S3 can be used as a landing zone for data ingestion from various sources, such as Internet of Things (IoT) devices,
+logs, or batch processes. EC2 instances can be used to run custom scripts or applications that read data from the sources,
+transform it, and then upload it to S3. This data can then be stored and organized in S3 using different prefixes, folders,
+or bucket policies, depending on the data type and access requirements.
+
+(114)
+
+Data transformation:
+
+S3 can be used as a data store for intermediate or processed data that needs to be transformed, aggregated, or enriched.
+EC2 instances can be used to run ETL workflows that read data from S3, perform transformations using tools such as
+Apache Spark, Python, or SQL, and then write the results back to S3. This approach can be used for both batch and
+streaming processing, depending on data velocity and latency requirements.
+
+(115)
+
+Data analysis:
+
+S3 can be used as a data source or target for data analysis, using tools such as Amazon Athena, Amazon Redshift, or
+Apache Hive. EC2 instances can be used to run queries, generate reports, or visualize data using BI tools such as
+Tableau, Power BI, or Amazon QuickSight. This approach can be used for both ad hoc and scheduled analysis,
+depending on the business needs and data sources.
+
+
+(116)
+
+Data storage:
+
+S3 can be used as a long-term storage solution for data archiving, backup, or disaster recovery (DR). EC2 instances can
+be used to run backup scripts or tools that copy data from EC2 instances or other data sources to S3. This approach can
+provide a cost-effective and scalable solution for storing large volumes of data over a long period of time, with high
+durability and availability.
+
+(117)  
+
+Computing and automation with AWS:
+
+AWS Glue (https://docs.aws.amazon.com/glue/latest/dg/what-is-glue.xhtml) is a fully consolidated data integration tool
+for end-to-end use, from data sourcing to analytic dashboards. It contains a fully managed ETL service that allows you to
+create and provide a number of features such as automatic schema discovery, data cataloging, job scheduling, error
+handling, and monitoring. Since Glue is an AWS service, it’s integrated directly with over 70 types of source data
+formats as well as popular AWS data target locations, such as Amazon S3, Amazon RDS, and Amazon Redshift. Most
+importantly, Glue uses a serverless architecture that provides built-in high availability (HA) and pay-as-you-go billing
+for increased agility.
+
+Within its infrastructure, Glue also supports various languages such as Python, Scala, and Java for creating custom
+transformations. It also contains a managed Apache Spark environment that can be used (at cost) to run PySpark or Scala
+workflows to process larger datasets using parallel processing within the cloud environment. Glue can be used to build
+scalable, reliable, and cost-effective data pipelines for various use cases, such as data warehousing, data migration, and
+data lake processing.
+
+(118)
+
+AWS Lambda:
+
+AWS Lambda (https://aws.amazon.com/lambda/) is a serverless compute service that allows you to run code in response
+to events or triggers, such as data changes in S3, DynamoDB, or Kinesis. Lambda can be used for simple ETL
+workflows that require real-time processing, filtering, or enrichment. It supports various languages such as Python,
+Node.js, and Java, and integrates with other AWS services such as S3, DynamoDB, and RDS.
+
+This is a serverless computing service that enables developers to run code without provisioning or managing servers.
+Lambda supports various programming languages and can be triggered by various events such as API Gateway, S3,
+DynamoDB, or CloudWatch. Lambda provides a flexible and scalable platform for building event-driven and
+microservices architectures, where small pieces of code can be executed in response to specific events or requests and
+then scaled up or down automatically based on the workload. Lambda supports various features such as automatic
+scaling, monitoring, logging, and security, and can be integrated with other AWS services such as S3, EC2, or RDS.
+
+(119)
+
+AWS Step Functions:
+
+AWS Step Functions (https://aws.amazon.com/step-functions/) is a workflow automation service that enables developers
+to coordinate multiple Lambda functions, services, and tasks into a state machine. Step Functions provides a visual
+interface for defining and monitoring state machines, and supports various state types such as task, choice, wait, and
+parallel. Step Functions provides a scalable and reliable platform for building complex and long-running workflows,
+such as data processing, batch jobs, or business processes. Step Functions supports various features such as error
+handling, retries, timeouts, and input/output transformations, and can be integrated with other AWS services such as
+Lambda, Simple Notification Service (SNS), or DynamoDB.
+
+Together or individually, Glue, Lambda, and Step Functions can be used to build serverless and event-driven workflows
+that automate various business processes and data workflows. Glue can be used to extract, transform, and load data from
+various sources into RDS databases, or to perform data processing and transformation using Spark and other tools.
+Lambda can be used to execute small pieces of code in response to specific events or requests and to perform data
+processing, transformations, or calculations. Step Functions can be used to coordinate and monitor multiple Lambda
+functions, services, and tasks and to manage complex and long-running workflows that involve multiple steps, branches,
+or conditions.
+
+
+In addition to the foundational AWS resources, AWS also provides a robust suite of big data tools and services. These
+tools include Amazon EMR for processing large-scale datasets using popular frameworks such as Apache Spark and Hadoop, and 
+Amazon Kinesis for real-time streaming data processing. With these powerful tools, businesses can
+effectively manage and analyze their big data workloads, gaining valuable insights and driving data-driven decisionmaking.
+
+
+(120)
+
+AWS big data tools for ETL pipelines:
+
+Several AWS tools can be used for creating ETL pipelines in the cloud. In this section, we chose to focus on the most
+common AWS tools that are best for building cost-effective and scalable ETL workflows.
+
+AWS Data Pipeline:
+
+AWS Data Pipeline (https://docs.aws.amazon.com/datapipeline/latest/DeveloperGuide/what-is-datapipeline.xhtml) is a
+web service for orchestrating data workflows across various AWS services and on-premises systems. It provides a visual
+pipeline designer that makes it easy to visualize and clearly define pre-built connectors for popular data sources and
+destinations, scheduling, error handling, and monitoring. Data Pipeline supports a wide range of data formats and
+protocols, including relational databases, NoSQL databases, and Hadoop clusters.
+
+(121)
+
+Amazon Kinesis
+
+Amazon Kinesis (https://aws.amazon.com/kinesis/) is a managed service a big data platform specifically designed for
+processing large datasets (we’re talking in the petabyte-scale range) for real-time data streaming and processing. Kinesis
+is one of Amazon’s plug and play tools, so it’s easy to start up and get your pipelines running. It provides a scalable and
+durable way to process and analyze data in real time, using Kinesis Data Streams, Kinesis Data Firehose, or Kinesis Data
+Analytics.
+
+(122)
+
+Amazon EMR:
+
+Amazon EMR (https://aws.amazon.com/emr/), formally known as Amazon Elastic MapReduce, is also a big data
+platform specifically designed for processing large datasets using Apache Hadoop, Apache Spark, and other open source
+tools. In comparison to Amazon Kinesis, which fills a similar role, EMR is far more flexible, but the onus is put on you
+to manage the infrastructure. EMR can be used for ETL workflows that require complex transformations, ML, or
+analytics, especially when dealing with large quantities of real-time data (think daily online sales for Estée Lauder).
+EMR is a scalable and cost-effective way to process this data in parallel using on-demand or spot instances.
+
+(123) Walk-through – creating a Free Tier AWS account:
+
 
