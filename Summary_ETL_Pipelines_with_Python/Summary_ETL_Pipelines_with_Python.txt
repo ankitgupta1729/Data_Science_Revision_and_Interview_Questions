@@ -1391,4 +1391,137 @@ EMR is a scalable and cost-effective way to process this data in parallel using 
 
 (123) Walk-through – creating a Free Tier AWS account:
 
+A. Create a free account on https://aws.amazon.com/free  (sign in if already exist and skip below steps)
+B. Create a root user account with your email and AWS account name of your choice.
+C. For the purpose of practice, make sure you create an account that is denoted as Always Free so that you can use all
+of AWS’ tools within a specified processing power limitation to prevent the risk of unexpected charges.
+
+
+If you would like to learn more about AWS Free Tier, please visit the following URL: https://aws.amazon.com/free/freetier-faqs/.
+
+(124)
+
+In the following section, we’ll go through connecting your new AWS account to your local environment for pipeline
+development. We’ll go through case study use cases of AWS in later chapters; for now, we want you to familiarize
+yourself with working with AWS tools locally.
+
+(125)
+
+Command-line packages for a local AWS development environment:
+
+For developers working in a local environment, AWS provides command-line packages that enable seamless integration
+with AWS services. These packages, such as AWS CLI, allow developers to interact with AWS resources, manage
+infrastructure, deploy applications, and automate workflows directly from their CLI. With these tools, developers can
+leverage the full capabilities of AWS services without reliance on AWS’s web user interface (UI).
+
+(126)
+
+Prerequisites for running AWS from your device in AWS:
+
+Using the graphical UI (GUI) of the AWS site is a great way to learn, but it makes for a clunky workflow when
+repeatedly establishing a development environment. To set up a local AWS development environment, we need to install
+several tools, including the following:
+
+• AWS CLI—CLI for AWS services
+• AWS Serverless Application Model CLI (AWS SAM CLI)—For building and deploying serverless applications
+• Docker—Containerization platform for packaging and running applications
+• LocalStack—Local AWS cloud environment for testing and developing applications
+
+(127)
+
+AWS CLI:
+
+The purpose of the AWS CLI command-line shell program is exactly as the name suggests: it’s a one-stop shop to
+control your entire AWS account from the command line. This means that there is no need for the GUI (at least, mostly).
+
+To install AWS CLI, head to the following link: https://aws.amazon.com/cli/.
+
+
+Verify the installation by running the following command in Command Prompt:
+
+aws --version
+
+(128)
+
+Docker:
+
+The concept of a Docker “container” is very similar to the pipenv virtual environment we’ve been using in previous
+chapters, but with an added flair: it’s deployable both locally and in the cloud. This means that you can set up a Docker
+container with all of the attributes for your data integration on one device, but using cloud deployment, it’s also
+accessible from any device that contains access to that cloud environment. The runnable instance that gets deployed is
+called an image, which is the entirety of all configurations needed to run your pipelines. If a core configuration is only
+present on your local machine, such as credentials to an external database, Docker won’t see it unless you add the same
+information to the deploying image because Docker only references the files and variables present within the image
+when deploying the container’s data application on the cloud (or in an additional environment).
+
+
+To install Docker on your local device, visit the Docker website and select the Personal (aka free) format of Docker:
+https://www.docker.com/products/personal/.
+
+Reopen cmd.
+
+Open your iTerm2 terminal to verify your new installation of Docker is running with the following command:
+docker --version
+
+(129)
+
+LocalStack:
+
+While not necessarily a requirement, LocalStack is a useful cloud service emulator that allows you to run everything
+related to single-container deployment (from AWS to Docker) from your command line. Feel free to play around with
+this feature in Docker, as desired.
+
+To install LocalStack, run the following command in your iTerm2 terminal:
+
+docker run --rm -it -p 4566:4566 -p 4571:4571 localstack/localstack
+
+Verify the installation by running the following command in Command Prompt:
+
+aws --endpoint-url=http://localhost:4566 s3 ls
+
+(130)
+
+AWS SAM CLI:
+
+AWS SAM is Amazon’s open source framework for defining the infrastructure of your cloud environment. In layman’s
+terms, this roughly translates to the foundational skeleton of your cloud computing environment. We won’t go into the
+specifics of what options are available to you in this book, but feel free to read more about AWS SAM in its
+documentation: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/what-is-sam.xhtml.
+
+AWS SAM CLI is a command-line shell program that allows you to run the AWS SAM program locally. To install AWS
+SAM CLI, run the following command in your iTerm2 terminal (Note: we will use regular pip in this install instead of
+pipenv because we want it accessible on the entire device, not just in a single virtual environment):
+
+pip install aws-sam-cli
+
+Verify the installation by running the following command in Command Prompt:
+
+sam --version
+
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Chapter 10: Tutorial – Creating an ETL Pipeline in AWS
+
+---------------------------------------------------------------------------
+
+(131)
+
+We will walk you through the creation of a deployable ETL pipeline in
+Python Lambda Functions and AWS Step Functions. Finally, we’ll create a scalable pipeline using Bonobo, EC2, and
+RDS. These tools will help all of your data pipelines harness the power of the cloud.
+
+(132) 
+
+Creating a Python pipeline with Amazon S3, Lambda, and Step Functions:
+
+we will create a simple ETL pipeline using AWS Lambda and Step Functions. AWS Lambda is a
+serverless compute service that allows you to run code without provisioning or managing servers, while Step Functions
+provides a way to orchestrate the serverless lambda functions and other AWS services into workflows.
+
+
+(133)
+
+Setting the stage with the AWS CLI:
+
 
