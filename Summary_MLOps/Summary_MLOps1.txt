@@ -78,7 +78,7 @@ losing the data; it can be done using the reshape() or flatten() method.
 4. [1 2 3 4 5 6]
 Note: Here, you can use my_2array.reshape(6) instead of flatten().
 
-(7) Pamdas: loc - selection by label:
+(7) Pandas: loc - selection by label:
 
 A loc gets rows (and/or columns) with specific labels. To get all the rows in which
 fruit size is medium, loc is written as follows:
@@ -1769,5 +1769,3228 @@ connect them to create the flow.
 ## Docker for ML
 
 (91) 
+
+Containers are an abstraction at the app layer that packages code and dependencies
+together. Multiple containers can be run on the same machine and share the OS
+kernel. Each running container is considered an isolated process in user space.
+
+(92)
+
+Docker automates the repetitive and time-consuming configuration task, saving
+both time and effort for the developer. 
+
+(93)
+
+Docker is a containerization platform to package applications and their dependencies
+in the form of a container. It ensures that all the required libraries and dependencies
+are wrapped in an isolated environment to run the application smoothly in the
+development, test, and production environments. Docker is popular among
+developers as it is lightweight, fast, portable, secure, and more efficient than virtual
+machines. A containerized application will start running as soon as you run the
+Docker container.
+
+(94)
+
+Docker has its own Docker registry, called Docker hub. Docker hub allows
+developers to store and distribute container images over the internet. An image tag
+enables developers to differentiate images. A Docker registry has public and private
+repositories. A developer can store a container image on the Docker hub using the
+push command and retrieve one using the pull command.
+
+(95)
+
+Many a time, the code works perfectly on your machine but throws an error when
+you run it on another machine. This happens with developers and data scientists as
+well. The reason could be anything from a different OS to a different release of an OS,
+different python versions, or dependency issues. So, when they face this issue, they
+might end up spending a lot of time fixing it. With Docker, you should not encounter
+these issues, as Docker packages require files, configuration, and commands for
+seamless flow.
+
+(96)
+
+With Docker, you can put all the required files in the directory and write down
+the configuration, OS version, and commands to be executed sequentially in a
+Dockerfile. You can also connect the two Docker containers with the same network.
+Additionally, you can use the same Dockerfile for development, pre-production, and
+production.
+
+Docker ensures reproducibility, portability, easy deployment, granular updates,
+lightness, and simplicity.
+
+(97) Installation on unix:
+
+https://www.youtube.com/watch?v=cqbh-RneBlk&ab_channel=vCloudBitsBytes
+
+sudo apt-get update
+sudo apt install docker.io
+sudo systemctl enable docker
+sudo systemctl status docker
+sudo docker run hello-world
+
+
+(98) Docker compose:
+
+Docker compose enables developers to configure and run more than one container.
+It reads the configuration from the docker-compose.yml file. A single docker-
+compose up command can start the services and run the multi-container applications.
+On the other hand, you can destroy all of this using the docker-compose down
+command. You can also remove the volumes by adding the -- volumes flag.
+
+You can install the Docker compose using the following command:
+
+sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+
+Authorize docker-compose to execute files:
+
+sudo chmod +x /usr/local/bin/docker-compose
+
+Finally, verify the installation:
+
+docker-compose --version
+
+The installation provides the following:
+• Docker Engine
+• Docker CLI client
+• Docker Compose
+
+(99) Hello World with Docker:
+
+This is a sample Docker image to test whether Docker is working properly. By
+running the following command, you will create the first Docker container:
+
+sudo docker run hello-world
+
+-- procedure:
+/
+To generate this message, Docker took the following steps:
+1. The Docker client contacted the Docker daemon.
+2. The Docker daemon pulled the "hello-world" image from the Docker Hub.
+(amd64)
+3. The Docker daemon created a new container from that image, which runs
+the executable that produces the output you are currently reading.
+4. The Docker daemon streamed that output to the Docker client, which
+sent it to your terminal.
+
+(100) Docker objects:
+
+While working with Docker, you can create and use Docker objects like images,
+containers, volumes, and networks. In this chapter, you are going to learn about
+some of these objects.
+
+
+-- Dockerfile
+
+Dockerfile can be considered as a set of commands or instructions that enables
+developers to build Docker images. These commands or instructions get executed
+sequentially. It is a plain text document with no extension.
+
+-- Docker Images
+
+To create a Docker container, a Docker image needs to be created. It stores all the
+code and dependencies required to run the application and acts as a template to
+run a container instance. A Docker image can be uploaded on the Docker hub, from
+where it can be pulled to the server or system to run the container.
+To view the list of available Docker images, execute the following command in the
+terminal:
+
+docker images
+
+
+-- Docker Containers
+
+An instance of a container is created when you run the Docker image. You can use
+the same Docker image to run as many containers as you want. It is an important
+component of the Docker ecosystem. Docker runs containers in an isolated
+environment.
+
+An additional layer called a container layer, gets automatically created on top of
+the existing image layers when the developer runs a container. A Docker container
+has its own read and write layer, which allows developers to make changes that
+are specific to that container. Suppose you are running three containers using the
+same Docker image, and you install another version of the python package inside
+a running container. This will not affect the existing version of the python package
+in other containers. Docker manages the data within the Docker container using
+Docker Volumes.
+
+However, the data volume is part of the Docker host file system,
+and it is simply mounted inside the container.
+
+The command to check all the running containers is docker ps.
+The command to check all the running and stopped containers is docker ps -a
+
+To run Docker in the background, run the container in detached mode. You can use
+the -d flag to run the container in detached mode.
+
+(101)
+
+The bridge network is the default network interface
+that Docker Engine assigns to a container.
+
+sudo docker network ls
+
+This command will show you the list of networks and their scope. The output
+contains the following headers:
+NETWORK ID, NAME, DRIVER, SCOPE
+To check the network details of any Docker container, use the following command,
+followed by the network ID:
+
+sudo docker network inspect <NETWORK ID>
+
+
+The -p flag is used to map container ports to host ports. Consider this example:
+docker run -p <myport>:<containerport> nginx
+
+Note: To observe the output, use docker logs [container_id].
+
+(102) Create a Dockerfile
+
+It is a standard practice to write
+instructions in the uppercase to differentiate between instructions and arguments.
+
+-- FROM
+
+•The FROM instruction sets the base image for subsequent instructions.
+•A valid Dockerfile must have a FROM instruction.
+•FROM can occur multiple times in the Dockerfile.
+
+-- CMD
+
+•CMD defines a default command to execute when a container is being created.
+•CMD does not get executed while building an image.
+•Can be overridden at runtime.
+
+-- RUN
+
+It executes a command in a new layer on top of the current image and commits the
+results.
+
+-- COPY
+
+The COPY instruction copies new files or directories from <src> and adds them to the
+file system of the container at the path <dest>.
+
+-- ENTRYPOINT
+
+This helps you to configure the container as an executable; it is similar to CMD. There
+can be at max one instruction for ENTRYPOINT; if more than one is specified, only the
+last one will be honored.
+
+-- EXPOSE
+
+This exposes the network ports on the container, on which it will listen at runtime.
+
+-- ENV
+
+This will set the environment variables <key> to <value> within the container.
+When a container is running from the resulting image, it will pass and persist all the
+information to the application running inside the container.
+
+(103) Build a Docker image
+
+Using the docker build command, users can automate a docker build that executes
+several command-line instructions in succession.
+The docker build command builds an image from a Dockerfile and a context:
+
+docker build -t ImageName:TagName dir
+
+Where:
+● -t: Image tag
+● TagName: The tag you want to give to your image
+● ImageName: The name you want to give to your image
+● dir: The directory where the Dockerfile is present
+
+For the current directory, simply use . (period):
+
+sudo docker build –t myimage:v1 .
+
+Check the newly created image using the docker images command.
+The next step is to build the container from the newly created image.
+
+Note: To check all the commands run against that image, execute the following
+command docker history [Image_id]
+
+(104)
+
+A Docker container is a runtime instance of a Docker image. The docker run
+command can run the Docker image as follows:
+
+docker run --name test -it myimage:v1
+
+Where:
+
+•-it: It is used to mention that you want to run the container in interactive
+mode.
+•--name: It is used to give a name to the container.
+•myimage: It is the image name that is to be run.
+•v1: It is the tag of the image.
+
+(105)
+
+The docker inspect [container_id] command will populate the complete
+information of the container in JSON format.
+
+The docker top [container_id] command will show top-level processes within
+a container.
+
+(106) Lifecycle and flow of Docker Container:
+
+A. DockerFile
+B. Create Docker Image using docker build
+C. Create Docker Container using docker run where the application is created
+D. Application is runing now
+
+D1. if you want to stop-- docker stop
+D2. if you want to restart -- docker restart
+
+Di. if you want to pause-- docker pause
+Dii. if you want to unpause: docker unpause
+
+E. kill the docker process using Docker kill 
+
+(106) Dockerize and Deploy the ML Model
+
+When you have all the files at one place, you can start building the Docker image
+using the docker build command.
+
+The next step is to run the image to start the Docker container instance using
+the docker run command.
+
+Just run the docker command in the terminal, and you will get the list of commonly
+used Docker commands.
+
+---------------------------------------------------------------------------------------------------------------------------------
+
+# Build ML Web Apps Using API
+
+(107)
+
+When developing a web app in Python, you are very likely to use a framework for
+it. A framework is a library that eases the life of a developer while building scalable,
+standard, and production-ready web applications.
+
+(108) REST APIs:
+
+REST is an acronym for Representational State Transfer. REST is an architectural
+style mainly created to guide the development and design of the architecture for
+the World Wide Web (WWW). In simple words, a web service or web API following
+REST architecture is a REST API.
+
+REST is a pattern to make APIs that can be used to access resources like images,
+videos, text, JSON, and XML hosted on the server. RESTful API provides a common
+platform for communicating between applications built in different programming
+languages.
+
+
+The interesting thing about the API is that the client does not need to know the
+internal operations performed at the server’s end and vice versa. REST API treats
+any data requested/processed by the user as a resource; it can be text, image, video,
+and so on.
+
+(109)
+
+REST API is stateless; it means that the client should provide all the parameters in the
+request every time the API is called. The server will not store previous parameters
+passed with the request by the client.
+
+Client makes a request for Get,post,put,delete and then Rest API convert it into HTML request and it goes to server
+and then server makes the HTML response and then again REST api converts it into JSON,xml and sends to client.
+
+(110) FASTAPI:
+
+FastAPI is a web framework for developing RESTful APIs in Python. FastAPI is a
+lightweight (compared to Django), easy-to-install, easy-to-code yet high-performing
+framework. It enables the development of REST API with a minimal code requirement.
+
+Once you develop and run the API, you can access the documentation for your application at
+{API endpoint}/docs or {API endpoint}/redoc
+
+Note: FastAPI requires Python 3.6 and above.
+
+(111)
+
+Let’s install FastAPI and uvicorn, an Asynchronous Server Gateway Interface
+(ASGI) server, for production.
+
+pip install fastapi uvicorn
+
+Now, create a loan_pred_app.py file. First, load the dependencies and pickle the object
+of the trained model. Furthermore, create a FastAPI instance and assign it to the app.
+This will make the app a point of interaction while creating the API.
+
+(check demo)
+
+(112)
+
+Now, it’s time to run the app and see standard UI auto-generated by FastAPI, which
+uses swagger, now known as openAPI.
+
+The preceding command can be interpreted as follows:
+
+•loan_pred_app refers to the name of the file where the API is created.
+•The app is the instance defined in it.
+•--reload will simply restart the FastAPI server every time a change is made
+in the app file.
+
+(113)
+
+Simply add /docs to the end of the URL, and you should see auto-generated
+docs for the app.
+
+http://127.0.0.1:8000/docs
+
+FastAPI provides the functionality to validate the data type. It detects the invalid
+data type at runtime and returns the bad input to the client, which eventually
+reduces the burden of managing exceptions at the developer’s end.
+
+Optionally, you can run the curl command to get the output in the
+terminal.
+
+(114) Streamlit
+
+Streamlit is an open-source library in Python that enables users to build and share
+attractive UI for machine learning models.
+
+With streamlit, you can add beautiful and interactive widgets
+to get the user inputs with a few lines of code, such as a dropdown selection box and
+a slider to change the values.
+
+In streamlit, everything can be coded in Python without the need for any front-end
+skills such as JavaScript to develop stunning UI for the app.
+
+
+Let’s install streamlit using the following command:
+
+pip install streamlit
+
+Verify the streamlit installation using the following:
+
+streamlit hello
+
+(115)
+
+Open the terminal and run the following command where the streamlit_app.py file is
+located:
+
+streamlit run streamlit_app.py
+
+Or
+
+streamlit run streamlit_app.py &>/dev/null&
+
+To deploy your Streamlit app on the streamlit cloud, you can use Streamlit sharing.
+Upload your files with the requirements.txt file on GitHub. Create an account on their
+website at https://streamlit.io/cloud and then provide a GitHub link and streamlit
+app file. This will deploy your app on the streamlit cloud.
+
+(116)  Flask
+
+Flask is a web framework that allows you to build web applications using Python.
+It is a lightweight framework compared to Django. It follows the REST architecture.
+You can develop simple web applications with Flask, as it requires less base code.
+Flask is based on the Web Server Gateway Interface (WSGI) and Jinja2 engine.
+
+To start a Flask application, you need to use the run() function. If you set debug=True
+inside the run() function, then it becomes easy to track the error. When you enable
+debug mode, the server will restart every time you make changes in the app file and
+save it. If an error occurs, then it shows the reason in the browser itself. However, you
+should not use this feature while deploying models in the production environment.
+
+
+(117)
+
+In a Flask, you can call static files like CSS or JavaScript files to render the web page
+of the app. The route() function guides the Flask to the URL called by the function.
+
+pip install Flask
+
+To run the Flask application in the terminal, go to the directory where app.py and
+other required files are located:
+
+python app.py
+
+(118)
+
+app.route(‘/’) will route to the home page URL; the trailing slash ‘/’is generally usedas a convention for the home page.
+
+(119) Gunicorn
+
+The Gunicorn is an application server for running a Python app. Gunicorn is WSGI
+compatible, so it can communicate with multiple WSGI applications. In the current
+case, Gunicorn translates the request received from Ngnix for the Flask app and vice
+versa.
+
+To install Gunicorn, execute the following command:
+
+sudo apt-get install gunicorn3
+
+Go to the directory where the app.py file is located and run:
+
+gunicorn3 app:app
+
+This command helps to know which IP and port are be.
+
+(120) NGINX
+
+NGINX is a high-performance, highly scalable open-source, and reverse proxy web
+server. It can perform load balancing and caching application instances. It accepts
+incoming connections and decides where they should go next. In the current case, it
+sits on top of a Gunicorn.
+
+To install NGINX, execute the following command:
+
+sudo apt-get install nginx
+
+
+You can check the status of NGINX using the following command:
+
+sudo service nginx status
+
+Now, go to the following path:
+
+cd /etc/nginx/sites-enabled/
+
+Note: NGINX configuration files do not have any extension, and every line should be closed using ; (semicolons).
+
+Create a new configuration file for the Flask app:
+
+sudo nano flask_app
+
+Then, add the following snippet and save the file:
+
+server{
+2.         listen 80;
+3.         server_name 0.0.0.0;
+4.
+5.         location / {
+6.                 proxy_pass http://unix:/home/suhas/webapi/flask/
+flaskapp.sock;
+7.         }
+8. }
+
+Here, you are dictating NGINX to listen to port 80. Inside the location block, pass the
+request to the socket using proxy_pass. After changing the NGINX file, restart the
+NGINX service using the following command:
+
+sudo service nginx restart or sudo systemctl restart nginx
+
+You can check the status of NGINX using the following command:
+
+sudo service nginx status
+
+Go to the directory where the app.py file is located and run the following command
+to start the Gunicorn server:
+
+gunicorn3 app:app
+
+Open a new tab in the browser and enter the IP in the address bar. You should see
+the Flask app up and running.
+
+Create and run the service in the background:
+Create a systemd unit file that allows the Ubuntu boot system to start Gunicorn
+automatically and serve up the Flask application every time the server starts.
+
+First, go to the system directory using the following command:
+
+cd /etc/systemd/system
+
+Next, you need to create a service for the Flask app
+
+sudo nano flaskapp.service
+
+Then, add the following commands to it and save it:
+
+1. [Unit]
+2. Description=Flaskapp Gunicorn Service
+3. After=network.target
+4.
+5. [Service]
+6. User=suhas
+7. Group=www-data
+8. WorkingDirectory=/home/suhas/webapi/flask
+9.
+10. ExecStart=/usr/bin/gunicorn3
+sock -m 007 app:app
+--workers
+3
+--bind
+unix:flaskapp.
+11. Restart=on-failure
+12. RestartSec=10
+13.
+14. [Install]
+15. WantedBy=multi-user.target
+
+In the preceding service, you are instructing Gunicorn to start three worker processes,
+which can be updated afterward. Then, create and link the UNIX socket file. In the
+current scenario, 007 is used for access so that the socket file allows access to the
+owner and group and restricts others. Then, pass the filename of the app.
+
+sudo systemctl daemon-reload
+
+sudo service flaskapp restart
+
+Restart the flaskapp service by running the preceding command, and you should
+see flaskapp.sock file created in the app directory.
+
+If everything goes well, open the browser and enter the IP in the address bar. You
+should see the app up and running.
+
+-----------------------------------------------------------------------------------------------------------
+
+Build Native ML Apps
+
+(121) 
+
+In order to consume ML models as a native application, a GUI should be built for the
+users. In this chapter, you will learn to build native applications using Tkinter and
+Kivy packages, which can be converted into desktop applications for Windows and
+Android devices, respectively.
+
+Python allows multiple ways to build a Graphical User Interface (GUI), which is an
+application that contains the main window, buttons, widgets, input fields, and the
+like. End users can interact with it and see the response based on their actions and
+inputs. Python has numerous GUI frameworks or toolkits available.
+
+(122) Introduction to Tkinter
+
+Tkinter is a free software released under a Python license.
+
+Tkinter is the Python interface to the Tk GUI library. Tk is derived from the Tool
+Command Language (TCL), which is a scripting language. The best part is that you
+do not need to install Tkinter explicitly as it comes with Python since 1994.
+
+Tkinter enables developers to create widgets (GUI elements) easily, which are
+packaged in the Tk toolkit. With widgets, developers can create buttons, menus,
+and input fields to get user data. These widgets can be linked to Python features,
+methods, data, or other widgets.
+
+For instance, a button widget can be used to perform a certain action upon click
+event, or it can call the function and pass the user's data as parameters.
+
+(123)
+
+You can verify the Tkinter installation using the following command:
+
+python -m tkinter
+
+(124) Hello World app using Tkinter
+
+Let’s create a basic Tkinter app to give you a glimpse of Tkinter functionality. The
+following code creates a simple app displaying the Hello World text with the Exit
+button to close the app.
+
+1. from tkinter import *
+2. win = Tk()
+3.
+4. a = Label(win, text ="Hello World")
+5. a.pack()
+6.
+7. b=Button(win, text='Exit', command=win.destroy)
+8. b.pack()
+9.
+10. win.mainloop()
+
+In the preceding code, first, the tkinter package is imported to create the main
+window for the app using the Tk(), where the win is the name of the main window
+object that has been created using Tk(). A Label() widget is used to display text
+or images, and the win parameter is used to denote the parent window of the app.
+
+The pack() organizes the widgets in blocks (such as buttons and labels). If you do
+not organize the widget, your app will still run, but that widget will be invisible. A
+Button() widget is used to add buttons, and here it is used to close the Tkinter app.
+When the user clicks on the Exit button, the Tkinter app window will close. Finally,
+the mainloop() is to keep the application running and execute user commands.
+
+(125) Build an ML-based app using Tkinter
+
+Here, you need to develop the Python code for data loading, data cleaning, feature
+engineering, model building and finally, saving trained models to serialized objects
+like pickles. Then you can use trained models to get predictions on the Tkinter app.
+
+Let’s consider a loan prediction scenario, where the goal is to predict whether a
+customer’s loan will be approved. The focus will not be on hyperparameter tuning
+and model optimization. However, you can optimize a model to improve its overall
+performance.
+
+Tkinter comes with three geometry managers: grid, place, and pack. A geometry
+manager’s job is to arrange widgets in specific positions. The place geometry
+manager gives you more flexibility compared to the other two geometry managers.
+You can declare the vertical and horizontal position of the widget. The following
+code mentions the vertical and horizontal positions of each widget, including the
+Predict button.
+
+run the following command in demo folder:
+
+python3 ml_app.py
+
+(126) Convert Python app into Windows EXE file
+
+Now, you can convert this Tkinter - ML app to Windows executable application
+using Pyinstaller.
+
+Pyinstaller packages a Python application
+and its dependencies into a single package that can be run independently without
+installing a Python interpreter.
+
+(127)
+
+Here, a virtual environment is created with Python version 3.7 using conda, as
+follows:
+
+conda create -n venv_tkinter python=3.7 -y
+
+Once it is created, activate it using:
+
+source activate venv_tkinter
+
+Note: To remove the conda environment, you can execute the following command
+
+conda env remove -n venv_tkinter:
+
+(128) run the following command to create windows app from python code:
+
+pyinstaller --noconfirm --onefile --windowed --icon "python_104451.ico" --add-data "~/trained_model/model.pkl:." --hidden-import "sklearn" --hidden-import "sklearn.ensemble._forest" --hidden-import "sklearn.neighbors._typedefs" --hidden-import "sklearn.utils._weight_vector" --hidden-import "sklearn.neighbors._quad_tree" "ml_app.py"
+
+Where:
+
+•-y,--noconfirm: Will replace output directory without asking for
+confirmation
+•-F, --onefile: Will create one file bundle executable
+•-D, --onedir: Will create one folder bundle containing the Windows
+executable file
+•--add-data: Additional non-binary files or folders to be added to the
+executable
+•-c, --console, --nowindowed: Opens a console window for standard i/o
+(default)
+•-w, --windowed, --noconsole: Used to not provide a console window for
+standard i/o
+•--hidden-import MODULENAME: Used to name an import not visible in the
+code of the script(s); this option can be used multiple times
+
+Now, open the ml_app.exe file located in the dist folder.
+
+(129) Build an ML-based app using kivy and kivyMD
+
+In this section, using the pickle object of the trained model generated earlier in this
+chapter, let’s develop and deploy the FastAPI endpoint on the remote server, i.e.,
+Heroku. You will learn how to deploy ML models on the Heroku platform with CI/
+CD pipeline in the upcoming chapter.
+
+Moreover, you can deploy this FastAPI app using any other hosting service, such
+as PythonAnywhere or Amazon EC2. In the current scenario, a remote endpoint is
+used to make predictions in the Kivy app.
+
+So, whenever users pass the data in the kivy app and press the Predict button, it will
+send the parameters to the API endpoint, where it will pass the received parameters
+to the model object and in return, send the prediction to API. The Kivy app will fetch
+the output (prediction) provided by the API.
+
+(130) KivyMD app
+
+Kivy is an open-source software library for the quick development of apps with a
+simple GUI. Kivy is written in Python, so in order to use it, you should have Python
+installed on your system. Unlike Tkinter, it is not pre-installed with Python; you
+need to install it separately.
+
+KivyMD is an extension of the kivy framework. It is a collection of Material Design
+(MD) widgets and is mainly used for GUI building along with kivy. It is a good idea
+to create a virtual environment first, as it helps maintain different packages easily.
+You can install kivy and KivyMD using the following commands:
+
+pip install kivy
+pip install kivymd
+
+(131)
+
+Use the deployed endpoint on the remote server. Keep it simple for now. Import the
+required dependencies first. Here, import MDApp, which is a base app. Build the app
+on top of this base app as it takes care of initialization and booting up the app.
+
+Then, import the Builder function for the front end of the app.
+
+
+1. from kivymd.app import MDApp
+2. from kivy.lang.builder import Builder
+3. from kivy.uix.screenmanager import Screen, ScreenManager
+4. from kivy.core.window import Window
+5. from kivy.network.urlrequest import UrlRequest
+6. import certifi as cfi
+
+The screen is the base, and other components will be placed on top of it. It is similar
+to the web page. Here, you can assign a name to the screen. As you can see in the
+following code, a hierarchy is being maintained.
+
+The screen managers mainly manage the different screens. Let’s understand each
+component. MDLabel is used to display the text with properties like horizontal
+alignment, font style, and so on.
+
+MDTextField is used to get user inputs. Here, hint_text is added to guide users
+while entering the data into the app. It has an id parameter, which will fetch the data
+entered by the user.
+
+MDButton is used to perform actions. Here, it is being used to call the predict()
+with the parameter on_press to complete the action.
+
+First store ScreenManager() into the sm object for ease of access, then add the main
+screen widget. After that, define the MainApp class (import MDApp in it as a base),
+which holds the core logic of the app. Define the build() for adding text and input
+widgets. The predict() will get the user data from the id directly as shown in the
+code.
+
+Provide these input parameters to the remote API endpoint, which will return the
+prediction for it.
+
+In kivy, you can use UrlRequest() to parse the URL and the on_success parameter
+to be triggered on request completion. In the current case, use UrlRequest() to
+call res() on completion of the API request, which will replace the blank text of
+MDLabel defined earlier: MDRaisedButton.
+
+Run the app using python main.py and if everything goes well, you should see the
+app up and running.
+
+(132) Convert the Python app into an Android app
+
+
+Now, you will learn to convert this into an Android app using the Buildozer package.
+Make sure your kivy filename is the main.py for this step. You need to install the
+Buildozer package first, if it is not installed already.
+
+pip install buildozer
+
+Install the required dependencies, as follows:
+
+pip install cython==0.29.19
+
+sudo apt-get install -y \
+python3-pip \
+build-essential \
+git \
+python3 \
+python3-dev \
+ffmpeg \
+libsdl2-dev \
+libsdl2-image-dev \
+libsdl2-mixer-dev \
+libsdl2-ttf-dev \
+libportmidi-dev \
+libswscale-dev \
+libavformat-dev \
+libavcodec-dev \
+zlib1g-dev
+
+sudo apt-get install -y \
+libgstreamer1.0 \
+gstreamer1.0-plugins-base \
+gstreamer1.0-plugins-good
+
+sudo apt-get install build-essential libsqlite3-dev sqlite3 bzip2 libbz2-dev zlib1g-dev libssl-dev openssl libgdbm-dev libgdbm-compat-dev liblzma-dev libreadline-dev libncursesw5-dev libffi-dev uuid-dev libffi6
+
+sudo apt-get install libffi-dev
+
+You may need to install additional dependencies as per system requirements.
+Now, create the buildozer.spec file by running the following command:
+
+buildozer init
+
+The preceding command will create a standard buildozer.spec file. However, you
+need to modify it as per requirement. For instance, providing dependencies next
+to requirements under the Application requirements section, providing package
+name, title, and domain, providing internet permission under the Permissions
+section, and so on.
+
+Finally, build and package the Android app using the following command:
+
+buildozer -v android debug
+
+Optionally, you can use Google Colab notebook.
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+CI/CD for ML
+
+(133)
+
+By automating the manual process, you
+save time, effort, and cost. The best part about automation is that it reduces human
+errors. You can automate most of the parts while incorporating new changes or updates in the application.
+
+(134)
+
+CI/CD pipeline enables you to deploy the updates to the application in an automated
+way.
+
+(135)
+
+After studying this chapter, you should be able to build a CI/CD pipeline to deploy
+ML models in production, integrate GitHub with Jenkins, run the tests using
+Jenkins’s job and generate a test summary in Jenkins, build a Docker image, and run
+a Docker container using Jenkins. Finally, you should be able to integrate Jenkins
+with an email account to get the status of the build and deployment.
+
+(136) CI/CD pipeline for ML
+
+CI/CD is an acronym for Continuous Integration/Continuous Delivery/
+Deployment (CI/CD). The purpose of the CI/CD pipeline is to automate the chain
+of interconnected steps to deploy an application or release a new version of the
+software.
+
+(137)
+
+When a new feature gets added to the application, any improvement needs to be
+integrated with the application. However, it involves different teams that execute
+multiple tasks and validate them before moving on to the production stage. Mostly,
+this is a manual and time-consuming process, and it can cause a delay in the release
+of the new version.
+
+(138)
+
+CI/CD pipeline helps in automating the testing, running error-free code for the
+application, faster deployments, saving time and cost for developers, high reliability,
+and so on.
+
+CI/CD pipeline enables you to push the changes from development to deployment
+quickly, which usually consist of four stages:
+
+•Commit code changes: After making changes to the file or code, the
+developer pushes the updates to the source repository. This activity is often
+performed in a team. CI/CD pipeline enables any team member to check the
+integrity of the code. Hence, you can automatically push the changes to the
+repository after it passes the tests.
+
+•Build: In this phase, it fetches the changes from the repository for the build. It
+keeps a watch on the source repository for any changes. As soon as it detects
+the changes, it initiates the build process and validates the build results after
+build completion.
+
+•Test: The test phase runs the automated tests, such as unit tests, pytest, and
+API tests, on top of the build. It is a vital stage of the CI/CD pipeline. This
+ensures the overall integrity of the code and prevents any broken code from
+passing on to the next phase.
+
+•Deploy: This phase deploys the changes to the production environment.
+
+(139)
+
+Stages:
+
+1. Commit Code Changes
+2. Build
+3. Test
+4. Deploy
+5. Release
+
+Continuous Integration: Commit Code Changes  --> Build  --> Test
+Continuous Delivery: Commit Code Changes  --> Build  --> Test --> Delivery
+Continuous Deployment: Commit Code Changes  --> Build  --> Test --> Delivery --> release
+
+(140)
+
+Listing down some popular tools for CI/CD pipeline:
+
+•Jenkins
+•GitHub Actions
+•Bamboo
+•CircleCI
+•GitLab CI/CD
+•Travis CI
+
+(141) Continuous Integration (CI)
+
+In Continuous Integration (CI), the team of developers builds, run, and test code in
+local environments first. If everything goes well then, they push the updates to the
+repository. After this, the chain of steps starts to run, which involves the build, run,
+and test stages. The project members get notified at each step and get timely updates,
+such as the build outcome and test outcomes. Finally, the artifacts get stored and the
+report of the current status is sent via email or notified via Slack.
+
+When a team of developers is working on the same application, they push the code
+changes to the repository. However, due to changes in the environment, such as the
+production environment, the code can break or throw an error. On the other hand,
+there could be a conflict between updates, when multiple developers try to push the
+updates of the application to the central code repository. This issue is taken care of
+by the CI stage, where developers can push the changes that will pass through the
+defined stages, such as build, run, and test, to ensure that the code is working properly
+without any issues. However, if any of the CI stages fail, then you will be notified,
+and the further process stops. This way, you can avoid integrating any broken code
+into production. Developers can frequently push and check the functioning of the
+code, flow, and integrity of the code or applications before pushing it to the next
+stage for deployment.
+
+(142) Continuous Delivery/Deployment (CD)
+
+CD refers to Continuous Delivery or Continuous Deployment (the terms are used
+interchangeably) based on the level of automation you are planning to implement.
+The CD stage depends on the CI stage. Once the CI stage is completed, it triggers the
+CD stage in the pipeline. The purpose of the Continuous Delivery (CD) stage is to
+deliver an error-free codebase or artifact to the pre-production environment. In this
+stage, you can add a series of test cases (wherever required) to ensure a stable build
+and functional application. It sends the test status report to the team or developer,
+and then the application is manually pushed to the production environment. If any
+of the steps fail, you may need to carry out the entire process again with the required
+updates.
+
+On the other hand, continuous deployment goes one step further and deploys the
+application from the pre-production environment to the production environment
+quickly. This removes the step of manual deployment of an application to the
+production environment. However, it is optional, as it depends on the developer
+and operation team to choose the level of automation they want to implement as per
+the business and application’s nature.
+
+(143) Continuous Training (CT)
+
+A new stage introduced in the traditional CI/CD pipeline is Continuous Training
+(CT). In this stage, you expect the models to be trained continuously as new data
+comes in or any event occurs, such as the accuracy of the model dropping below the
+acceptable threshold. This may add slight complexity to CI/CD pipeline, but it is
+essential for Machine Learning deployment.
+
+With CI/CD, Continuous Training (CT) is equally important in MLOps. Model
+retraining depends on scenarios and various other factors, such as how frequently
+data is changing and the schema of input data. It also depends on events such as
+accuracy dropping below an acceptable threshold, specific periods such as the end
+of every week, or manual triggers.
+
+(144) Introduction to Jenkins
+
+Jenkins is an open-source, modular CI/CD automation tool written in Java that comes
+with several plugins. Jenkins enables the smooth and continuous flow of building,
+testing, and deploying apps with a recently updated or developed codebase. It has a
+large community support and is popular among developers.
+If the build is successful, then Jenkins automatically executes a series of steps from
+the code repository, and if everything goes well, it deploys the application to the
+server.
+
+Here are some salient features of Jenkins:
+
+•Jenkins is an open-source, free, and modular tool.
+•It is created by developers and for developers.
+•Jenkins is easy to install, configure and can be installed on Linux, MacOS,
+and Windows.
+•A large number of Jenkins plugins are available for popular cloud platforms.
+•Jenkins’s master can distribute the load to multiple slaves and enable faster
+processing.
+
+(145) Installation
+
+Jenkins can be installed on any server that supports JAVA, as it is written in JAVA.
+
+Jenkins installation is described here with various options:https://www.jenkins.io/doc/book/
+
+As you are installing Jenkins on Ubuntu, you can refer to the following link for a
+step-by-step installation guide.
+
+https://www.jenkins.io/doc/book/installing/linux/#debianubuntu
+
+(146) Build CI/CD pipeline using GitHub,Docker, and Jenkins
+
+First off, you need to create a
+codebase in the local machine and run the ML app locally to make sure it is working
+properly on the local machine. Next, you will push the changes to the GitHub
+repository. Then, integrate the GitHub repo and Jenkins by webhook. Jenkins is to
+be installed on pre-production or production servers. Jenkins will pull the latest
+codebase from the linked GitHub repo and deploy the ML app on the server.
+
+(147) Check the demo folder
+
+CORS (Cross-Origin Resource Sharing) refers to the situation when a front end
+running in a browser has JavaScript code that communicates with a back end, and
+the back end is of a different origin than the front end. However, it depends on your
+application and requirement whether to use it or not.
+
+In the Dockerfile, it will first pull the base image, that is, Python 3.7
+slim buster, and install the necessary packages. After that, packages from the
+requirements file will be installed, and the 8005 port will be exposed so that it can
+be accessed outside the Docker container. Finally, it will assign PYTHONPATH in the
+ENV instruction and will execute the command mentioned in the CMD instruction to
+install the Python package in editable mode.
+
+(148) Create a Personal Access Token (PAT) on GitHub
+
+
+If you perform any action like pull, push, or clone using the git cli command,
+then it won’t work anymore with the GitHub password. As a matter of fact, GitHub
+has removed password authentication. Instead, you have to use a Personal Access
+Token (PAT).
+
+PATs are an alternative to using passwords for authentication to GitHub Enterprise
+Server when using the GitHub API or the command line.
+
+First, you need to create a PAT. This is described in the following link:
+
+https://docs.github.com/en/enterprise-server@3.4/authentication/keeping-your-
+account-and-data-secure/creating-a-personal-access-token
+
+(149) Create a webhook on the GitHub repository
+
+A webhook can be considered a lightweight API that enables one-way data sharing
+after being triggered by certain events. In GitHub, a webhook can be triggered when
+actions, such as push and pull, are performed on a repository. With the help of the
+GitHub webhook, you can trigger the CI stage on a remote server.
+
+Go to your GitHub repo | Settings | Webhooks.
+
+Alternatively, you can directly jump to that page using the following URL:
+
+https://github.com/<username>/<your-repo-name>/settings/hooks
+
+In the current case, it is as follows:
+
+https://github.com/suhas-ds/docker_pkg_jenkins/settings/hooks
+
+You cannot use https://localhost:8080/github-webhook/ in GitHub webhook’s
+payload URL as the localhost URL needs to be exposed to the internet. You can use
+ngrok for exposing localhost URLs on the internet. Refer to the official site of ngrok
+https://ngrok.com/ for more details.
+
+Here, ngrok is being used for demonstration purposes; however, the remote server’s
+IP or domain can be used in the deployment stage.
+
+Use the command ngrok http 8080 to expose the 8080 port publicly.
+
+(150)
+
+Provide a payload URL, as shown in the following figure. The payload URL format
+was discussed earlier in this chapter. Select the Content type as an application/json
+format. The Secret field is optional. Let’s leave it blank for now.
+
+Choose the Enabled SSL verification and Just push the event options, as shown in
+the following figure, so that it will send data only when someone pushes updates
+to the repository. However, you can also select the individual events, that is, Let me
+select individual events.
+Now, click on the Add Webhook button to save Jenkins GitHub Webhook.
+
+(151) Configure Jenkins
+
+Now, mainly two sections are to be configured for the current scenario: GitHub
+webhook integration and extended email integration.
+
+1. Go to Jenkins dashboard.
+2. Go to Manage-Jenkins | Manage Plugin.
+3. Install Git, GitHub, and email plugins without restart.
+
+If the preceding plugins are already selected, you can continue to the next step.
+
+Now, let’s configure the GitHub webhook in Jenkins.
+
+Go to Manage Jenkins | Configure System.
+
+Scroll down and update the API URL in the GitHub section, as follows:
+
+https://api.github.com
+
+add token
+
+save
+
+(152) 
+
+Now, whenever the developer pushes the updates to the repository, Jenkins will
+detect the changes and start executing a series of commands one by one.
+Next, configure the email for a feedback loop or status updates, for example,
+succeeded or failed.
+
+Go to Manage Jenkins | Configure System.
+
+Scroll down and update the fields in the GitHub section.
+
+In the following figure, the Default Subject field is updated by adding Status at the
+beginning. Also, an email body is added in the Default Content field. It is highly
+customizable, so you can update it as per requirement.
+
+In the Default Triggers section, choose the Always checkbox so that Jenkins sends
+the status email for both success and failure scenarios.
+
+Now, select HTML (text/html) from the dropdown in the Default Content Type
+field and add your email ID in Default Recipients
+
+In the Extended E-mail Notification section, provide details for the email
+notifications. In the current scenario, Gmail details are provided, as follows.
+
+•smtp.gmail.com to SMTP server
+•465 to SMTP Port
+•Add email login credentials
+•Check the Use SSL box
+•Click on the Save button
+Provide your email details as shown in the following figure:
+
+If you are integrating your Gmail account for email notifications, you will have
+to allow less secure apps in the settings of your Gmail account. You can go to the
+following URL to turn it on if it is off.
+
+https://myaccount.google.com/lesssecureapps
+
+For more details, visit https://support.google.com/accounts/answer/6010255?hl=en.
+The required configuration for Jenkins is complete.
+
+(153) Create CI/CD pipeline using Jenkins
+
+Now, you will build a simple CI/CD pipeline using GitHub and Jenkins. When
+developers push the updates to the GitHub repository, the GitHub webhook detects
+the changes and sends the notification to Jenkins. Jenkins pulls the latest code from
+the GitHub repository, builds the Docker image, and runs the container using that
+image. Next, it trains the model and exports the pickle object from the trained model.
+In the next step, pytest results are exported and displayed in Jenkins. After passing
+all the tests, it will run the ML web app. Finally, it will send the feedback via email
+to the developer or concerned team.
+
+(154) Stage 1: 1-GitHub-to-container
+
+At this stage, Jenkins will pull the latest code and files from GitHub as soon as the
+developer pushes the updates to the linked GitHub repository. Let’s understand this
+process step by step.
+
+When the developer pushes the updates to the GitHub repository, the webhook
+detects the changes, and it gets triggered. GitHub webhook sends a message to
+Jenkins that new updates have been detected, and then Jenkins pulls the latest code
+files to start building the Docker image.
+
+As shown in the following figure, select the New Item from the left panel of the
+Jenkins dashboard.
+
+As shown in the following figure, provide a job name in the Enter an item name
+field and choose a Freestyle project. In the current case, it is named 1-GitHub-to-
+docker-container.
+
+(155)
+
+As shown in the following figure, select the Git radio button under the Source Code
+Management tab and provide the GitHub repository URL. By default, it will be the
+master branch, but you can update it. If your repository is private, then you may
+need to pass the credentials for the same.
+
+As shown in the following figure, choose the GitHub hook trigger for GITScm
+polling under the Build Triggers tab, to pull the latest updates from the GitHub
+repository.
+
+In the following figure, Docker commands are being executed for building and
+running Docker images with the latest changes from the GitHub repository.
+
+echo "Stage 1 -------------------------->"
+sudo -S docker build -t loan-pred:v1 .
+sudo -S docker run -d -it --name model1 -p 8005:8005 loan-pred:v1 bash
+echo "docker container is running"
+
+[For Password Error: https://stackoverflow.com/questions/17940612/authentication-error-in-jenkins-on-using-sudo]
+
+(156) Stage 2: 2-training
+
+At this stage, the model will be trained on training data by running the train_pipeline.
+py file inside the Docker container. As shown in the following figure, select the None
+radio button under the Source Code Management tab, as it is the next stage; no need
+to pull the source code again.
+
+As shown in the following figure, select the Build after other projects are built
+option under the Build Triggers tab. Next, provide the name of the previous stage in
+the Projects to watch field. Then, select the first radio button, that is, Trigger only if
+the build is stable, which means stage 2 will start executing only after the successful
+completion of the previous stage.
+
+As shown in the following figure, write Docker commands for training the model
+pipeline and exporting the latest pickle object of the trained model, under the Build
+tab.
+
+echo "Stage 2 ---------------------------------------------------->"
+sudo docker exec model1 python prediction_model/train_pipeline.py
+echo "Model Training Completed"
+
+The console output of stage 2 is shown in the following figure. It tells you what
+caused stage 2 to trigger and the status of stage 2. After that, Jenkins is triggering
+stage 3 on the successful completion of stage 2.
+
+(157) Stage 3: 3-testing
+
+In this stage, Jenkins is running pytest and publishing test results using JUnit.
+Jenkins understands the JUnit test report in XML format. JUnit enables Jenkins to
+provide test results, including historical test result trends, failure tracking (if any),
+and a neat and clean web UI for viewing test reports. Choose the None radio button
+under the Source Code Management tab.
+
+As shown in the following figure, select Build after other projects are built, and
+Trigger only if build is stable under Build Triggers, which denotes that this stage is
+the next one and will start execution after completion of the previous stage.
+
+As shown in the following figure, under the Build tab, Jenkins is running tests
+inside the running Docker container using the Docker command. Next, the Docker
+command will export the pytest results in a .xml file. Then, the mkdir command will
+create a new directory as reports and copy test results to it.
+
+echo "Stage 3 ------------------------------------>"
+sudo docker exec model pytest -v --junitxml TestResults.xml --cache-clear
+rm -rf reports; mkdir reports
+sudo docker cp model:/code/src/TestResults.xml reports/
+echo "Test reports completed" 
+
+Finally, it is publishing the test results using the JUnit plugin.
+
+As shown in the following figure, choose Publish JUnit test results report, under
+Post-build Actions.
+
+As shown in the following figure, provide a path where you want to store the test
+results. Jenkins will fetch the test results from the mentioned path and publish the
+test results.
+
+reports/TestResults.xml
+
+(158) Stage 4: 4-deployment-status-email
+
+At this stage, Jenkins is deploying an ML web app using FastAPI and a trained
+model.
+
+As shown in the following figure, select Build after other projects are built, and
+Trigger only if build is stable under Build Triggers, which means this stage is the
+next one and will start execution after completion of the previous stage.
+
+As shown in the following figure, select Execute shell from the dropdown Add
+build step, under the Build tab, as it will execute the commands from the shell.
+
+In the following figure, Jenkins is executing a FastAPI command inside a running
+Docker container named model1, and -d in the following command is to instruct
+the Docker container to run the command in detached mode. And -w /code means
+it will change the working directory to /code. Finally, --host and --port are the
+address and port on which the FastAPI web app will be running, respectively.
+
+echo "Stage 4 --------------------------------->"
+sudo docker exec -d -w /code model uvicorn main:app --proxy-headers --host 0.0.0.0 --port 8005
+echo "Successfully Deployed"
+
+As shown in the following figure, choose the Extended Email Notification from the
+Add post-build action dropdown.
+
+As shown in the following figure, select the Content Type as HTML (text/html) so
+that you can use HTML tags in the body; however, it is optional.
+
+As shown in the following figure, select the Always option under the Triggers
+section. This enables Jenkins to send an email despite the build status (Success or
+Failure). It will send the email to the mentioned people.
+
+As shown in the following figure, choose the Compress and Attach Build Log option
+from the Attach Build Log dropdown. By enabling this option, people will get the
+console output of the current stage so that people come to know what happened in
+the job without visiting Jenkin’s job; however, it is optional.
+
+As you can see in the following figure, an email shows the result of stage 4. If the
+job fails due to any reason, then this email will be triggered because you selected the
+Always option in the extended email plugin. This email contains the job name, build
+number, and the status of the job. Here, the Attach Build Log option is not selected.
+
+
+(159) 
+
+It’s time to check the deployed loan prediction web app. This web app is running
+on the 8005 port, so you can access it by the server’s IP address (or domain name),
+followed by port 8005. When any changes are committed to a linked GitHub
+repository, Jenkins will trigger the first and subsequent stages one by one, and the
+latest web app will be deployed again. In short, after pushing the updates to the
+GitHub repository, you can sit and watch the status of each stage or just wait for the
+email.
+
+Provide the user data and hit the Execute button, as shown in the following figure.
+
+(160)
+
+Issue related to mail:
+
+https://www.youtube.com/watch?v=TqiBFlU3ACU&ab_channel=Mukeshotwani
+https://support.google.com/mail/thread/4477145/no-app-passwords-under-security-signing-in-to-google-panel?hl=en
+
+-----------------------------------------------------------------------------------------------------------------------
+
+(161) Deploying ML Models on Heroku
+
+Heroku is a Platform as a Service (PaaS) platform that enables developers to
+build, run, and operate applications entirely in the cloud. You can push the Docker
+container to Heroku or provide GitHub repository details, such as the branch name,
+to auto-deploy the web app as soon as you push new changes to the model. This
+way, you can make the ML model accessible on the web, ready to make predictions.
+
+If you are a beginner, then GitHub CI/CD is the simplest platform to build an end-
+to-end CI/CD pipeline. It is easy to manage as everything is in GitHub. You only
+need a GitHub repository to create and run a GitHub Actions workflow.
+
+(162)
+
+After studying this chapter, you should be able to deploy the ML model on Heroku
+- Platform as a Service (PaaS) and integrate the GitHub repository into Heroku
+for automated deployment. Create the Heroku app from Heroku web UI and the
+terminal. You will learn to build and run CI/CD pipelines using GitHub Actions and
+Heroku. You will also learn to execute multiple tests using pytest and tox on GitHub
+Actions. Create YAML files for GitHub Actions to run the workflow.
+
+(163)
+
+Heroku is a container-based cloud Platform as a Service (PaaS) platform. Developers
+use Heroku to deploy, manage, and scale modern apps. It has a pretty easy process
+to deploy your applications.
+
+Heroku saves you time by removing the difficulty of maintaining servers, hardware,
+or infrastructure. It supports the most popular languages, such as Node, Ruby, Java,
+Clojure, Scala, Go, Python, and PHP.
+
+(164)
+
+Simply put, Heroku allows you to make your apps available on the internet for
+others to access, like a website. With a few steps, it allows you to make your app
+accessible to others. You can focus on app development without worrying about
+infrastructure, servers, and other such things
+
+(165)
+
+When GitHub integration
+is configured for a Heroku app, Heroku can automatically build and release (if the
+build is successful) the updates when pushed to the specified repository.
+
+(166)
+
+Heroku apps can be scaled to run on multiple dynos (a container that runs a Heroku
+app’s code) simultaneously (except on Free or Hobby dynos) with simple steps to
+avoid any downtime. Heroku offers manual and auto scaling of the dynos. You can
+scale it horizontally by adding more dynos to handle the heavy traffic of requests.
+On the other hand, you can scale it vertically by increasing resources like memory
+and CPU as required.
+
+(167)
+
+There are three methods to deploy the web app on the Heroku platform:
+
+•Deployment with Heroku git
+•Deployment with GitHub repository integration
+•Deployment with Container Registry
+
+(168) 
+
+Setting up Heroku:
+
+You need to create a Heroku account. This is a one-time activity. Go to the Heroku
+platform at https://www.heroku.com/
+
+Step 1:
+Create a Heroku account (if you don’t have one) and log in.
+Select the primary development language as Python and create a free account.
+
+Step 2:
+After logging in to the account, create a new app, as shown in the following figure:
+
+Click on the Create new app button and add the app name. In this case, it is docker-
+ml-cicd.
+
+Hit the Create app button and complete the process.
+Note: Two or more Heroku apps can’t have the same name.
+
+------------------------------------------------- left heroku because it needs credit card details to create app -----------------------
+
+(169) Deploying ML Models on Microsoft Azure
+
+ 
+Microsoft Azure is a popular cloud platform among developers.
+
+In this chapter, you will be acquainted with MLaaS, that is, Machine Learning as a
+Service, offered by Microsoft Azure. This chapter is mainly divided into two parts.
+In the first part, GitHub Actions and Azure web app containers will be used in the
+CI/CD pipeline to deploy the ML app on the Azure cloud. In the second part, Azure
+DevOps and Azure Machine Learning (AML) service will be used to deploy ML
+apps on the Azure cloud.
+
+(170)
+
+After studying this chapter, you should be able to deploy ML models on Platform as
+a Service (PaaS) and ML as a Service (MLaaS). You should also be able to integrate
+the GitHub repository to Azure for automated deployment of the app. You should
+know how to create a web app and container for it. Additionally, you will be familiar
+with how to build and run CI/CD pipelines using GitHub Actions and Azure and
+execute multiple test cases using pytest and tox on GitHub Actions. Further on in
+the chapter, you will learn how to create YAML files for GitHub Actions to run the
+workflow. By the end of the chapter, you should also be able to build and run CI/CD
+pipelines using Azure DevOps.
+
+(171)
+
+Microsoft Azure (also known as Azure) is a cloud computing service offered by
+Microsoft. Azure provides different forms of cloud computing options, such as
+Software as a Service (SaaS), Platform as a Service (PaaS), ML as a Service (MLaaS),
+and Infrastructure as a Service (IaaS), for deploying applications and services on
+Azure.
+
+Microsoft first introduced its cloud computing services as Windows Azure in 2008,
+but it was commercially launched in 2010. Later, in 2014, they expanded their services
+and re-launched it as Microsoft Azure.
+
+
+Azure is a ready-to-go, resourceful, flexible, and fast yet economical cloud platform.
+It comes with 200+ products and cloud services; however, running Virtual Machines
+(VM) or containers is popular among developers. It is compatible with open-source
+technologies like Docker, Jenkins, and Kubernetes. Azure has a built-in Continuous
+Integration and Continuous Deployment pipeline.
+
+Azure enables integration with GitHub to make it easy to deploy code available
+on the GitHub repository to apps running on Azure. When GitHub integration is
+configured for an Azure app, Azure can automatically build and release (if the stage
+is completed successfully) and push it to Azure.
+
+Azure App Service can be scaled using Azure Kubernetes Service (AKS). You can
+choose different tiers that come with a set of computational power and set the auto
+scale limit. When required, it will make replicas of the service to serve the requests
+seamlessly.
+
+There are numerous ways to deploy the app on the Azure platform, but you will
+explore two methods in this chapter:
+•Deployment using GitHub Actions
+•Deployment using Azure DevOps and Azure ML
+
+Azure primarily uses a pay-as-you-go pricing plan, which allows you to pay only
+for the services you have used. If any application uses multiple services, then
+each service will be billed based on the plan/tier obtained for it. Microsoft offers a
+discounted rate if the user or organization is looking for a long-term commitment.
+
+Azure is a paid service, but it allows new users to explore its functionality and
+services for free for a limited duration using free credits. After that, you would have
+to activate a pay-as-you-go pricing plan.
+
+(172)
+
+Set up an Azure account:
+
+Create an Azure account (if you don’t have one), and log in.
+
+Note: You can explore Azure for free; however, you need to provide credit/debit
+card details. Azure will send a notification if any payment is to be made. Also,
+you will get access to popular services for free for 12 months, with an additional
+$200 credit for 30 days.
+
+Azure DevOps will be used in this chapter. For this, you need to log in to Azure
+DevOps.
+
+https://azure.microsoft.com/en-us/services/devops/
+
+To connect and communicate with Azure, the Azure command-line tool is required,
+that is, azure-cli and azureml-sdk.
+
+Install Azure CLI with your local terminal:
+
+pip install azure-cli==2.54.0
+pip install --upgrade azureml-sdk[cli]
+
+You can create a resource group. It is a container that holds related resources for Azure
+projects. You can allocate the resources to this resource group as per requirement.
+
+(173)
+
+Deployment using GitHub Actions:
+
+In this part, an ML app will be deployed in Azure web service using Docker. GitHub
+Actions will be used for building, testing, and deploying ML apps to Azure. First
+off, GitHub Actions will build and push a Docker image to the Azure Container
+Registry (ACR) and pull it into the Azure App Service.
+
+Firstly, prepare the required codebase for this implementation. Next, create an ACR,
+and then build and push the Docker image to the ACR. In the next step, create a web
+app in the Azure App Service, which will pull container images from the ACR to
+deploy a web-based ML app.
+
+CORS (Cross-Origin Resource Sharing) refers to the situations when a front end
+running in a browser has JavaScript code that communicates with a back end, and
+the back end is of a different origin than the front end. However, it depends on your
+application and requirement whether to use it.
+1. origins = [
+2.
+3."*"
+]
+4.
+5. app.add_middleware(
+6.CORSMiddleware,
+7.allow_origins=origins,
+8.allow_credentials=True,
+9.allow_methods=["*"],
+10.allow_headers=["*"],
+11. )
+
+The LoanPred class for the data model is inherited from BaseModel. Then, add a
+root view with a function, which returns 'message': 'Loan Prediction App' for
+the home page.
+
+(174)
+
+Here, create /predict_status as an endpoint, also known as the route. Then,
+add predict_loan_status() with a parameter of the type data model, that is,
+LoanPred.
+
+The following function will create the UI for user input. Here, create /predict as
+an endpoint, also known as a route, and declare the input data types expected from
+users.
+
+(175)
+
+docker-compose.yml
+
+This builds the web service from the Dockerfile in the current directory and mounts
+the app directory on the host to /app inside the container.
+
+pytest.ini
+
+Pytest allows you to use a global configuration file, that is, pytest.ini, where you
+can keep settings and additional arguments that you pass whenever you run the
+command. You can add -p no:warnings to addopts field, which will suppress the
+warnings. This section will execute the parameters when pytest runs.
+
+1. [pytest]
+2. addopts = -p no:warnings
+
+runtime.txt
+This file is optional. In this file, you can declare the Python version to be used.
+1. python-3.7
+
+(176)
+
+start.sh
+
+This is a shell script that contains a series of commands to be executed by the bash
+shell. The first line of this file dictates which interpreter should be used to execute
+this script.
+
+It will install the prediction_model package from src/ placed in app/ and run the
+FastAPI app in the next command. The main.py is the file name located in the app
+directory.
+
+1. #!/bin/bash
+2. pip install app/src/
+3. python app/main.py
+
+(177)
+
+Make sure you remove the --reload option if you are using it. The --reload
+option consumes much more resources, and it is also unstable. You can use it during
+development but should not use it in production.
+
+(178)
+
+test.py
+
+This test file will enable testing the FastAPI app using testclient. FastAPI provides
+the same starlette.testclient as fastapi.testclient; however, it comes
+directly from Starlette. With this, you can check the app’s routes without running
+them from the app explicitly.
+
+(179)
+
+Define the test functions with a name starting with test_ as per standard naming
+conventions of pytest:
+
+1. def test_read_main():
+2.response = client.get("/")
+3.assert response.status_code == 200
+4.assert response.json() == {'message': 'Loan Prediction App'}
+
+Write simple assert statements in the test function to check the output.
+
+(180)
+
+tox.ini
+
+This is the tox configuration file. The tox automates and standardizes the testing in
+Python. It is a virtualenv management and test command-line tool to check whether
+your package is compatible with different Python versions. The tox will first
+create a virtual environment based on the configuration provided and then install
+dependencies. Finally, it will execute the commands provided in the configuration.
+tox-gh-actions is a plugin that enables tox to run on GitHub Actions. Hence, you
+need to install tox-gh-actions in the GitHub Actions workflow before running the
+tox command.
+
+This file will check the package compatibility with Python-3.7. First, it will install the
+required dependencies and then run the pytest commands.
+
+1. [tox]
+2. envlist = py37
+3. skipsdist=True
+4.
+5. [gh-actions]
+6. python =
+7.
+3.7: py37
+8.
+9. [testenv]
+10. install_command = pip install {opts} {packages}
+11. deps =
+12. -r requirements.txt
+13.
+14. setenv =
+15.
+PYTHONPATH=src/
+16.
+17. commands=
+18.pip install requests
+19.pytest -v test.py
+20.pytest -v src/tests/
+
+(181)
+
+Once all files and codebase are ready, run the app on the local machine. If the app
+is running on a local machine, then deploy the app to the Azure Container Registry.
+
+Build a Docker image on a local machine using the following command:
+
+sudo docker build . -t mlappcd.azurecr.io/mlapp-cd:v1
+
+Then, run the Docker image using the following command:
+
+docker run -p 8000:8000 mlappcd.azurecr.io/mlapp-cd:v1
+
+At this point, you should see an ML app up and running on the local machine.
+
+(182)
+
+Infrastructure setup:
+
+First off, set up infrastructure on Azure cloud. In this section, you will learn to set
+up an Azure Container Registry (ACR) and create a web app container using the
+Azure App Service.
+
+(183)
+
+Azure Container Registry:
+
+To begin with, push the Docker image to the Azure Container Registry from the local
+machine, and from the next time onward, GitHub Actions will push the image. This
+Docker image will be pulled by the Azure App Service to run a web app container.
+
+(184)
+
+Create an Azure Container Registry, as shown in the following figure:
+
+After providing the values to fields, complete the process by clicking on the Review
++ create button.
+
+After completing the preceding process, you can check the container registry to see
+the status. The following figure shows the status of the container registry as OK:
+
+Next, enable the Admin user option in the Access keys. The following figure shows
+that admin user access is enabled under Settings:
+
+(185)
+
+After completing the preceding process, go back to your local terminal. Log in to
+Azure using Azure CLI, as follows:
+
+az login
+
+(186)
+
+After executing the preceding command in the local terminal, a browser window
+will open where you need to log in. Then, you can close the browser window and
+continue in the terminal.
+
+After that, log in to the Azure Container Registry using the following command in
+the terminal:
+
+az acr login --name mlappcicd
+
+(187)
+
+First, build the Docker image in the local machine:
+
+sudo docker build . -t mlappcicd.azurecr.io/mlapp-cd:v1
+
+Now, push that image to Azure container registry:
+
+docker push mlappcicd.azurecr.io/mlapp-cd:v1
+
+As shown in the following figure, verify that the image (which is pushed to the repo)
+is available in the Azure Container Registry. In this case, you can see that the image
+mlapp-cd is available in the repo.
+
+(188)
+
+Azure App Service:
+
+Now, create an Azure App Service resource. Using the Azure App Service, you can
+create a container-based web app. This will pull the image from the ACR. Azure App
+Service enables you to build web, mobile, and API apps quickly, which can be scaled
+as per requirement
+
+As shown in the following figure, select the subscription and service group under the
+Basic tab. Then, provide the name of the instance as mlapp-cd. Choose the Docker
+Container radio button, as the ML app is based on the Docker container.
+
+Next, choose the operating system Linux and select the region where the web app
+needs to be deployed. Finally, select the Sku and size from the plan. You can change
+the App Service Plan as per the application and business requirements.
+
+In the next tab, that is, Docker configuration, make sure the image from the Azure
+Container Registry is selected. As shown in the following figure, select the Image
+Source as Azure Container Registry, and then select the registry, image, and tag
+from the Azure container registry options section.
+
+After providing the values to fields, complete the process by clicking on the Review
++ create button. You should see the status of the web app in the newly created
+resource.
+
+(189)
+
+GitHub Actions:
+
+GitHub Actions will automate the deployment on Azure. To automate the deployment
+of the ML app, the workflow (.yml) file is used, as follows:
+
+prod.workf﻿low.yml
+
+GitHub Actions will look for this file for executing the workflow. This workflow is
+used for app deployment on Azure. It gets triggered by push events, which means
+any changes pushed to the repo’s master branch of the GitHub repository will
+trigger this workflow to run. Under jobs, declared the OS and Python versions to
+be used. Then, it will run the pytest using tox. After passing all tests, it will start the
+deployment on Azure. For this, it will use the secrets defined in the settings of the
+GitHub repository. First off, log in to the Azure Container Registry, and then build
+and push the Docker image to the registry. Finally, this workflow will deploy the app
+to the Azure web app service and log out from Azure.
+
+Next, create the repository on GitHub for this (if not created already) and push the
+codebase into that repo.
+
+(190) 
+
+Service principal:
+
+You need to provide a service principal in the GitHub Actions workflow for Azure
+authentication and app deployment. To get the credentials, execute the following
+command with your subscription id in the terminal.
+
+az ad sp create-for-rbac --name "github-actions" --role contributor --scopes /subscriptions/<subscription-id>/resourceGroups/mlapp-cd --sdk-auth
+
+
+With the preceding command, you will create an Azure Role Based Access Control
+(RBAC) named github-actions with a contributor role and scope.
+
+Azure RBAC is an authorization system built on Azure Resource Manager that
+provides access management of Azure resources.
+
+
+Now, go to GitHub repo settings and create three GitHub secrets:
+
+•AZURE_CREDENTIALS: Entire JSON response from preceding
+•REGISTRY_USERNAME: clientId value from JSON response
+•REGISTRY_PASSWORD: clientSecret value from JSON response
+
+use environmental variable name and value in github repo settings
+
+(191)
+
+Configure Azure App Service to use GitHub Actions for CD:
+
+You need to configure the Azure App Service so that it can be automated using
+GitHub Actions. Head over to the Azure App Service | Deployment Center and
+link the GitHub repo master branch, as shown in the following figure.
+
+After completing the configuration in the app service, place the prod.workflow.
+yml workflow file in the linked GitHub repository. The path would be .github/
+workflows/prod.workflow.yml. When you push any changes to the GitHub repo, it
+will trigger the GitHub Actions workflow. After completing all the stages, the ML
+app will be deployed on Azure.
+Go to the Actions tab in the GitHub repository, and you will see that GitHub has
+already started running the prod.workflow.yml workflow for app deployment on
+Azure.
+
+Click on Deploy, and it will take you to the summary of this workflow. You will see
+the status of the jobs you have defined in the workflow. Other execution details are
+also mentioned, such as the time taken to complete this workflow, the username that
+pushed the updates to the master branch, and the name of the workflow file.
+
+Head over to the Azure App Service; you should see container logs in the Azure
+App Service, as shown in the following figure. This helps you debug the issue while
+deploying the app.
+
+Azure provides a monitoring service to track the usage of the Azure app. You can
+select metrics from the dropdown.
+The following figure shows the monitoring service of the Azure app.
+
+(192)
+
+Deployment using Azure DevOps and Azure ML:
+
+In this part, you will use Azure DevOps and AML to deploy an ML app on the Azure
+cloud. Unlike the previous part, the CI pipeline and CD pipeline are in the Azure
+cloud. This approach requires parallelism to be enabled. If you are using free credits,
+then by default, parallelism is not enabled; however, you can activate it by sending
+the request via email. You can use Azure Git repo or other sources, such as GitHub.
+This approach gives more flexibility, such as integration with other platforms,
+manual approval before deploying to the production, auto redeploy triggers, and
+such.
+
+(193) 
+
+Azure Machine Learning (AML) service:
+
+Azure Machine Learning (AML) service enable the creation of a reproducible CI/
+CD pipeline for ML. It is an Azure cloud-hosted environment that allows developers
+and organizations to deploy ML models quickly in the production environment with
+minimal code. In Azure Machine Learning Studio, you can run the notebooks on the
+cloud, use Automated ML for automated training and tuning the ML model using a
+metric, or use a designer to deploy a model from data preparation using a drag-and-
+drop interface.
+
+The following are the salient features of Azure Machine Learning Studio:
+
+•Storage provision to store your data and artifacts
+•MLFlow to track your experiments and log the run details like timestamp,
+model metrics, and so on
+•Model registry to store trained ML models for reusability
+•Key vault to store credentials and variables
+•Supports open-source libraries and frameworks
+•Compute instance, which enables building and training in a secure VM
+•Pipelines and CI/CD for faster training and deployment.
+•Endpoints for ML model
+•Data drift functionality to deliver consistent accuracy and predictions
+•Monitoring service to track the model, logs, and resources
+
+(194)
+
+Workspace:
+
+A machine learning workspace is the main resource of AML. It contains experiments,
+models, endpoints, datasets, and such. It also includes other Azure resources, such
+as Azure Container Registry (ACR), which registers Docker containers at the time of
+Docker image deployment, storage, application insights, and key vault.
+
+(195)
+
+Experiments:
+
+An experiment consists of several runs initiated from the script. Run details and
+metadata are stored under the experiment. When you run the script, the experiment
+name needs to be provided to store the run information. However, it will create
+a new experiment if the name provided in the script does not exist in the given
+workspace.
+
+(196)
+
+Runs:
+
+A run can be defined as a single iteration of the training script. Multiple runs are
+recorded under an experiment. A run logs model metrics and metadata, such as
+timestamps.
+
+The best thing about AML is that you do not need to create a separate web service
+API using frameworks like Flask, Django, and FastAPI. AML creates endpoints for
+trained ML models and tracks the web service.
+
+In this section, you will be using the Azure Machine Learning template and modifying
+it as per your requirements. You can build your codebase from the scratch; however,
+this template saves time as it has reusable and required steps already defined. The
+Azure DevOps demo generator can be accessed at the following link:
+
+https://azuredevopsdemogenerator.azurewebsites.net/environment/createproject
+
+Go to DevOps Labs, select the Azure Machine Learning template and add it to your
+project by providing the project name and organization in the next step.
+Alternatively, you can directly go to the following URL:
+
+https://azuredevopsdemogenerator.azurewebsites.net/?name=machinelearning
+
+
+(disable pipeline : https://dev.azure.com/ankitgupta1729/_settings/pipelinessettings)
+
+(197)
+
+As you can see, a codebase is imported along with the template. This template
+contains code and pipeline definitions for a machine learning project to demonstrate
+how to automate the end-to-end ML/AI project. In this, most steps can be reused
+with minor modifications wherever required. A codebase is residing in the Azure Git
+repository; however, you can import a codebase from the GitHub repository. Note
+that this template is built for a regression algorithm and uses a diabetes dataset.
+
+However, you need to update the files for the classification algorithm, and the loan
+dataset will be used for it.
+
+Next, head over to the pipeline section from the left menu. You can see that the steps
+have already been defined in the template. Don’t worry if you want to create all the
+steps from the beginning. First off, create a new project, and inside that project, go
+to the pipeline section from the left menu. Next, select a codebase from the available
+source options, such as GitHub, Azure Repos, and Git. Then, create a new pipeline
+from a YAML file, or use the classic editor to create a pipeline without YAML.
+
+Next, go to the newly created project settings and create a new service connection,
+if it is not created. Choose Service Principal (automatic), and then choose the
+subscription and resource group from the dropdown and provide the service
+connection name in the next window. Make sure the Grant access permission to all
+pipeline checkbox is selected.
+
+https://dev.azure.com/ankitgupta1729/azure_demo/_settings/adminservices
+
+(198)
+
+Now, you need to update the files that will be used in the Azure CI/CD pipeline. You
+can refer to the following code to modify respective scripts. Only code modifications
+are discussed here, as you can keep the rest of the code as it is in the original script.
+
+code/training/train.py
+
+This file will build a classification model using logistic regression. After model
+training, it will log Cross-Validation (CV) scores and accuracy for later use. Then, it
+will save the model as a pickle object. This script will be called by the aml_service/10-
+TrainOnLocal.py script.
+
+code/score/score.py
+
+aml_config/config.json
+
+(199) 
+
+Configure CI pipeline:
+
+At this stage, you will configure the CI pipeline. This pipeline will execute the
+following tasks:
+
+•Set up Python version 3.6.
+•Install required dependencies.
+•Create or get Azure Machine Learning (AML) workspace.
+•Build and train the ML model.
+•Evaluate newly trained model performance against the existing model to
+decide whether the model is to be promoted to production.
+•Register model in Azure Machine Learning (AML) service.
+•Create a scoring Docker image with the required dependencies.
+•Publish the artifacts (all files) to the repo.
+
+
+(200)
+
+Configure CD pipeline:
+
+Now that you have completed the CI pipeline configuration, it’s time to configure
+the CD pipeline. The CD pipeline will deploy the image generated through the CI
+pipeline to the Azure Container Instance (ACI) and Azure Kubernetes Service
+(AKS). In the current case, the scope of the project is limited to ACI. However, you
+can deploy it on AKS to handle large amounts of traffic and make it scalable.
+This pipeline executes the following tasks:
+
+•Set up Python version 3.6.
+•Install the required dependencies.
+•Deploy a web service on the Azure container instance (ACI).
+•Test the ACI web service by passing data that needs to be tested.
+•Deploy a web service on Azure container instance (AKS).
+•Test the AKS service by passing the data to be tested.
+
+Now, navigate to Pipeline | Releases, select Deploy Web service and click on Edit
+pipeline.
+The following figure shows the QA – Deploy on ACI stage of the CD pipeline when
+switched to the Tasks tab.
+
+In the following figure, you can see the entire file path provided by the artifacts that
+are retrieved from the CI pipeline:
+
+When you update the CD pipeline, you can run the CD pipeline manually by hitting
+the Create Release button or setting the auto trigger, which means that the CD
+pipeline starts executing upon completion of the CI pipeline. You need to make sure
+that continuous deployment triggers are enabled in the Artifacts stage and the QA
+-Deploy on ACI stage of the CD pipeline.
+
+In the following figure, you can see the CD pipeline triggers upon completion of the
+CI pipeline, which caused the QA -Deploy on ACI stage to start executing:
+
+It takes a few minutes to execute all the steps. You should see the number of tasks
+completed and the status of the stage. If you want to see the details of each step, click
+on the Logs option.
+
+The following figure shows the status of each step with logs.
+
+When ACI deployment is completed, it waits for manual approval from the developer
+but for a limited time. You can update the time from the options. After approval,
+it will deploy to the AKS. If you want to automate this step, you can remove the
+manual approval or set auto approval. However, it is recommended to keep manual
+approval before deploying it on AKS.
+
+In the following figure, you can see that the QA – Deploy on ACI stage is completed,
+and it is pending approval for deploying it on AKS. You can set the time for approval
+requests to be active. After approval, the pipeline will deploy the app using AKS.
+
+Now, head over to the Azure Machine Learning studio, and go to Jobs from the left
+panel. You should see the experiment with the name provided in the training script,
+that is, mlops-classification. On the right side, you can see the details like the
+experiment name, the date of creation, and the last submission. When you go to the
+experiment, you will see the run information with status and other metadata. On the
+top, you can see metrics details with graphs. In the current case, accuracy and CV
+score are being logged. You can assess each job’s details by clicking on it.
+
+The following figure shows the model metrics, that is, accuracy and CV score, along
+with run information and other details. In the graphs, you can see the value of each
+metric logged in the runs separately.
+
+When a model is deployed in an Azure Container Instance (ACI), you will get the
+scoring URI, which can be consumed by the subsequent applications.
+
+The following figure shows the endpoint created by the script in the CI/CD pipeline:
+
+You can assess the model endpoints by evaluating the outcome after passing the
+input data. Moreover, you can consume the endpoint using other languages, such as
+C#, Python, and R.
+
+In the following figure, you can see the output produced by the model’s endpoints
+under Test results after passing the test data:
+
+You can assess the same endpoint in the Postman as well. The following figure shows
+the testing of scoring URI in the Postman:
+
+Azure Role Based Access Control (RBAC) is an authorization system built on
+Azure Resource Manager that provides fine-grained access management of
+Azure resources.
+
+(201) Deploying ML Models on Google Cloud Platform
+
+Cloud computing is the on-demand delivery of computer system resources, such as
+servers, databases, analytics, storage, and networking. These resources and services
+are available off-premises; however, they can be accessed over the cloud (the internet)
+as per requirement. This means you do not need to set up big infrastructure on-
+premises. This is beneficial for businesses and individuals as they get the required
+system resources and services instantly under a pay-as-you-go plan. Resources
+and services can be added or removed quickly, which allows you to spend money
+efficiently.
+
+Refer to the previous chapters to learn about concepts like Packaging ML Models,
+FastAPI, Docker, and CI/CD pipeline, as they are pre-requisites for this chapter.
+
+(202)
+
+After studying this chapter, you should be able to deploy an ML model on Google
+Kubernetes Engine (GKE). You can create a fully automated CI/CD pipeline with
+simple steps, without the need to integrate any external tool, service, or platform.
+You will create a remote Git repository on GCP using Cloud Source Repository and
+Kubernetes cluster to make a scalable ML app. You will also learn to create manifest
+files for Kubernetes in this chapter. By the end of it, you should be able to create
+triggers in Cloud Build for the automated deployment of ML apps.
+
+(203)
+
+Google Cloud Platform (GCP):
+
+Google Cloud Platform (GCP) comprises cloud computing services offered by
+Google, which uses the same infrastructure as the one used by YouTube, Gmail,
+and other Google platforms or services. The platform offers a range of services for
+compute, Machine learning and AI, networking, IoT, and BigData. Here are a few
+services offered by the GCP:
+
+•Google's compute engine provides VM instances to run the code and deploy
+the apps.
+•AI and Machine learning services like Vertex AI, which is an end-to-end ML
+life cycle management and unified platform. Data Scientists can upload the
+data, build, train, and test ML models easily.
+•AI building blocks, such as Vision AI, help derive insights from images using
+AutoML.
+•Container services, such as Container Registry and Google Kubernetes
+Engine (GKE), manage Docker images and allow developers to build
+scalable applications.
+•BigQuery and data proc to process and analyze large amounts of data.
+•Databases, such as Cloud SQL and Cloud Bigtable, store data on the cloud.
+•Developer tools, such as Cloud Build, Cloud Source Repositories, and Google
+Cloud Deploy to automate CI/CD process.
+•Management tools, such as Deployment Manager and Cost Management,
+help you to track the deployment and cost of tools or services used in projects.
+•Networking services, such as Virtual Private Cloud (VPC), let you create a
+virtual private cloud environment within a public cloud. Multiple projects
+created in different regions can communicate with each other without openly
+communicating through the public internet.
+•Security services, such as cloud key management, firewalls, and security
+center.
+•Storage services, such as Cloud Storage, allow you to store artifacts.
+•Serverless computing, such as Cloud Function, is an event-driven serverless
+compute platform. This Function as a Service (FaaS) lets you run the code
+with no server or containers.
+•Operations services, such as Cloud Logging and Cloud Monitoring, let
+you track the performance, delay, and such of the deployed models or
+applications.
+•It also provides other services, such as migration, IoT, event management,
+identity and access, hybrid and multi-cloud, backup, and recovery.
+
+(204)
+
+GCP offers a free trial account for 90 days with $300 credits. It will give hands-on
+experience to new customers so that they can explore the services offered by GCP.
+
+(205)
+
+Set up the GCP account:
+
+First of all, set up a GCP account; however, this is a one-time activity. It should be
+ready for use immediately on logging in:
+
+Step 1:
+
+Create a GCP account (if you don’t have one) and log in. The free trial account can
+be created on the GCP platform at https://cloud.google.com/free.
+
+First, log in using your Gmail ID; it will then redirect you to the GCP Free-trial
+page. Select your country from the dropdown, accept the Terms of Service, and then
+click on Continue. Next, choose Individual (for personal use) or Business (if it is a
+business account). After that, provide personal details like name, address, and city.
+Finally, provide payment mode details and complete the process.
+
+Step 2:
+
+After logging in to the account, create a new project, as shown in the following figure:
+
+Click on the NEW PROJECT button and provide the project name. In this case, it is
+MLOps, and the project ID will be auto-generated; however, it can be edited. In this
+case, it is mlops-54321. Location can be pre-selected or can be changed.
+Hit the Create button to complete the process.
+Note: The project ID is unique to each project.
+
+(206)
+
+Cloud Source Repositories:
+
+In this case, the Git repository, that is, the Cloud Source Repository, is used; however,
+other remote Git repositories, such as GitHub, can also be used. Cloud Source
+Repositories are private Git repositories hosted on GCP. Multiple Git repositories
+can be created within a single project. It supports the standard set of Git commands,
+such as push, pull, clone, and log. Cloud Source Repositories can be added to a local
+Git repository as remote repositories. It allows collaboration and provides security.
+However, it is recommended not to store any personal or confidential data in it. The
+good part is that GCP’s Cloud Source Repositories allow you to store up to 50 GB
+per month for free.
+
+Now, search and enable Cloud Source Repositories API, which allows access to
+source code repositories hosted by Google.
+
+Next, create a new repository in Cloud Source Repositories, and provide the
+repository name and project ID, as shown in the following figure:
+
+---------- Left-----------------
+
+(207) Deploying ML Models on Amazon Web Services
+
+Cloud computing refers to storing and accessing data and applications over the
+internet. Usually, data is stored on a remote server. Simply put, you can access data
+and applications from anywhere on the internet without worrying about the physical
+or on-premises infrastructure, which makes cloud computing more popular among
+organizations.
+
+Amazon Web Services (AWS) helps solve on-premises infrastructure issues. AWS
+can spin up 100-1000 servers in a few minutes and, extra or unused servers will be
+removed. It is easy to scale applications with AWS. You can add more storage for
+applications or data. AWS helps focus on building and deploying applications on
+the cloud without worrying about setting up infrastructure from scratch.
+
+(208)
+
+After studying this chapter, you should be able to deploy an ML model on Amazon
+Elastic Container Service (ECS) without the need to integrate any external tool,
+service, or platform except AWS. You will create a remote Git repository on AWS
+using AWS CodeCommit and Amazon Elastic Container Service (ECS) cluster to run
+scalable ML apps. You will also learn to integrate Application Load Balancer (ALB)
+with Amazon Elastic Container Service (ECS) for routing requests coming from
+the external world. Moving on, you will integrate the service port with the Docker
+port via port mapping, create a security group for Application Load Balancer (ALB)
+and learn to push the Docker container image to AWS Elastic Container Registry
+(ECR). You should be able to create a fully automated CI/CD pipeline with AWS
+CodePipeline, AWS CodeBuild, AWS Elastic Container Registry (ECR), Application
+Load Balancer (ALB), and Amazon Elastic Container Service (ECS) after completing
+this chapter.
+
+(209) 
+
+Introduction to Amazon Web Services (AWS):
+
+Amazon Web Services (AWS) is a cloud infrastructure where you can host
+applications. In 2006, AWS started offering IT services to the market in the form of
+web services. AWS is one of the leading cloud service providers.
+
+(210)
+
+AWS compute services:
+
+Amazon Web Services (AWS) offers compute services for managing workloads that
+comprise many servers or instances.
+
+Here are some of the widely used compute services offered by AWS that can be used
+as per the business or application requirements. These services will be discussed
+later in the chapter.
+
+(211)
+
+Amazon Elastic Compute Cloud (EC2):
+
+Amazon EC2 is a virtual machine that represents a remote server. Amazon EC2
+service is grouped under Infrastructure-as-a-Service (IaaS). Amazon EC2 enables
+applications with resizable computing capacity, and these EC2 machines are known
+as instances. You can create multiple instances with different computing sizes. You
+can even upgrade the ram, vCPU, and so on after creation, so you do not need to
+recreate a new instance and configure it again. This is why the elastic term is used.
+
+(212)
+
+Amazon Elastic Container Service (ECS):
+
+Amazon Elastic Container Service (ECS) enables you to deploy, scale, and manage
+containerized applications. It manages containers and enables developers to run
+containerized applications across the cluster of EC2 instances. However, it is not
+based on Kubernetes. Amazon ECS is free, meaning you don’t need to pay for the
+ECS cluster. However, additional charges are to be paid for EC2 instances running in
+ECS tasks. There are mainly two ways to launch an ECS clusters:
+
+•Fargate Launch
+•EC2 Launch
+
+Amazon ECS is a technology owned exclusively by AWS. ECS easily integrates with
+AWS Application Load Balancer (ALB) and Network Load Balancer (NLB).
+
+(213)
+
+Amazon Elastic Kubernetes Service (EKS):
+
+Amazon Elastic Kubernetes Service (EKS) is a Kubernetes service backed by AWS,
+which enables you to build Kubernetes clusters on AWS without manually installing
+Kubernetes on EC2. Amazon Elastic Kubernetes Service (EKS) allows you to manage
+or orchestrate containers in a Kubernetes environment. You need to pay for the EKS
+cluster, with additional charges for EC2 instances running inside the Kubernetes
+pod. Amazon EKS service set up and manages the Kubernetes control plane for you.
+It is a good choice if you are looking for multi-cloud functionality and additional
+features compared to the Amazon Elastic Container Service (ECS).
+
+(214)
+
+Amazon Elastic Container Registry (ECR):
+
+Amazon Elastic Container Registry (ECR) allows developers to store, share and
+deploy Docker images on Amazon ECS. It provides security to images stored in
+it. Amazon Elastic Container Registry (ECR) is integrated with Amazon ECS. It is
+similar to the Docker Hub container registry but is managed by AWS. It allows you
+to store private Docker container images in it.
+
+(215)
+
+AWS Fargate
+
+Simply put, AWS Fargate is a serverless compute for containers. You pay for the
+usage per minute for the resources used by containers like virtual CPU (vCPU) and
+memory. AWS Fargate is compatible with both Amazon Elastic Container Service
+(ECS) and Amazon Elastic Kubernetes Service (EKS).
+
+(216)
+
+AWS Lambda:
+
+AWS Lambda is simple and less expensive. It is a serverless and event-driven
+compute service; it is a Function as a Service (FaaS). That means you don’t need
+to manage servers or clusters. Events could be any simple activity, such as a user
+clicking on links to get the latest news. The term Lambda is supposed to be borrowed
+from functions of lambda calculus and programming. Mostly, it comprises three
+components:
+
+•A function: It is the actual code to perform the task.
+•A configuration: It dictates the execution of a function.
+•An event source: This is the event that triggers the function. However, this
+component is optional.
+
+AWS Lambda is a good choice for event-driven programming or when you need to
+access several services.
+
+(217)
+
+Amazon SageMaker:
+
+AWS also provides a machine learning platform as a service, that is, Amazon
+SageMaker. It removes the overhead of managing and maintaining servers manually.
+It also reduces the time and cost of machine learning model deployment on the AWS
+cloud.
+
+Amazon SageMaker is a cloud-based machine learning platform that enables data
+scientists and developers to build, train, tweak, and deploy machine learning models
+in production environments. It uses Amazon Simple Storage Service (S3) to store
+the data and comes with over 15 most commonly used built-in machine learning
+algorithms for training the data. It deploys the ML models to SageMaker endpoints.
+Amazon SageMaker uses the Amazon Elastic Container Registry (ECR) to store
+container images.
+
+(218)
+
+Set up an AWS account:
+
+The AWS Free Tier provides customers the ability to explore and try out AWS
+services free of charge up to specified limits for each service. The Free Tier consists
+of three different types of offerings, a 12-month Free Tier, an Always Free offer, and
+short-term trials.
+
+(219)
+
+Step 1: Create or log in to the existing AWS account
+Create an AWS account (if you don’t have one) and sign in. A free trial account can
+be created on the AWS platform at https://aws.amazon.com/free.
+First, click on the Create a Free Account button. Next, provide the login details,
+such as email ID, password, and AWS account name. Then, select the account type
+(Professional or Personal) and provide contact information. After that, issue PAN
+and payment details. Finally, complete the verification process on the identity
+verification page.
+
+After a few minutes, the account will be activated and ready to use. Select a plan as
+per your requirements.
+
+(220)
+
+Step 2: Create an IAM user and provide the required permissions
+After signing in to the AWS Management Console, open the IAM console - https://
+console.aws.amazon.com/iam/. IAM stands for Identity and Access management.
+Next, click on Users in the navigation pane and choose Add users. Then, provide
+the user name for that user and choose the access type. After that, select the existing
+policies from the attached existing policies or create a new one for that user. In this
+scenario, Administrator access is given to the IAM user. Tags are optional. Finally,
+review and complete the process. Do not forget to save the user details like Access
+key ID, Secret access key, and user name. In this case, an IAM user will be used to
+execute all the tasks. Hit the Create user button and complete the process.
+
+https://www.youtube.com/watch?v=HuE-QhrmE1c
+
+(221)
+
+The Secret access key is available only when it is created, so you need to download
+and save it. If lost, then you have to create another one.
+
+Creating access keys for the AWS account root user is not recommended unless
+required. Rather, create one or more IAM users with the required permissions to
+execute the tasks.
+
+(222)
+
+Step 3: Install and configure AWS CLI on the local machine:
+
+AWS Command-Line Interface (CLI) is a tool that allows the management of
+several AWS services. It is an open-source tool that enables you to interact with AWS
+services through commands. First, download and install it, then configure it with
+AWS credentials. To get started with AWS CLI, follow this link https://docs.aws.
+amazon.com/cli/latest/userguide/getting-started-install.html.
+
+For Linux, download the installation file using the curl command, where the -o
+option specifies the filename that the downloaded package is written to:
+
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+
+Unzip the installer as follows:
+
+unzip awscliv2.zip
+
+The installation command uses a file name install from unzipped aws directory:
+
+sudo ./aws/install
+
+Verify the installation by checking the version of AWS CLI using the following
+command:
+
+aws --version
+
+Restart the terminal if the aws command cannot be found.
+
+Next, configure the AWS CLI with AWS IAM credentials, as shown in the following
+figure:
+
+(223)
+
+AWS Code Commit:
+
+In this case, the Git repository, that is, AWS CodeCommit, is used; however, other
+remote Git repositories like GitHub can be used. AWS CodeCommit is a private
+Git repository hosted on AWS. It allows you to create multiple Git repositories and
+supports a standard set of Git commands, such as push, pull, clone, and log. AWS
+CodeCommit can be added to a local Git repository as a remote. It allows collaboration
+and provides security; however, it is a standard practice not to store any personal
+or sensitive data in it. The good part is that AWS CodeCommit is available to both
+new and existing users for free up to a certain limit. It does not expire even after 12
+months of free tier usage. It is free for the first 5 active users, which includes 1,000
+repositories per account, 50 GB of storage per month, and 10,000 Git requests per
+month.
+
+Go to CodeCommit from Services:
+
+Services | All Services | Developer Tools | CodeCommit
+
+Create a new repository in CodeCommit and then provide the repository name; the
+description is optional. Repository names are included in the URL of that repository.
+
+Once the repository is created, specific permissions need to be provided; then, create
+Git credentials to access the CodeCommit repository from the local machine. Go to
+the IAM console, select Users from the navigation pane and choose the user for which
+CodeCommit is to be configured. Then, attach the AWSCodeCommitPowerUser
+policy from the policies list and complete the process. In this case, the IAM user has
+admin privileges, so there is no need to attach the above-mentioned policy to the
+IAM user.
+
+(224)
+
+Choose the same IAM user and locate HTTPS Git credentials for AWS CodeCommit.
+Next, select that user and click on the Generate credentials button. It will populate
+Git credentials, that is, username and password. Password can be seen and
+downloaded, save it for future use. This password cannot be recovered later on;
+however, it can be regenerated.
+
+
+(225)
+
+After creating the code commit repository, clone it to the local machine. Copy project
+code files into the directory on the local machine. Re-initialize the Git repository using
+the git init command. Finally, commit and push changes to the CodeCommit
+repository from the local machine.
+
+git clone https://git-codecommit.us-east-1.amazonaws.com/v1/repos/mlops-repo
+Cloning into 'mlops-repo'...
+Username for 'https://git-codecommit.us-east-1.amazonaws.com': ankit-at-876960293422
+Password for 'https://ankit-at-876960293422@git-codecommit.us-east-1.amazonaws.com': 
+warning: You appear to have cloned an empty repository.
+
+
+Let’s consider the scenario of loan prediction where the problem statement is to
+predict whether a customer’s loan will be approved. Feel free to implement
+hyperparameter tuning and tweak the model.
+
+First, create an installable package of ML code, and then build a web app using
+FastAPI; then, create the tests and dependencies file. After that, create Dockerfile and
+docker-compose.yml files. Finally, create the configuration file buildspec.yaml for AWS
+deployment.
+
+The tox is a free and open-source tool used for testing Python packages or applications.
+It creates the virtual environment and installs the required dependencies in it; finally,
+it runs the tests for that Python package.
+
+(226)
+
+The skipsdist=True flag indicates not to perform a packaging operation. It means
+the package will not be installed in a virtual environment before performing any
+test. Set PYTHONPATH to the src/ directory where Python package files are placed.
+In the commands section, pytest commands will be executed, and the results of the
+tests will be exported in .xml files in the pytest_reports directory.
+
+After a successful push from the local terminal, code files will be displayed in the
+cloud source repository.
+
+(227) 
+
+Continuous Training:
+
+With a CI/CD pipeline, you can add Continuous Training (CT) stage. So when the
+CI/CD pipeline will run, it will also train the model on the latest available data as
+per the configuration settings.
+
+start.sh
+
+To train the model on the latest data, you need to add the following command to the
+start.sh file:
+
+python app/src/prediction_model/train_pipeline.py
+
+This will run the train_pipeline.py file and generate the latest pickle file of the trained
+model. This file will first install the package, then train the model, and finally, run
+the FastAPI app.
+
+(228)
+
+Amazon Elastic Container Registry (ECR):
+
+Amazon Elastic Container Registry (ECR) is a container registry service managed
+by AWS. It stores, manages, and provides security to private container images. If
+these container images are to be accessed through code or other services, such as
+CodeBuild, then container registry access needs to be provided to the specified
+service roles.
+
+Go to Elastic Container Registry from Services:
+
+Services | All Services | Containers | Elastic Container Registry
+
+(229)
+
+Create a repository with the name mlapp-cicd. By default, the visibility of the
+repository will be private; it means access will be managed by IAM and pre-defined
+permissions will be granted to the repository policy. The repository name should be
+concise yet meaningful, that is, it should be based on the content of the repository.
+The name must start with a letter and can only contain lowercase letters, numbers,
+hyphens, underscores, periods, and forward slashes.
+
+Then, go to the repository and click on the View push commands button in the top-
+right corner. It will display the push commands and instructions you have to follow
+while pushing a Docker container image from a local machine using AWS CLI. First,
+
+you need to log in to AWS ECR using the command given in the pop-up window.
+Next, build a Docker image on a local machine using the docker build command.
+If the Docker image is already built, the Docker build step can be skipped. Then,
+tag the Docker image and push the image to the AWS ECR repository using the
+commands given in the pop-up window.
+
+The following figure shows the push commands for the mlapp-cicd repository:
+
+(230)
+
+AWS CodeBuild:
+
+A CodeBuild is a fully managed Continuous Integration (CI) service backed by
+AWS infrastructure that allows developers to automate the build, test, and deploy
+containers or packages quickly. It works on an on-demand or pay-as-you-go model,
+that is, it charges users based on the minute for the compute resources they have
+used.
+
+The CodeBuild config file type is YAML. This file contains a series of phases and
+commands to execute the build specified by the developer.
+
+In this case, the buildspec.yaml file first installs the tox package in the install phase.
+Next, it will run the tests using tox and log in to AWS ECR in the pre_build phase.
+Then, the buildspec.yaml file will build a Docker container image with the latest tag in
+the build phase and push the image to the AWS ECR repository in the post_build
+phase. Finally, specify the details for pytest reports, such as files, a base directory,
+and file format. Also, provide the filename to be stored as an artifact in the S3 bucket.
+
+To create a build, CodeBuild is used. Search and select CodeBuild from developer
+tools and choose Build projects from the Build section. Click on the Create build
+project button to create a new one. First off, under the Project configuration, provide
+the project name.
+
+Next, under the Source section, select the Source provider from the dropdown list
+and choose the subsequent details, such as Repository and Branch. Source providers
+contain details and code files to be used as input source code for the build project.
+In the current scenario, choose AWS CodeCommit as a Source provider, as shown in
+the following figure. However, other source providers can be selected instead of AWS
+CodeCommit, such as BitBucket, GitHub, and S3.
+
+Then, under the Environment section, choose the Managed Image option and choose
+the operating system as Ubuntu from the dropdown. It provides other operating
+systems such as Windows Server and Amazon Linux. In the current scenario, aws/
+CodeBuild/standard:4.0 image is chosen. The remaining selections can be kept
+as default. Make sure you select the Privileged checkbox, which allows you to build
+Docker images.
+
+(231)
+
+After that, under the Buildspec section, choose Use a buildpsec file, as shown in the
+following figure:
+
+Finally, under the Logs section, select Cloudwatch logs. This will upload build output
+logs to cloudwatch. This enables you to analyze the logs and output generated after
+building the project. However, this is optional. At the bottom of the page, click on the
+Create build project button and complete the configuration process.
+
+(232)
+
+Attach container registry access to CodeBuild’s service role:
+
+Now, you need to provide access to the service role of CodeBuild so that it can build
+the Docker container images. For this, go to IAM management console | Roles
+and select the CodeBuild service role. In the current scenario, it is CodeBuild-
+mlapp-cicd-service-role. Click on it, and the summary page will open. Click
+on Attach policies, and then search for EC2ContainerRegistry and select
+AmazonEC2ContainerRegistryFullAccess. It provides administrative access to
+Amazon ECR resources. If the required access is not provided, CodeBuild will be
+unable to build Docker images.
+
+Now, go to the main page of CodeBuild, and let’s manually execute the build
+phase by hitting the Start build button in the top-right corner. Build status will be
+displayed as In Progress. Logs are available under the Build logs tab. By default,
+it will show the last 1000 lines of the build log. After completion of the build phase,
+the latest container image should be available in Amazon Elastic Container Registry
+(ECR). Also, the test report should be available under the Reports tab, as shown in
+the following figure:
+
+(233)
+
+Amazon Elastic Container Service (ECS):
+
+Amazon Elastic Container Service (ECS) is a container orchestration tool used for
+managing and running Docker containers. Amazon Elastic Container Service (ECS)
+is a fully managed container management service offered by AWS. In the current
+scenario, ECS with the Fargate model will be used. It will take care of managing the
+cluster and load balancing. It will also make sure the application is up and running.
+
+Let’s understand the terms used in the Amazon Elastic Container Service (ECS):
+
+•Task Definition: The task definition allows you to specify which Docker
+image to use, which ports to expose, how much CPU and memory to allot,
+how to collect logs, and how to define environment variables. This is a
+blueprint that dictates how a Docker container should launch.
+
+•Task: A task resembles an instance of task definition. It can be created
+independently, that is, without an Amazon ECS cluster. This will spin
+up a container with an application running in it. It will not replace itself
+automatically if it stops or fails due to some error.
+
+•Service: A Service is responsible for creating and maintaining the desired
+number of tasks up and running all the time. If any task fails or is stopped
+due to some error, then the ECS Service will replace that task with a new one.
+It refers to the task definition file to create tasks.
+
+•Cluster: It is a logical group of container instances.
+
+•Container: This is the Docker container created during task instantiation.
+
+
+(234)
+
+AWS ECS deployment models:
+
+AWS ECS Deployment model can be chosen as per your requirement. Let’s look at the
+models AWS Elastic Container Service (ECS) mainly offers for cluster deployment.
+
+EC2 instance:
+
+EC2 (Elastic Compute Cloud) is a virtual machine in the cloud. First, configure and
+deploy EC2 instances in the cluster to run the containers. It provides more granular
+control over the instances. You can choose the instances as per requirement.
+This model is a better choice if you want to do the following:
+
+• Run containerized applications continuously
+•Have better control over the auto-scaling configuration
+•Use a Classic Load Balancer (CLB) to distribute workloads
+•Use Graphical Processing Unit (GPU)
+•Use Elastic Block Storage (EBS)
+•Deploy large and complex applications
+
+Fargate:
+
+This is a serverless pay-as-you-go model. You will be charged based on the
+computing capacity selected and the time of usage. ECS with Fargate is a container
+orchestration tool used for running Docker based containers without having to
+manage the underlying infrastructure.
+
+This model is a better choice if you want to do the following:
+
+•Run the task occasionally or for a short period
+•Containerized applications should be able to handle sudden spikes in
+incoming traffic
+•Use application and network load balancers to distribute workloads
+•Save time from different configurations, regular maintenance, and security
+management
+
+(235)
+
+Go to Elastic Container Service from Services:
+
+Services | All Services | Containers | Elastic Container Service
+
+First off, go to the cluster page and create an ECS cluster by clicking on the Create
+Cluster button. AWS provides templates for creating clusters to simplify the process
+of cluster creation. In the current scenario, Networking only (AWS Fargate) is
+selected as the type of instance. On the next screen, under Cluster configurations,
+the Cluster name is to be provided. In this scenario, it is mlapp-cluster, as shown
+in the following figure:
+
+Then, click on the Create button, and it will launch the ECS cluster. You will see ECS
+cluster is created with the type Fargate, but no instances are running.
+
+(236)
+
+Task definition:
+
+After that, create a task definition. Go to the Task Definition page and click on
+Create new Task Definition. Choose the type as Fargate in step 1. In step 2,
+provide the task definition name. In this case, it is mlapp-cicd. Select the Task
+role ecsTaskExecutionRole from the dropdown and select the Operating system
+family as Linux, as shown in the following figure:
+
+https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_execution_IAM_role.html
+
+Keep the Task execution role as default, that is, ecsTaskExecutionRole. Under
+the Task size section, choose the required memory and CPU to be allotted for tasks
+based on application requirements or use cases. A Task memory (GB) of 1GB and
+Task CPU (vCPU) of 0.25 vCPU is chosen for the current scenario, as shown in the
+following figure:
+
+Finally, add the container details, such as container name, image URI to be taken
+from AWS ECR, and memory limits (in MiB) for containers. Hard and soft limits
+correspond to the memory and memoryReservation parameters in task definitions.
+The Port mappings parameter is important. Here, you need to provide a port used
+by the container to run the application and expose it in the Dockerfile. In the current
+scenario, the container port is 8000. You can leave the rest of the configurations as
+they are and add a container.
+In the end, click on Create and complete step 2 of the task definition.
+
+(237)
+
+Running task with the task definition:
+
+The task can be run independently using the task definition created earlier.
+The following figure shows the various options available for task definition. Now, to
+run the task, choose the first option, that is, Run Task.
+
+Next, choose the launch type. In the current scenario, FARGATE is chosen. Choose
+mlapp-cluster from the Cluster dropdown.
+
+(238)
+
+Amazon VPC and subnets:
+
+Amazon Virtual Private Cloud (Amazon VPC) enables you to launch AWS resources
+into a virtual network that you've defined. These virtual networks are similar to the
+traditional networks used in data centers. The merit of a virtual network is that it
+comes with scalable infrastructure managed by AWS. Each VPC network consists of
+one or more IP address ranges called subnets.
+
+Next, under VPC and security groups, choose cluster VPC and choose subnets. In
+the current scenario, choose 2a and 2b; however, the remaining 2c and 2d can also
+be chosen. Make sure the Auto-assign public IP is ENABLED. This will allow you to
+automatically assign available public IPs to access the ML app from anywhere.
+
+(239)
+
+Then, edit the default security group, and the security groups window will show
+up. Here, create a new security group that will be used in a later stage. Choose
+Create new security group from Assigned security groups and provide the name
+for the security group as mlapp-sg, where sg stands for the security group. After
+that, two ports are allowed, that is, port 80 and port 8000, for the communication of
+containerized applications with the external world.
+
+After that, add HTTP port 80 and Custom TCP port 8000, on which the containerized
+application is running. Choose Anywhere in the source option for both ports.
+
+Finally, in the bottom-right corner, hit the Run Task button. It will take some time
+to get the task up and running. The task’s status will be shown as RUNNING in the
+Tasks tab, as shown in the following figure
+
+(240)
+
+The public IP of the task is 54.191.99.95. It means an ML app can be accessed with
+this public IP from anywhere on the internet.
+The issue with running a task independently is that if the task fails or stops due to
+any reason, then the application also stops; this makes the application inaccessible to
+the external world. To overcome this issue, ECS service can be used. Don’t forget to
+stop the running task. With ECS service, multiple tasks can be created.
+
+(241)
+
+Load balancing:
+
+In parallel computing, load balancing is a process of distributing application traffic
+across different available computes or resources in order to make overall request
+handling more efficient. The main objective of the technique is to avoid any downtime
+for end users or customers.
+
+The following figure resembles the high-level architecture of an Application Load
+Balancer (ALB):
+
+An application load balancer can only be added to a service while creating a service.
+Next, go to the load balancing part and create the target groups, which takes care of
+dynamically adding the IP addresses that get created while creating the tasks.
+
+Go to load balancer from Services:
+
+Services | All Services | Developer Tools | Load balancing
+
+The following figure shows the components of Load Balancing:
+
+Let’s understand the role and configuration of the two components of Load Balancing.
+
+Target group:
+
+With a load balancer, a single DNS name is enough to access the containerized
+application. A load balancer will take the user requests on port 80 and route them to
+tasks with dynamic IP through the service. The target group will ensure connectivity
+between the load balancer and tasks with dynamic IP through service.
+
+Go to the target group and create a new target group by hitting the Create target
+group button.
+
+Creating a target is a three-step process:
+
+•Specify group details
+•Register targets
+•Review IP targets to include in your group
+
+Step 1: Specify group details
+
+A configuration setting cannot be changed after the creation of a target group. In this
+step, the target type is IP addresses; its features are listed in the following figure:
+
+Next, provide the Target group name as mlapp-tg. The Target group name should
+not start or end with a hyphen (-). Then, provide port 8000 with HTTP type Protocol
+as the application is exposed to port 8000. Leave the rest of the selections as they are.
+This configuration is shown in the following figure:
+
+Under the health check section, by default, the target group will check the root or
+index path (‘/’), or you can specify a custom path if preferred. The target group will
+periodically send the requests to this endpoint of the application to check whether
+it is healthy.
+
+Step 2: Register targets
+
+In this step, IP addresses and ports can be specified manually from the selected
+network. By default, the VPC network will be selected. Remove the pre-selected IP,
+as this part is optional. This can be configured later on. The following figure shows
+this step
+
+After that, specify the ports for routing to this target. In the current case, the
+application’s port 8000 is specified, as shown in the following figure:
+
+Step 3: Review IP targets to include in your group
+At this point, you can repeat steps 1 and 2 if you want to add additional IP targets.
+However, you have not specified any IP address is specified in step 2, so go ahead
+and hit the Create target group button at the bottom. It will take you back to the
+main page of the targets group and display a successful message, as shown in the
+following figure:
+
+Amazon Resource Names (ARNs) are unique identifiers of AWS resources. AWS
+ARN format could be any one of the following formats:
+
+•arn:partition:service:region:account-id:resource-id
+•arn:partition:service:region:account-id:resource-type/resource-id
+•arn:partition:service:region:account-id:resource-type:resource-id
+
+A partition is a group of AWS regions, and each account has a limited scope: one
+partition.
+
+(242)
+
+Security Groups:
+
+A security group is a set of firewall rules that control the traffic toward the load
+balancer. It has not been created yet, so let’s go ahead and create a new security
+group. Follow these steps:
+
+Services | All Services | EC2 | Network & Security | Security Groups
+
+First off, specify basic details for the security group, such as name and description,
+as shown in the following figure. A Security group name is mlapp-lb-sg, where lb
+stands for the load balancer and sg stands for the security group.
+
+Next, configure inbound rules for the security group. Hit the Add rule button. A load
+balancer should be able to access port 80 from anywhere, so specify port 80 under
+the Port range and choose Source type as anywhere, as shown in the following
+figure. More rules can be added through the Add rule button.
+
+Then, hit the Create security group button in the bottom-right corner of the page
+and complete the process. The following figure shows the details of the security
+group after creation:
+
+This security group, mlapp-lb-sg will be used for the load balancer.
+
+(243)
+
+Application Load Balancers (ALB):
+
+Application Load Balancer (ALB) accepts incoming requests and routes them to
+registered targets, such as EC2 instances. It also checks the health of its registered
+targets (by default, the root path is set to ‘/’; however, it can be changed to a different
+path of application). Application Load Balancer (ALB) is client-facing. It routes
+the traffic to healthy targets only. It can be easily integrated with Amazon Elastic
+Container Service (Amazon ECS), Amazon Elastic Container Service for Kubernetes
+(Amazon EKS), AWS Fargate, and AWS Lambda.
+
+Once security and target group is created, create a load balancer. Go to the Load
+balancing section again and choose Load Balancers.
+
+Services | All Services | EC2 | Load balancing | Load Balancers
+
+Then, hit the Create Load Balancer button. The following figure shows the main
+page of the load balancer:
+
+(244)
+
+After clicking the Create Load Balancer button, it will show three options with brief
+descriptions and architecture to choose from, as shown in the following figure:
+
+The application load balancer distributes the incoming requests across targets, such
+as containers, microservices, and EC2 instances, depending on the requests. Before
+passing the incoming requests to the targets, it evaluates whether the listeners’ rules
+are configured.
+
+In the current scenario, choose the first type, which is Application Load Balancer,
+by hitting the Create button.
+
+Now, configure the load balancer. First, specify the name for the load balancer
+mlapp-lb, where lb stands for the load balancer. Next, choose the scheme as
+Internet-facing. The main difference between the Internet-facing and the Internal
+scheme is the internet. An Internet-facing load balancer routes the requests coming
+from clients over the internet to specified targets. On the other hand, an Internal
+load balancer will only route the request from clients with private IPs to specified
+targets. Select the IP address type as IPv4, which is used by specified subnets. The
+following figure shows the basic configuration of the Application Load Balancer:
+
+
+Then, configure the network mapping. Network mapping enables the load balancer
+to route incoming requests to specific subnets and IP addresses. For mapping, select
+at least two availability zones and one subnet per zone where the load balancer can
+route the traffic. By default, it will display the available zones for selection. A load
+balancer will route the requests to targets in these availability zones only. Choose
+the default VPC and two Subnet (2a and 2b) from the dropdown, as shown in the
+following figure:
+
+After that, remove the default security group and choose the security group from
+the dropdown created in the previous section. A security group can also be created
+through the Create new security group link. It will take you to the main page of the
+security group only, as seen in the previous section. The following figure shows the
+security group mlapp-lb-sg chosen for the load balancer:
+
+Finally, choose the target group you created earlier, that is, mlapp-tg with port 80,
+as shown in the following figure:
+
+Scroll down and hit the Create load balancer button in the bottom-right corner. The
+following figure shows the main page of the load balancer, which shows the newly
+created load balancer is created:
+
+Now, first, delete the service if you created it earlier, as the load balancer setting
+cannot be added after the creation of the service. Next, create a service with a load
+balancer.
+
+(245)
+
+Service:
+
+An AWS ECS service allows you to keep running a specified number of instances of
+a task definition simultaneously in an AWS ECS cluster. If the task(s) fails or stops
+due to any reason, the ECS service will launch another instance of task definition to
+ensure that the desired number of tasks are up and running. The benefit of this is
+that the application will be up and running despite the failure of any task.
+
+Go to the Services tab on the mlapp-cluster page and hit the Create button to create
+a new service.
+
+Service creation involves four steps, as shown in the following figure. The
+configuration and setting for each step are discussed in the following figure:
+
+Step 1: Configure service
+
+In this step, select the launch type. As the ECS cluster is configured with FARGATE,
+choose the launch type as FARGATE. The operating system family will be Linux.
+
+Choose Task Definition as mlapp and Cluster as mlapp-cluster from the dropdown
+as shown in the following figure:
+
+Next, in the same step, issue the name for the service; in this scenario, it is mlapp-
+cicd, and Set the Number of tasks to 2, which refers to the desired number of
+tasks that will be influenced by the service. However, this count can be updated (1
+and above) as per the requirement. The remaining options can be kept as it is. The
+following figure is the continuation of step 1:
+
+Step 2: Configure network
+
+In this step, the first choose Cluster VPC and the Subnets associated with it from the
+dropdown. Again, choose two subnets, that is, 2a and 2b, similar to standalone tasks
+but with additional configuration, as shown in the following figure. Make sure the
+Auto-assign public IP is ENABLED. This will allow you to assign available public IPs
+to access the ML app from anywhere.
+
+Next, click on the Edit button in the security groups. It will open a window to
+configure security groups. Here, the existing security group is chosen, which you
+created for running independent tasks. It has inbound rules defined for ports 80
+and 8000, as shown in the following figure. Save this configuration for the security
+group.
+
+Then, select Application Load Balancer as the load balancer type. This enables it
+to distribute across the tasks running in the service without letting the end user
+know. A load balancer of the type Application Load Balancer allows containers to
+use dynamic host port mapping, that is, multiple tasks are allowed per container
+instance. Multiple services can use the same listener port on a single load balancer
+with a rule-based routing path.
+
+After that, choose the Load balancer name from the dropdown as shown in the
+following figure. A load balancer will listen to HTTP port 80. Choose the Target
+group name as mlapp-tg from the dropdown, which you created and configured in
+the load balancer section.
+
+Step 3: Set Auto Scaling (optional)
+
+Auto-scaling is optional. This will automatically update the service’s desired count
+within a specified range based on CloudWatch alarms. In the current scenario, the
+default is used, that is, Do not adjust the service’s desired count. Click on Next step.
+
+Step 4: Review
+
+In this step, review the configuration for the service. Here, you can go to the previous
+step to update the configuration. If it looks fine, then go ahead and create a service
+by hitting the Create Service button, as shown in the following figure:
+
+After step 4, the service will be created; however, it will take a few minutes to create
+the desired number of tasks for that service. The progress of task creation can be
+checked under the Events and Logs tab. After a few minutes, the tasks’ status will
+change to RUNNING, as shown in the following figure:
+
+Now, click on the first task, copy its public IP, and enter the public IP, followed by
+port 8000, in the browser. It should display a message, as shown in the following
+figure:
+
+Go back and click on the second task, copy its public IP, and enter the public IP
+followed by port 8000 in the browser. It should display a message, as shown in the
+following figure:
+
+The good thing about service over standalone tasks is that if any one of the tasks
+fails or shuts down due to any reason, the service will replace it with a new task
+to maintain the desired number of tasks up and running. The issue with a service
+without a load balancer is that when it replaces a task or creates a new one, the
+public IP will get changed, which makes it a bit difficult to keep a track of the latest
+or running tasks for that service.
+
+These public IPs can be accessed by the external world through the internet. However,
+you can restrict access to the public IP of tasks by updating inbound rules in the
+security group of service mlapp-sg. Go to the mlapp-sg security group, remove
+inbound rules (if they exist), add a new rule and specify container port, that is, 8000
+in Port range, and choose the security group of the load balancer, that is, mlapp-
+lb-sg instead of 0.0.0.0/0 or anywhere in the source. Finally, you can save the
+rules. This will restrict the direct access to public IPs of tasks for the external world
+through the internet.
+
+
+(246)
+
+Let’s check the deployed containerized app with an application load balancer. Go
+to the load balancer page, copy its DNS name, and run it on the browser (paste and
+enter). It should display a text message. This is the root page of the application.
+Then, pass the input data in <ALB DNS name>/docs and check the prediction
+output, as shown in the following figure. Here, you don’t need to pass the port and
+IP address as the load balancer is configured with port and target group, which will
+handle dynamic IPs of tasks.
+
+(247)
+
+CI/CD pipeline using CodePipeline:
+
+An AWS comes with a set of tools and services for the CI/CD pipeline. In the
+previous section, the build was triggered manually with CodeBuild. To automate
+the manual process, you must build the CI/CD pipeline with an automated trigger.
+
+To achieve this, AWS CodePipeline will be used. Before creating a CI/CD pipeline,
+make sure previous services and topics are studied and implemented on the AWS
+cloud. An AWS CodePipeline will connect those services to create an automated
+pipeline. AWS services like CodeCommit, ALB, ECS FARGATE cluster, and such
+need to be created and configured. Make sure you provide the necessary permissions
+to services wherever applicable. For the current scenario, any external service, such
+as GitHub, is not being used. However, you can integrate external services or third-
+party services into this process. Here, AWS services are leveraged to deploy an
+application.
+
+When there is any update pushed to CodeCommit, it will trigger the CI/CD pipeline.
+A CodeBuild configuration file buildspec.yaml will first run the tests. Next, log in to
+Amazon ECR, then build and push Docker container images to the Elastic Container
+Registry (ECR). It will also write a container image definitions file imagedefinitions.
+json, in which a repository, followed by an image tag, will be captured. This
+container image definitions file will be stored in an Amazon S3 bucket as an artifact.
+A CodeBuild will export the test reports (.xml) in the pytest_reports/ directory.
+These test results can be seen on the CodeBuild page. After that, in the deploy stage,
+specify the ECS cluster details. ECS cluster will pull the latest container image from
+Elastic Container Registry (ECR). Finally, the containerized app will be deployed
+into the ECS cluster. Logs will be captured in CloudWatch.
+
+When the client or end user will access this ML app through Domain Name System
+(DNS) name, DNS will translate the human-readable name to numerical IP addresses
+that the machine can understand. This request will go to Application Load Balancer
+(ALB). Next, the Application Load Balancer (ALB) will check the specified listener's
+rules, such as port numbers and IP addresses. Then, it will send incoming requests
+to a specific target group which will route requests toward running tasks located in
+the Elastic Container Service (ECS) FARGATE cluster. The application will process
+the request and send the prediction to the client or end user.
+
+(248)
+
+AWS CodePipeline:
+
+A pipeline is a workflow that is responsible for automating the deployment or release
+of the application. A CodePipeline is a fully managed continuous delivery (CD)
+service in the AWS cloud. It enables faster and easy deployment of an application.
+It automates the different phases involved in the CI/CD process, such as build,
+test, and deploy. Each phase comprises a series of actions to be performed. AWS
+CodePipeline can easily integrate with third-party services like GitHub.
+
+Go to CodePipeline from Services.
+
+Services | All Services | Developer Tools | CodePipeline
+
+Let’s start by creating a pipeline. Hit the Create pipeline button. It consists of 5
+steps, namely:
+
+•Choose pipeline settings
+•Add source stage
+•Add build stage
+•Add deploy stage
+•Review
+
+Step 1: Choose pipeline settings:
+
+In this step, you need to specify the Pipeline name as mlapp-cicd. A pipeline name
+cannot be changed after creation. Choose a New service role for CodePipeline.
+Check to Allow AWS CodePipeline to create a service role so it can be used with
+this new pipeline checkbox. The Role name should auto populate.
+
+Step 2: Add source stage
+
+In this step, you need to specify the details of the source from which the latest code
+and updates are to be pulled. Choose AWS CodeCommit as a Source provider.
+Next, choose the Repository name as loan_pred. Then, choose the main branch
+from which the latest code and updates are to be pulled. From the Change detection
+options, choose Amazon Cloudwatch Events (recommended) as shown in the
+following figure. This will trigger the pipeline as soon as it detects the changes in the
+source repository’s branch.
+
+Step 3: Add build stage
+
+Here, first off, you need to choose the AWS CodeBuild as the Build provider.
+Alternatively, Jenkins can be chosen as the Build provider. The region US West
+(Oregon) is chosen. Next, choose the build Project name that you have already
+created in the CodeBuild console, or create a build project in the CodeBuild console.
+The Create project link will redirect you to the CodeBuild console. In the Build type
+section, you need to choose Single build as it is expected to trigger a single build.
+
+Step 4: Add the deploy stage
+
+In this step, provide deployment details where the application needs to deploy. This
+step depends on the previous step. Once the build is complete, this step will deploy
+the application to Elastic Container Service (ECS) cluster.
+First, choose the deploy provider as Amazon ECS. The region is US West (Oregon).
+Then, choose the cluster name that you have already created in the Amazon ECS
+console or create a cluster in the Amazon ECS console and complete this step. After
+that, specify the cluster and service name that was created in the previous section.
+Refer to the following figure for step 4 configuration.
+
+Step 5: Review
+
+In this step, review the configuration of the previous steps.
+If the configuration is fine, hit Create pipeline.
+
+(249)
+
+Run CodePipeline:
+
+By default, it will start building the pipeline for the first time soon after its creation.
+When any updates are pushed to the source, that is, AWS CodeCommit, pipeline
+execution will begin. You can see the progress and status of the pipeline on the main
+page of CodePipeline. Go to pipeline mlapp-cicd, and you can see the status of each
+phase. It displays the link to that service. For instance, the progress of the build can
+be seen through the link under the Build step.
+
+Go to the details in the Build section; you can see the source and submitter details. In
+the following figure, who started the build job and the source version are displayed.
+In the first row, the build job was started by CodePipeline, and in the next row, the
+build job was started manually by the IAM user.
+
+The main page of CodePipeline is shown in the following figure. It displays details
+like the latest status of the pipeline and the latest source revision.
+
+To access the app, you can use the DNS name shown on the main page of the load
+balancer. A DNS name will not change even if a new task is created or if the public
+IP of the task changes. The following figure shows the prediction after passing the
+input data using FastAPI UI.
+
+(250)
+
+Monitoring:
+
+Monitoring is an essential part of the deployment. It is recommended to monitor ECS
+clusters and other integrated services to ensure the high availability of applications.
+This enables you to check the overall health of ECS containers. First, create a plan
+for the resources and services that need to be monitored. Next, decide the action to
+be taken if a specified event is detected. Decide who should be notified of the event
+or error, where to monitor metrics and events, and so on.
+
+ECS provides cluster-level statistics, such as:
+
+•CPU Utilization–Current% of CPU utilized by the ECS cluster
+•Memory Utilization–Current% of Memory utilized by the ECS cluster
+
+Amazon ECS metric data is automatically sent to CloudWatch in 1-minute periods
+that get captured for 2 weeks. Amazon CloudWatch Container Insights allows
+you to aggregate and analyze metrics and logs from containerized applications. It
+helps to monitor utilization metrics such as CPU, memory, disk, and network. It also
+provides diagnostic information about container restart failures.
+
+You can create an AWS Lambda function that will get triggered if a specified event
+is detected and will send the alert to the slack channel. This way, team members and
+developers will be notified about the alert.
+
+Thus, you have learned to create a simple CI/CD pipeline using CodePipeline to
+deploy the ML app on the Amazon ECS Fargate cluster. However, you can modify
+it as per business and application requirements. Reference figures in this chapter
+are from classic UI. If you see a new UI for creating and managing services, you can
+switch back to the classic UI, or you can continue with the new UI.
+
+Alternatively, you can use AWS CloudFormation or Terraform to automate
+the creation of infrastructure or services.
+
+-----------------------------------------------------------------------------------------------
+
+(251) Monitoring and Debugging
 
 

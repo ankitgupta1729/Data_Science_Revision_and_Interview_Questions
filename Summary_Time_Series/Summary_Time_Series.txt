@@ -614,8 +614,7 @@ parameters.
 • Then the MA model is called “invertible”
 
 -- General condition for invertability
-• Complex roots of 1 + 𝜃1
-𝑧 + 𝜃2𝑧2 + ... + 𝜃𝑞𝑧𝑞 lie outside the unit circle on the complex plane
+• Complex roots of 1 + 𝜃1𝑧 + 𝜃2𝑧2 + ... + 𝜃𝑞𝑧𝑞 lie outside the unit circle on the complex plane
 
 ARIMA Models
 • AR: Autoregressive (lagged observations as inputs)

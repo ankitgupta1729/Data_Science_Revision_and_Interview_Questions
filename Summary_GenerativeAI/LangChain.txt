@@ -1,0 +1,21 @@
+(1) Langchain is a framework which uses LLMs. ChatGpt is an application which is made using LLMs. LLMs is a machine learning model
+    which is trained on huge text corpus whose architecture is based on transformers.
+
+(2) We will create LangChain Application using repl. Go to: https://replit.com/ and then make account and create Python Repl with templates.
+
+(3) write in code editor:
+
+import openai
+import langchain
+
+-- all dependencies will automatically installed
+
+(4) To use the OpenAI models, we have to go to openai website, make account and create the secret key from your profile.
+
+(5) Come to Repl, go to tools, go to secrets and paste the secret key with OPENAI_API_KEY name
+
+(6) Temperature is a parameter in openai function which is used for randomness. It has value between 0 and 1.
+    If it has value near 1 then it gives more random result and if it has value towards 0 then it gives repeated values.
+
+(7)  
+ 

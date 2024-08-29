@@ -1,0 +1,260 @@
+(1) ChatGPT is a product of OpenAI. Google Bard is a product of Google and Meta Llama 2 is a product of facebook.
+
+(2) In deep learning, major components are ANN,CNN,RNN. ANN is used for structured data, CNN is generally used for image 
+    or video data. RNN is generally used for sequence related data. RNN contains the feedback loop.
+
+(3) Generative AI generate new data based on training sample. Generative model can generate image,text,audio,video 
+   (like unstructured data) etc as output. It can have Generative Image model, Generative Language Model etc. LLM 
+   comes in Generative Language Model but it can generate images as well. GAN comes under generative image models.
+   DALL.E is a famous model for image generation.
+   
+   Generative language model can be used for text to text or text to image generation or image to text generation and example is LLM. (we can use RNN, LSTM etc also)
+   Generative Image model like GAN is used for image to image generation.
+
+(4) In GAN, Discriminator and Generators are neural networks.        
+
+(5) LLM is part of generative AI. Generative AI is a super set.
+
+(6) In LLMs, input is called input prompt and output is called output prompt.
+
+(7) ML is the subset of AI. DL (Deep Learning) is the subset of ML. GenAI is the subset of DL.
+
+(8) RNN HAS SHORT TERM MEMORY AND IT CAN'T HANDLE long sentences. LSTM has cell states and it can handle long sentences.
+
+(9) GRU (Gated recurrent unit) is updated version of LSTM and it has 2 gates: reset gate and update gate.     
+
+(10) RNN, LSTM, GRU are used for sequence to sequence mapping like one to one, one to many (iamge capturing), many to one (sentiment analysis), many to many(language
+     translation). In both encoder and decoder, we use RNN,LSTM,GRU. In transformer, we don't use it. In transformer, both encoders and decders don't have 
+     RNN, LSTM, GRU, we use positional encoding, multihead attentions and parallel processing which makes it faster.
+
+(11) LLMs:
+
+     A large language model is a trained deep learning model that understands and generate text in a human like fashion.
+
+     LLMs are good at understanding and generating human languages.
+
+(12) Why we call it Large Language model ?
+
+     Because the size and complexity of the neural network as well as the size of the dataset that it was trained on. 
+
+(13) What makes LLM so powerful ?
+
+     In case of LLMs, one model can be used for a whole variety of tasks like:
+
+     Text generation, Chatbot, summarizer, translation, code generation and so on.
+
+(14)  Few milstone in LLMs:
+
+A. BERT: Bidirectional Encoder Representations from Transformers (BERT) was developed by Google
+B. GPT: GPT stands for "Generative Pre-trained Transformer". The model was developed by OpenAI.
+C. XLM: Cross-lingual language model pretrained by Guillaume Lample, Alexis Conneau.
+D. T5: The Text-to-Text Transfer Transformer, it was created by Google AI.
+E. Megatron: It is a large, powerful transformer developed by the applied research team at nvidia
+F. M2M-100: Multilingual encoder-decoder (seq2seq) model researched at Facebook. 
+
+(15) Transformer has Encoder and Decoder. 
+
+   BERT, RoBERTa, XLM,XLM-R,ALBERT,ELECTRA,DeBERTa follows encoder architecture.
+   GPT, GPT-2,CTRL,GPT-3,GPT-Neo,GPT-3 follows decoder architecture.
+   TS,BART,M2M-100,BigBird follows both encoder and decoder.
+
+(16)
+
+OpenAI Based LLM Models:
+
+Models  --> Description
+
+GPT-4 --> A set of models that improved on GPT-3.5 and can understand as well as generate natural language or code
+GPT-3.5 --> A set of models that improved on GPT-3 and can understand as well as generate natural language or code
+GPT base --> A set of models without instruction following that can understood as well as
+             generate natural language or code
+DALL.E  --> A model that can generate and edit images given a natural language prompt
+Whisper --> A model that can convert audio into text
+
+Embeddings  --> A set of models that can convert text into a numerical form
+Moderation  --> A fine-tuned model that can detect whether text may be sensitive or unsafe
+GPT-3 Legacy --> A set of models that can understand and generate natural language    
+
+(17) GPT is a model and chatgpt is an application.
+
+(18) Other Open Source Models
+
+A. BLOOM
+B. Llama 2
+C. PaLM
+D. Falcon
+E. Claude
+F. MPT-30B
+G. Stablelm and so on
+
+(19) 
+
+How ChatGPT was trained ?
+
+Internally it uses an LLM which is gpt-3.5 or gpt-4
+
+It has trained on a large amount of data which is available all over the internet.
+
+A. Generative pre-training
+B. Supervised fine-tuning
+C. Reinforcement learning
+
+(20) We will use openai api using python. We will use also use openai playground and chat completion api also.
+     Hugging Face hub contains many open source large language models and we can use it using api key. Hugging face is a different organization like openai.
+
+(21) 
+
+About OpenAI:
+
+OpenAI is a leading company in the field of AI. It was founded in 2015 as a non profit org by Sam Altman and Elon Musk.
+
+In 2021, Sam Altman is the current CEO of OpenAI.
+
+The company was founded with the goal of developing and promoting friendly AI in a resposible way, with a focus on 
+transparency and open research
+
+(22)
+
+ChatGPT answers better than human but it is not  a human . So Q* project was started to achieve human like intelligence 
+which is called AGI(Artificial General Intelligence) was started in openai.
+
+(23)
+
+why we use it and how to generate api key:
+
+A. Go to https://platform.openai.com/apps
+B. Go to API option.
+C. go to the "docs" in top right side and check documentation https://platform.openai.com/docs/quickstart
+D. In Model section https://platform.openai.com/docs/models/gpt-3-5-turbo, various models has tokens. These
+   tokens play an important role. We give inputs in LLM models in the forms of prompts. Prompts is nothing but a collection
+   of tokens. Inputs and outputs from LLM models is in the form of prompts.
+E. OpenAI stopped the free services and it stopped free 20$ credits  
+F. There is an alternative, API 21 lab, which gives 90$ free credits but we can't use gpt 3.5 turbo model (it is not open source, organization has to pay for it.)
+G. We don't need to train these LLM models. We can directly use it. If we have to fine-tune, then we have to pay for higher resources.
+H. create virtual env using python=3.8, activate it and install pip install jupyter notebook
+I. open jupyter notebook using jupyter-notebook
+J. Instruction can be found at https://platform.openai.com/docs/quickstart
+K. pip install --upgrade openai
+
+# Generate openai key
+
+we have to add some credit method then we can use api key. otherwise we have to use hugging face api key.
+go to openai site, go to profile, do billing and then add api key.
+
+(24) we have to use these trained models from openai otherwise training models will cost around crores for startups. 
+
+(25) 
+
+OpenAI PlayGround:
+
+search openai playground. Go to Chat section. It has 3 components: Model, System, User.
+
+Put:
+
+System: You are a helpful assistant
+User: How can I make the money ?
+set the model.
+
+Set temperature, max tokens and run it. You get the answer.
+
+Now click on "View Code", you will get the whole Python code. copy the code and use it in jupyter notebook.
+
+Code:
+
+from openai import OpenAI
+client = OpenAI()
+
+response = client.chat.completions.create(
+  model="gpt-3.5-turbo",
+  messages=[
+    {
+      "role": "system",
+      "content": [
+        {
+          "type": "text",
+          "text": "You are a helpful assistant"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": "How can I make the money ?"
+        }
+      ]
+    }
+  ],
+  temperature=1,
+  max_tokens=256,
+  top_p=1,
+  frequency_penalty=0,
+  presence_penalty=0,
+  response_format={
+    "type": "text"
+  }
+)
+
+(26)
+
+Now, change system as:
+
+System: You are a naughty assistent, so make sure you respond to everything with sarcasm.
+
+and now check and compare the answer with previous answer.
+
+(27)
+
+Now, check the assistants option in playground. create assistant. It has tools as File search, code interpreter, functions, retrieval(RAG).
+
+RAG (Retrieval-Augmented Generation):
+
+It is an AI framework that retrieves data from external sources of knowledge to improve the quality of responses. This
+natural language processing technique is commonly used to make LLMs more accurate and up to date.  
+
+(28)
+
+openai.ChatCompletion.create(): Similar to Completion.create(), but specifically designed for chat-based language models.
+
+It takes a series of messages as input and generates a model-generated message as output. 
+
+
+(29)
+
+OpenAPI has a special feature called function calling. Using it, we can format the output.
+
+
+(30) LLM model has input in input prompt. And prompt is nothing but a set of tokens. You can understand a prompt as a set of tokens and each token is a word.
+
+(31) check example of function calling from openai website. we can get information after sep 2021 (till model is trained) using function calling. we can also use Langchain 
+     by calling 3rd party API.
+
+(32) Function callinf means learn how to connect LLMs to external tools.
+
+(33) LangChain is a wrapper on top of OpenAI. when we make a request, it goes to LangChain and then it passes to OpenAI.
+ 
+(34) we can use LangChain for any open source model.
+
+(35) OpenAI models are not free.
+
+(36) we use agent in langchain for calling 3rd party api tool.
+
+(37) serp api is a real time api to access google search engine or bing or wikipedia.
+
+(38) generate serp api key: sign in on https://serpapi.com/dashboard and generate key using https://serpapi.com/manage-api-key
+
+(39) Central to LangChain is a vital component known as LangChain chains, forming the core connection or several LLMs. In certain sophisticated applications,
+     iy becomes necessary to chain LLMs together. (check the documentation)
+
+(40) If we want to combine multiple chains and set of sequence for that, we use simple sequential chains.
+
+(41) Read about document loader and memory features of LangChain. document loader is load odf,csv etc. LLM also retains the memory for previous answers to give next answer.
+
+(42) Hugging Face:
+
+Go to https://huggingface.co/ and sign up.    
+
+go to models: https://huggingface.co/models
+
+go to https://huggingface.co/settings/tokens and create new token

@@ -1,0 +1,62 @@
+#Install MSSQL Drivers in centos 7 (works on 8 also)
+
+(1) docker run -it centos
+
+(A) check centos version using: cat /etc/redhat-release
+
+(2) cd /etc/yum.repos.d/
+
+(3) sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
+
+(4) sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
+
+(A) cd ..
+
+(B) cd ..
+
+(5) follow instructions from here: 
+
+https://documentacoes.wordpress.com/2018/10/24/connect-to-sql-server-using-microsoft-odbc-driver-in-centos-7/
+
+(A) curl https://packages.microsoft.com/config/rhel/7/prod.repo > /etc/yum.repos.d/mssql-release.repo
+
+(B) yum install msodbcsql17-17.4.1.1-1
+
+(C) odbcinst -j
+
+do cat path
+
+------------------------------------------------------------------
+
+# Install Python (if not installed)   
+   
+(https://vinodpandey.com/how-to-install-python3-on-centos-7/)  
+
+1. sudo yum -y install wget make gcc openssl-devel bzip2-devel
+
+2. cd /tmp/
+wget https://www.python.org/ftp/python/3.6.12/Python-3.6.12.tgz
+
+3. tar xzf Python-3.6.12.tgz
+cd Python-3.6.12
+./configure --enable-optimizations
+sudo make altinstall
+
+sudo ln -sfn /usr/local/bin/python3.6 /usr/bin/python3.6
+sudo ln -sfn /usr/local/bin/pip3.6 /usr/bin/pip3.6
+
+
+------------------------------
+# Install pyodbc
+
+yum install unixODBC unixODBC-devel
+yum install gcc-c++
+dnf install python3-devel -y
+pip install pyodbc
+-------------------------------
+
+example: https://docs.devart.com/odbc/sqlserver/python.htm
+
+
+
+    

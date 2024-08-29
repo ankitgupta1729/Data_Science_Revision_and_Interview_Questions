@@ -1,0 +1,235 @@
+docker container --> independent/isolated entity like computers and images are like OS installed on containers.
+Used to get the same envoronment like node js,windows etc
+images can be found on docker hub --> python image, node image, ubuntu image etc.
+
+We can run multiple containers also.
+
+Docker --> docker desktop +cli after installation
+
+
+
+1. check docker installation:
+
+--> docker
+
+--> docker --version
+
+
+2. Create the docker file
+
+
+3. Building docker image:
+
+docker build -t run_ffa .
+
+4. run the docker
+
+run docker -p 8000:8000 run_ffa
+
+
+--------------------------------------------
+
+Install Docker Engine on CentOS (https://docs.docker.com/engine/install/centos/)
+
+1.  check whether docker is installed or not.
+
+type "docker" (or) "docker-engine"
+
+2. If docker is not installed then:
+
+A. Set up the repository
+
+sudo yum install -y yum-utils
+sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+
+B. Install Docker Engine
+
+sudo yum install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+If prompted to accept the GPG key, verify that the fingerprint matches 060A 61C5 1B55 8A7F 742B 77AA C52F EB6B 621E 9F35, and if so, accept it.
+
+This command installs Docker, but it doesn't start Docker.
+
+C. Start Docker.
+
+sudo systemctl start docker
+
+D. Verify that the Docker Engine installation is successful by running the hello-world image.
+
+sudo docker run hello-world
+
+This command downloads a test image and runs it in a container. When the container runs, it prints a confirmation message and exits.
+
+You have now successfully installed and started Docker Engine.
+
+
+
+
+----------------
+commands:
+
+docker container ls -a
+docker start container_name
+
+docker exec -it container_name bash
+
+docker run -it image_name
+
+docker images 
+
+
+-----
+
+port mapping:
+
+do expose port numbers so that it can be accessible in local system
+
+ex. docker run -it -p 1025:1025  image_name
+
+
+-----------
+
+Dockerization: (configuration)
+
+FROM Base_Image  ## for example base image is ubuntu so it install the ubuntu as base image (os) in the container
+
+RUN apt-get update
+RUN apt-get install -y curl
+RUN curl -sL https://
+RUN apt-get upgrade -y
+
+COPY source_file destination_file
+
+
+
+--------------------------------------
+
+Embed the scheduler in docker image:
+
+In a project folder:
+
+(1) Dockerfile: (save as "Dockefile" in notepad with all types as file type. It has no extension)
+
+#old image
+#FROM python:3.6.10-slim-stretch
+#new image
+FROM python:3.6.10-slim
+RUN apt-get update && apt-get -y install cron vim
+WORKDIR /app
+COPY . /app
+#root is the default directory for the scheduler
+COPY . /root
+COPY crontab /etc/cron.d/crontab
+RUN chmod 0644 /etc/cron.d/crontab
+RUN /usr/bin/crontab /etc/cron.d/crontab
+RUN apt-get clean
+RUN pip install -U pip setuptools
+RUN pip install -r requirements.txt
+# run crond as main process of container
+CMD ["cron", "-f"]
+
+
+(2) crontab: (save as "crontab" in notepad with all types as file type. It has no extension)
+
+# START CRON JOB
+# 1. use docker container ls -a to check the container_id
+# 2. docker exec -it container_id bash to go in the container os and type "which python" to find where the python binary is installed. Here it is in 
+# /usr/local/bin/python
+* * * * * /usr/local/bin/python /app/cron_tab.py > /proc/1/fd/1 2>/proc/1/fd/2
+# END CRON JOB
+
+(3) cron_tab.py:
+
+import openpyxl
+import sqlalchemy
+import pandas as pd
+print("Testing Connection")
+import platform
+print(platform.python_version())
+import os
+print(os.getcwd())
+print(os.listdir(os.getcwd())) # returns list
+try:
+    book = openpyxl.load_workbook('Details.xlsx')
+except FileNotFoundError:
+    print('Server details sheet not found!')
+sheet = book.active
+server=sheet.cell(5,2).value
+database=sheet.cell(6,2).value
+username=sheet.cell(7,2).value
+password=sheet.cell(8,2).value
+engine_query="mssql+pymssql://"+username+":"+password+"@"+server+"/"+database
+"mssql+pymssql://FFA_Chartering_PRD:FFA_Chartering_PRD@123#75@10.131.37.75/FFA_Chartering_PRD"+username+":"+password+"@"+server+"/"+database
+sql_engine = sqlalchemy.create_engine(engine_query).connect()
+query = "SELECT * FROM RM_ST_FFA_Control_table1"
+mail_details = pd.read_sql(query, sql_engine)
+print(mail_details) #modified
+print("connection established using sqlalchemy")
+import logging
+# importing module
+import logging
+
+# Create and configure logger
+logging.basicConfig(filename="logfile.log",
+					format='%(asctime)s %(message)s',
+					filemode='a')
+
+# Creating an object
+logger = logging.getLogger()
+
+# Setting the threshold of logger to DEBUG
+logger.setLevel(logging.DEBUG)
+
+# Test messages
+logger.debug("Harmless debug Message")
+logger.info("Just an information")
+logger.warning("Its a Warning")
+logger.error("Did you try to divide by zero")
+logger.critical("Internet is down")
+
+(4) Start the docker, check python installed folder and mention it in crontab file, also check the crontab default directory using above code with docker run -it "image_name"
+and mention it in the crontab file and copy it in the same location in dockerfile and then go to the project folder location and type the following commands in the command prompt if it is window:
+
+(i) docker ps
+
+(ii) docker container ls -a
+
+(iii) docker images
+
+(iv) docker build -t "image_name" .
+
+(v) docker run -d --rm --name "give_new_container_name" "image_name which you have given previously"
+
+(vi) docker ps
+
+(vii) to check the logs:
+
+docker exec -it container_id bash
+cd ..
+cd root 
+cat logfile.log
+
+
+------------ Remove docker containers and images ---------------
+
+
+# TO SEE DOCKER CONTAINERS
+
+docker container ls
+
+# TO SEE docker images
+
+docker images
+
+# to remove docker images forcefully
+
+docker rmi -f "image_name"
+
+-------------------- Date and time ------------------------------
+
+# to know the system date and time in linux docker container:
+
+date
+
+links: https://www.utctime.net/utc-to-ist-indian-converter and https://bobcares.com/blog/change-time-in-docker-container/#:~:text=To%20know%20the%20current%20time,date'%20command%20can%20be%20used.&text=To%20know%20the%20timezone%20configured,file%20has%20to%20be%20checked.
+

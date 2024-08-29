@@ -144,7 +144,7 @@ select *  from Customers where CustomerID= ALL(select CustomerID from Customers 
 
 -----------------------------------------------------------------------------------------------------------------
 
--- insert recrds from one table to another table even if it is not existed or existed but dulpcate records are ignored.
+-- insert recrds from one table to another table even if it is not existed or existed but duplicate records are ignored.
 
 select * into [New Customers] from Customers
 

@@ -1,0 +1,23 @@
+#FROM python:3.6.10-slim-stretch
+FROM python:3.6.10-slim
+#FROM ubuntu:latest
+RUN apt-get update && apt-get -y install cron vim
+WORKDIR /app
+COPY . /app
+COPY . /root
+COPY crontab /etc/cron.d/crontab
+RUN chmod 0644 /etc/cron.d/crontab
+RUN /usr/bin/crontab /etc/cron.d/crontab
+RUN apt-get clean
+RUN pip install -U pip setuptools
+RUN pip install -r requirements.txt
+# run crond as main process of container
+CMD ["cron", "-f"]
+
+
+
+
+
+
+
+
