@@ -97,7 +97,7 @@ df=pd.DataFrame(read_output)
 import nltk
 nltk.downloader.download('vader_lexicon')
 
-(G) After labeling the response variable using the sentiment score, fata has been supervised and now, we have used the random forest classifier for the 
+(G) After labeling the response variable using the sentiment score, data has been supervised and now, we have used the random forest classifier for the 
     classification of unseen data.
 	
 randomclassifier=RandomForestClassifier(n_estimators=200,criterion='entropy')
